@@ -1,5 +1,6 @@
 # Netlify configuration
 [build]
+  command = "npm run build"
   publish = "."
 
 # ✅ Protect /admin pages with role = admin

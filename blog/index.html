@@ -1,11 +1,3 @@
----
-pagination:
-  data: collections.posts
-  size: 100
-permalink: "/"
-eleventyComputed:
-  title: "Blog | Prompt Consulting"
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,15 +21,23 @@ eleventyComputed:
       <p>Accounting, Audit &amp; UAE Tax updates to help you make better decisions.</p>
     </section>
     <section class="grid">
-      {% for post in collections.posts | reverse %}
+      
         <article class="card">
-          <h3><a href="/blog{{ post.url }}">{{ post.data.title }}</a></h3>
-          <p>{{ post.data.description }}</p>
+          <h3><a href="/blog/posts/welcome/">Welcome to Our Blog</a></h3>
+          <p>Learn about VAT, Corporate Tax, and business compliance in the UAE with expert insights from Prompt Consulting.</p>
           <div class="meta">
-            {% if post.date %}Published: <time datetime="{{ post.date | date('yyyy-LL-dd') }}">{{ post.date | date('dd LLL yyyy') }}</time>{% endif %}
+            Published: <time datetime="2025-01-15">15 Jan 2025</time>
           </div>
         </article>
-      {% endfor %}
+      
+        <article class="card">
+          <h3><a href="/blog/posts/uae-corporate-tax-guide/">Understanding UAE Corporate Tax: A Complete Guide for 2025</a></h3>
+          <p>Everything you need to know about UAE Corporate Tax requirements, exemptions, and compliance for your business.</p>
+          <div class="meta">
+            Published: <time datetime="2025-01-10">10 Jan 2025</time>
+          </div>
+        </article>
+      
     </section>
   </main>
   <footer class="footer">
