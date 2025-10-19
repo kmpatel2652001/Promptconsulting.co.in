@@ -1,0 +1,12 @@
+{
+  "name": "promptconsulting-blog",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npx @11ty/eleventy --input=blog-src --output=blog",
+    "serve": "npx @11ty/eleventy --serve --input=blog-src --output=blog"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0"
+  }
+}
