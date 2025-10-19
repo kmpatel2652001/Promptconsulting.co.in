@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <p>Hello,</p>
+
+    <p>You have been invited to access the CMS for {{ .SiteName }}.</p>
+
+    <p>
+      Please click the link below to set your password and activate your account:
+    </p>
+
+    <p>
+      <a href="{{ .SiteURL }}/admin/#invite_token={{ .Token }}">
+        Accept invite
+      </a>
+    </p>
+
+    <p>If the button above does not work, copy and paste this URL into your browser:</p>
+    <p>{{ .SiteURL }}/admin/#invite_token={{ .Token }}</p>
+
+    <p>Thank you!</p>
+  </body>
+</html>
