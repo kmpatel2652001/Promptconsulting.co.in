@@ -1,0 +1,48 @@
+---
+pagination:
+  data: collections.posts
+  size: 100
+permalink: "/blog/"
+eleventyComputed:
+  title: "Blog | Prompt Consulting"
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog | Prompt Consulting</title>
+  <meta name="description" content="Insights on accounting, audit, corporate tax, VAT and business setup in the UAE."/>
+  <link rel="stylesheet" href="/blog/assets/blog.css"/>
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="/">Prompt Consulting</a>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section class="hero">
+      <h1>Insights &amp; Updates</h1>
+      <p>Accounting, Audit &amp; UAE Tax updates to help you make better decisions.</p>
+    </section>
+    <section class="grid">
+      {% for post in collections.posts | reverse %}
+        <article class="card">
+          <h3><a href="{{ post.url }}">{{ post.data.title }}</a></h3>
+          <p>{{ post.data.description }}</p>
+          <div class="meta">
+            {% if post.date %}Published: <time datetime="{{ post.date | date('yyyy-LL-dd') }}">{{ post.date | date('dd LLL yyyy') }}</time>{% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  </main>
+  <footer class="footer">
+    © <span id="year"></span> Prompt Consulting · <a href="/">Back to Home</a>
+  </footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+</body>
+</html>
