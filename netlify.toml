@@ -1,10 +1,36 @@
+# Netlify configuration
 [build]
-  command = "npm install && npm run build"
   publish = "."
 
-# Always generate the blog at /blog on each deploy.
-[[plugins]]
-  package = "@netlify/plugin-lighthouse"
+# ✅ Protect /admin pages with role = admin
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/index.html"
+  status = 200
+  force = true
+  conditions = {Role = ["admin"]}
 
-[dev]
-  command = "npm run serve"
+# ✅ (Optional but recommended) If using React/Vue/SPA routes
+# make sure this comes AFTER the admin rule
+# Uncomment this if needed
+# [[redirects]]
+#   from = "/*"
+#   to = "/index.html"
+#   status = 200
+
+# Security headers for all routes
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "geolocation=(), microphone=(), camera=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    Content-Security-Policy = "default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://wa.me; img-src 'self' data: https:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; script-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self' https://wa.me"
+
+# Optional: Cache static assets aggressively (none in this bundle besides HTML)
+[[headers]]
+  for = "/favicon.ico"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
