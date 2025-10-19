@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kirtan Patel - Chartered Accountant Consultant | Dubai, UAE</title>
+    <meta name="description" content="Kirtan Patel — Freelance Chartered Accountant Consultant in Dubai, UAE. VAT, Corporate Tax, Audit & Compliance, Accounting, Payroll, and Business Setup advisory.">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://YOURDOMAIN.com/">
+    <link rel="icon" href="/favicon.ico">
+    <meta name="robots" content="index,follow">
+    <meta property="og:title" content="Kirtan Patel - Chartered Accountant Consultant | Dubai, UAE">
+    <meta property="og:description" content="VAT • Corporate Tax • Audit & Compliance • Accounting • Payroll • Business Setup in the UAE">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://YOURDOMAIN.com/">
+    <meta property="og:image" content="https://YOURDOMAIN.com/og-image.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: #d97706;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            padding: 120px 0 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(45deg, #1e3a8a, #d97706);
+            border-radius: 50%;
+            opacity: 0.1;
+            transform: translate(50%, -50%);
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-text .subtitle {
+            font-size: 1.2rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .hero-image {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-placeholder {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 4rem;
+            box-shadow: 0 20px 40px rgba(30, 58, 138, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(217, 119, 6, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(217, 119, 6, 0.4);
+        }
+
+        /* Section Styles */
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1e3a8a;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+            border-radius: 2px;
+        }
+
+        /* About Section */
+        .about {
+            background: #f8fafc;
+        }
+
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .about-text {
+            font-size: 1.1rem;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        /* Services Section */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-top: 4px solid #d97706;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .service-card h3 {
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        /* Experience Section */
+        .experience {
+            background: #f8fafc;
+        }
+
+        .experience-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .experience-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .experience-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(135deg, #d97706, #f59e0b);
+        }
+
+        /* Skills Section */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .skill-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .skill-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin: 0 auto 1rem;
+            font-size: 1.2rem;
+        }
+
+        /* Contact Section */
+        .contact {
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            color: white;
+        }
+
+        .contact .section-title {
+            color: white;
+        }
+
+        .contact-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+        }
+
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .contact-btn {
+            flex: 1;
+            padding: 12px 24px;
+            border: 2px solid #d97706;
+            background: #d97706;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .contact-btn:hover {
+            background: transparent;
+            color: #d97706;
+        }
+
+        /* Footer */
+        footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            background: #d97706;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(217, 119, 6, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content,
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+
+            .services-grid,
+            .experience-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Animation classes */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <div class="logo">Kirtan Patel</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#services">Services</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Helping Businesses in the UAE Stay Compliant and Financially Strong</h1>
+                    <p class="subtitle">Freelance Chartered Accountant Consultant | VAT | Corporate Tax | Audit & Compliance | Accounting</p>
+                    <a href="https://wa.me/971588781696" target="_blank" rel="noopener noreferrer" class="cta-button">Contact Me</a>
+                </div>
+                <div class="hero-image">
+    <img src="kirtanpic.png" 
+         alt="Kirtan Patel – Chartered Accountant Consultant in Dubai" 
+         style="width:300px;height:300px;border-radius:50%;object-fit:cover;
+                box-shadow:0 20px 40px rgba(30,58,138,0.3);">
+</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>I am a Semi-Qualified Chartered Accountant with hands-on experience in VAT, Corporate Tax, Accounting, and Financial Due Diligence. I've worked with companies across industries in Dubai and India, ensuring compliance, accuracy, and efficiency.</p>
+                    <p>My expertise spans across various domains of accounting and finance, helping businesses navigate complex regulatory requirements while maintaining operational excellence. With a strong foundation built through comprehensive training and practical experience, I am committed to delivering exceptional financial solutions that drive business success.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="services">
+        <div class="container">
+            <h2 class="section-title">Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3>Corporate Tax & VAT Compliance</h3>
+                    <p>Comprehensive tax compliance services ensuring your business meets all UAE regulatory requirements efficiently and accurately.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔍</div>
+                    <h3>Audit & Assurance Support</h3>
+                    <p>Professional audit support services to ensure your financial statements are accurate, compliant, and investor-ready.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">📚</div>
+                    <h3>Accounting & Bookkeeping</h3>
+                    <p>Complete accounting solutions from daily bookkeeping to financial statement preparation using modern accounting software.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">💰</div>
+                    <h3>Payroll & WPS Compliance</h3>
+                    <p>End-to-end payroll management and WPS compliance ensuring timely salary payments and regulatory adherence.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🔎</div>
+                    <h3>Financial Due Diligence</h3>
+                    <p>Thorough financial analysis and due diligence services for mergers, acquisitions, and investment decisions.</p>
+                </div>
+                <div class="service-card">
+                    <div class="service-icon">🏢</div>
+                    <h3>Business Setup Advisory</h3>
+                    <p>Expert guidance on business formation, licensing, and regulatory compliance for new ventures in the UAE.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title">Experience</h2>
+            <div class="experience-grid">
+                <div class="experience-card">
+                    <h3>💼 Prompt Consultancy, Dubai</h3>
+                    <p><strong>Freelancer Consultant</strong> | Oct 2024 - Sep 2025</p>
+                    <ul>
+                        <li>Providing VAT and Corporate Tax compliance services</li>
+                        <li>Managing accounting and bookkeeping for multiple clients</li>
+                        <li>Conducting financial due diligence reviews</li>
+                        <li>Assisting with business setup and regulatory compliance</li>
+                    </ul>
+                </div>
+                <div class="experience-card">
+                    <h3>📋 MASD & Co LLP, Mumbai</h3>
+                    <p><strong>Consultant</strong> | Sep 2021 - Sep 2024</p>
+                    <ul>
+                        <li>Completed comprehensive CA articleship training</li>
+                        <li>Gained expertise in statutory audits and tax compliance</li>
+                        <li>Worked on diverse client portfolios across industries</li>
+                        <li>Developed strong foundation in accounting principles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="education">
+        <div class="container">
+            <h2 class="section-title">Education</h2>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <h4>CA Final</h4>
+                    <p>Group 1 Awaiting Results, Group 2 Cleared</p>
+                    <p>Institute of Chartered Accountants of India</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>CA Intermediate</h4>
+                    <p>Cleared</p>
+                    <p>Institute of Chartered Accountants of India</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Higher Secondary Certificate (HSC)</h4>
+                    <p>Gujarat Board</p>
+                </div>
+                <div class="timeline-item">
+                    <h4>Secondary School Certificate (SSC)</h4>
+                    <p>Gujarat Board</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-item">
+                    <div class="skill-icon">💻</div>
+                    <h4>Tally ERP 9</h4>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">📊</div>
+                    <h4>Zoho Books</h4>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">📈</div>
+                    <h4>QuickBooks</h4>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">🔢</div>
+                    <h4>Xero</h4>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">⚙️</div>
+                    <h4>Winman</h4>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">📋</div>
+                    <h4>Microsoft Excel</h4>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">📄</div>
+                    <h4>PowerPoint</h4>
+                </div>
+                <div class="skill-item">
+                    <div class="skill-icon">📝</div>
+                    <h4>Microsoft Word</h4>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Contact Me</h2>
+            <div class="contact-content">
+                <div class="contact-form">
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="cta-button" style="width: 100%;">Send Message</button>
+                    </form>
+                    <p style="margin-top:12px;font-size:0.9rem;opacity:.9">Submitting opens WhatsApp with your message. No data is stored on this site.</p>
+                </div>
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem;">📧</span>
+                        <div>
+                            <h4>Email</h4>
+                            <p><a href="mailto:kirtan.patel@promptconsulting.co.in" style="color:white;text-decoration:underline">kirtan.patel@promptconsulting.co.in</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem;">📞</span>
+                        <div>
+                            <h4>Phone</h4>
+                            <p><a href="tel:+971588781696" style="color:white;text-decoration:underline">+971 58 878 1696</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <span style="font-size: 1.5rem;">🌍</span>
+                        <div>
+                            <h4>Location</h4>
+                            <p>Dubai, UAE</p>
+                        </div>
+                    </div>
+                    <div class="contact-buttons">
+                        <a href="mailto:kirtan.patel@promptconsulting.co.in" class="contact-btn">Email Me</a>
+                        <a href="https://wa.me/971588781696" target="_blank" rel="noopener noreferrer" class="contact-btn">WhatsApp Me</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="social-links">
+                <a href="https://linkedin.com/in/kirtan-patel" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">💼</a>
+                <a href="mailto:kirtan.patel@promptconsulting.co.in" aria-label="Email">📧</a>
+                <a href="https://wa.me/971588781696" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">💬</a>
+            </div>
+            <p>&copy; 2025 Kirtan Patel | Designed on Canva</p>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for navigation links (internal only)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href && href.startsWith('#')) {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }
+            });
+        });
+
+        // Header background on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            header.style.background = window.scrollY > 100 ? 'rgba(255, 255, 255, 0.98)' : 'rgba(255, 255, 255, 0.95)';
+        });
+
+        // Fade in animation on scroll
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => entry.isIntersecting && entry.target.classList.add('visible'));
+        }, observerOptions);
+
+        document.querySelectorAll('section').forEach(section => {
+            section.classList.add('fade-in');
+            observer.observe(section);
+        });
+
+        // Contact form -> WhatsApp
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            const whatsappMessage = `Hello! I'm ${name} (${email}). ${message}`;
+            const whatsappURL = `https://wa.me/971588781696?text=${encodeURIComponent(whatsappMessage)}`;
+            window.open(whatsappURL, '_blank');
+            this.reset();
+            alert('Opening WhatsApp to send your message.');
+        });
+
+        // Hover effects to service cards
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('mouseenter', function() { this.style.transform = 'translateY(-10px) scale(1.02)'; });
+            card.addEventListener('mouseleave', function() { this.style.transform = 'translateY(0) scale(1)'; });
+        });
+    </script>
+</body>
+</html>
