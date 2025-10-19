@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{{ title }} | Prompt Consulting</title>
+  <meta name="description" content="{{ description | safe }}"/>
+  <link rel="stylesheet" href="/blog/assets/blog.css"/>
+</head>
+<body>
+  <header class="header">
+    <a class="logo" href="/">Prompt Consulting</a>
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/blog/">Blog</a>
+    </nav>
+  </header>
+  <main class="container">
+    <article class="article">
+      <h1>{{ title }}</h1>
+      <div class="post-meta">
+        {% if date %}Published <time datetime="{{ date | date('yyyy-LL-dd') }}">{{ date | date('dd LLL yyyy') }}</time>{% endif %}
+      </div>
+      {% if cover %}<p><img src="{{ cover | url }}" alt=""></p>{% endif %}
+      <div class="prose">
+        {{ content | safe }}
+      </div>
+    </article>
+  </main>
+  <footer class="footer">
+    © <span id="year"></span> Prompt Consulting · <a href="/blog/">All posts</a>
+  </footer>
+  <script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+</body>
+</html>
