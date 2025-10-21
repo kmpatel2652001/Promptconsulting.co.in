@@ -749,25 +749,6 @@
             </div>
             <div class="blog-cta">
                 <a class="cta-button" href="/blog/">View All Articles</a>
-                    <h3>VAT Compliance Checklist for Growing UAE Businesses</h3>
-                    <p>Stay ahead of filing deadlines and avoid penalties with a practical VAT compliance roadmap tailored for SMEs and startups operating across the Emirates.</p>
-                    <a class="blog-link" href="/blog/" target="_blank" rel="noopener noreferrer">Read the guide →</a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-meta">Corporate Tax • 02 Jan 2025</span>
-                    <h3>Preparing for UAE Corporate Tax Assessments</h3>
-                    <p>Understand the documentation, reconciliations, and governance practices tax reviewers expect so your business is confident before an assessment.</p>
-                    <a class="blog-link" href="/blog/" target="_blank" rel="noopener noreferrer">Explore best practices →</a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-meta">Accounting • 18 Dec 2024</span>
-                    <h3>Monthly Accounting Routines That Improve Cash Flow</h3>
-                    <p>Adopt simple, repeatable accounting routines that improve reporting accuracy, support executive decision-making, and keep cash flow transparent.</p>
-                    <a class="blog-link" href="/blog/" target="_blank" rel="noopener noreferrer">See the recommendations →</a>
-                </article>
-            </div>
-            <div class="blog-cta">
-                <a class="cta-button" href="/blog/" target="_blank" rel="noopener noreferrer">View All Articles</a>
             </div>
         </div>
     </section>
@@ -870,21 +851,46 @@
             observer.observe(section);
         });
 
-        // Ensure Latest Insights cards stay unique even if duplicates are injected
-        const blogGrid = document.querySelector('.blog-grid');
-        if (blogGrid) {
-            const seenLinks = new Set();
-            blogGrid.querySelectorAll('.blog-card').forEach(card => {
-                const link = card.querySelector('.blog-link');
-                if (!link) return;
-                const href = link.getAttribute('href');
-                if (seenLinks.has(href)) {
-                    card.remove();
-                } else {
-                    seenLinks.add(href);
+        // Ensure Latest Insights cards stay unique, even if duplicates are added later
+        (function enforceUniqueBlogCards() {
+            const blogGrid = document.querySelector('.blog-grid');
+            if (!blogGrid) return;
+
+            const normalizeHref = (href) => {
+                if (!href) return '';
+                try {
+                    const url = new URL(href, window.location.origin);
+                    return url.pathname.replace(/\/$/, '').toLowerCase();
+                } catch (error) {
+                    return href.replace(/\/$/, '').toLowerCase();
                 }
+            };
+
+            const pruneDuplicates = () => {
+                const seenLinks = new Set();
+                blogGrid.querySelectorAll('.blog-card').forEach((card) => {
+                    const link = card.querySelector('.blog-link');
+                    if (!link) return;
+
+                    const normalizedHref = normalizeHref(link.getAttribute('href'));
+                    if (!normalizedHref) return;
+
+                    if (seenLinks.has(normalizedHref)) {
+                        card.remove();
+                    } else {
+                        seenLinks.add(normalizedHref);
+                    }
+                });
+            };
+
+            const observer = new MutationObserver(() => {
+                pruneDuplicates();
             });
-        }
+
+            observer.observe(blogGrid, { childList: true });
+            pruneDuplicates();
+            window.addEventListener('beforeunload', () => observer.disconnect(), { once: true });
+        })();
 
         // Contact form -> WhatsApp
         document.getElementById('contactForm').addEventListener('submit', function(e) {
