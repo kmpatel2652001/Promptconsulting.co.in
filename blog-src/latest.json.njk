@@ -1,0 +1,16 @@
+---
+permalink: "/blog/latest.json"
+eleventyExcludeFromCollections: true
+---
+[
+{% for post in collections.latestPosts %}
+  {
+    "title": {{ post.data.title | dump | safe }},
+    "description": {{ post.data.description | dump | safe }},
+    "url": {{ post.url | dump | safe }},
+    "category": {{ (post.data.category or "") | dump | safe }},
+    "dateISO": {{ post.date | isoDate | dump | safe }},
+    "dateReadable": {{ post.date | readableDate | dump | safe }}
+  }{% if not loop.last %},{% endif %}
+{% endfor %}
+]
