@@ -19,7 +19,8 @@
     <article class="article">
       <h1>{{ title }}</h1>
       <div class="post-meta">
-        {% if date %}Published <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time>{% endif %}
+        {% if category %}<span class="post-tag">{{ category }}</span>{% endif %}
+        {% if date %}<span>Published <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></span>{% endif %}
       </div>
       {% if cover %}<p><img src="{{ cover | url }}" alt=""></p>{% endif %}
       <div class="prose">

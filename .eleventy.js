@@ -11,6 +11,10 @@ module.exports = function (eleventyConfig) {
     DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat("yyyy-LL-dd")
   );
 
+  eleventyConfig.addCollection("latestPosts", (collectionApi) =>
+    collectionApi.getFilteredByTag("posts").reverse().slice(0, 6)
+  );
+
   return {
     dir: {
       input: "blog-src",

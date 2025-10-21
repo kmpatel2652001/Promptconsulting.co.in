@@ -727,24 +727,24 @@
     <section id="blog" class="blog">
         <div class="container">
             <h2 class="section-title">Latest Insights</h2>
-            <div class="blog-grid">
-                <article class="blog-card">
+            <div class="blog-grid" data-latest-insights>
+                <article class="blog-card" data-fallback-card>
+                    <span class="blog-meta">Internal Controls • 10 Feb 2025</span>
+                    <h3>UAE: Real Estate Employee Ordered to Repay Dh437,000 After Embezzlement Conviction</h3>
+                    <p>Learn how weak oversight enabled a Dh437,000 fraud and the control checks UAE firms need to prevent repeat losses.</p>
+                    <a class="blog-link" href="/blog/uae-real-estate-employee-repay-dh437000/">Review the lessons →</a>
+                </article>
+                <article class="blog-card" data-fallback-card>
                     <span class="blog-meta">VAT • 15 Jan 2025</span>
                     <h3>VAT Filing Checklist for UAE SMEs</h3>
                     <p>Avoid penalties with a step-by-step VAT filing checklist tailored to the way SMEs operate across the Emirates.</p>
                     <a class="blog-link" href="/blog/vat-filing-checklist/">Read the guide →</a>
                 </article>
-                <article class="blog-card">
+                <article class="blog-card" data-fallback-card>
                     <span class="blog-meta">Corporate Tax • 02 Jan 2025</span>
                     <h3>Corporate Tax: Internal Controls to Finalise</h3>
                     <p>Practical control checkpoints that keep your first UAE corporate tax filing audit-ready and defensible.</p>
                     <a class="blog-link" href="/blog/corporate-tax-internal-controls/">Explore best practices →</a>
-                </article>
-                <article class="blog-card">
-                    <span class="blog-meta">Accounting • 18 Dec 2024</span>
-                    <h3>Why UAE SMEs Choose Outsourced Accounting</h3>
-                    <p>See the cost and control advantages of partnering with a specialist finance team for bookkeeping and advisory.</p>
-                    <a class="blog-link" href="/blog/outsourced-accounting-benefits/">See the recommendations →</a>
                 </article>
             </div>
             <div class="blog-cta">
@@ -851,45 +851,105 @@
             observer.observe(section);
         });
 
-        // Ensure Latest Insights cards stay unique, even if duplicates are added later
-        (function enforceUniqueBlogCards() {
-            const blogGrid = document.querySelector('.blog-grid');
+        // Hydrate Latest Insights cards directly from the blog feed so duplicates cannot appear
+        (function hydrateLatestInsights() {
+            const blogGrid = document.querySelector('[data-latest-insights]');
             if (!blogGrid) return;
 
             const normalizeHref = (href) => {
                 if (!href) return '';
                 try {
                     const url = new URL(href, window.location.origin);
-                    return url.pathname.replace(/\/$/, '').toLowerCase();
+                    let pathname = url.pathname.replace(/index\.html$/i, '');
+                    pathname = pathname.replace(/\/$/, '');
+                    return pathname ? pathname.toLowerCase() : '/';
                 } catch (error) {
-                    return href.replace(/\/$/, '').toLowerCase();
+                    let safeHref = href.split('#')[0].split('?')[0];
+                    safeHref = safeHref.replace(window.location.origin, '');
+                    safeHref = safeHref.replace(/index\.html$/i, '');
+                    safeHref = safeHref.replace(/\/$/, '');
+                    if (!safeHref.startsWith('/')) {
+                        safeHref = `/${safeHref}`;
+                    }
+                    return safeHref ? safeHref.toLowerCase() : '/';
                 }
             };
 
-            const pruneDuplicates = () => {
-                const seenLinks = new Set();
-                blogGrid.querySelectorAll('.blog-card').forEach((card) => {
-                    const link = card.querySelector('.blog-link');
-                    if (!link) return;
-
-                    const normalizedHref = normalizeHref(link.getAttribute('href'));
-                    if (!normalizedHref) return;
-
-                    if (seenLinks.has(normalizedHref)) {
-                        card.remove();
-                    } else {
-                        seenLinks.add(normalizedHref);
-                    }
-                });
+            const buildMeta = (category, formattedDate) => {
+                const metaBits = [];
+                if (category) metaBits.push(category);
+                if (formattedDate) metaBits.push(formattedDate);
+                return metaBits.join(' • ');
             };
 
-            const observer = new MutationObserver(() => {
-                pruneDuplicates();
-            });
+            const createCard = (entry) => {
+                const article = document.createElement('article');
+                article.className = 'blog-card';
 
-            observer.observe(blogGrid, { childList: true });
-            pruneDuplicates();
-            window.addEventListener('beforeunload', () => observer.disconnect(), { once: true });
+                const metaText = buildMeta(entry.category, entry.dateReadable);
+                if (metaText) {
+                    const meta = document.createElement('span');
+                    meta.className = 'blog-meta';
+                    meta.textContent = metaText;
+                    article.appendChild(meta);
+                }
+
+                const heading = document.createElement('h3');
+                heading.textContent = entry.title || '';
+                article.appendChild(heading);
+
+                if (entry.description) {
+                    const description = document.createElement('p');
+                    description.textContent = entry.description;
+                    article.appendChild(description);
+                }
+
+                const link = document.createElement('a');
+                link.className = 'blog-link';
+                link.setAttribute('href', entry.url);
+                link.textContent = 'Read article →';
+                article.appendChild(link);
+
+                return article;
+            };
+
+            const applyLatest = (posts) => {
+                const seen = new Set();
+                const uniquePosts = [];
+
+                posts.forEach((post) => {
+                    if (!post || !post.url || !post.title) return;
+                    const normalized = normalizeHref(post.url);
+                    if (!normalized || seen.has(normalized)) return;
+
+                    seen.add(normalized);
+                    uniquePosts.push(post);
+                });
+
+                if (!uniquePosts.length) return;
+
+                const fragment = document.createDocumentFragment();
+                uniquePosts.slice(0, 3).forEach((post) => {
+                    fragment.appendChild(createCard(post));
+                });
+
+                blogGrid.innerHTML = '';
+                blogGrid.appendChild(fragment);
+            };
+
+            fetch('/blog/latest.json', { cache: 'no-store' })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Failed to load: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((posts) => {
+                    applyLatest(Array.isArray(posts) ? posts : []);
+                })
+                .catch((error) => {
+                    console.warn('Falling back to embedded Latest Insights cards.', error);
+                });
         })();
 
         // Contact form -> WhatsApp

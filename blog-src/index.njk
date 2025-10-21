@@ -31,7 +31,8 @@ permalink: "/blog/index.html"
           <h3><a href="{{ post.url }}">{{ post.data.title }}</a></h3>
           <p>{{ post.data.description }}</p>
           <div class="meta">
-            {% if post.date %}Published: <time datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>{% endif %}
+            {% if post.data.category %}<span class="pill">{{ post.data.category }}</span>{% endif %}
+            {% if post.date %}<time datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>{% endif %}
           </div>
         </article>
       {% endfor %}

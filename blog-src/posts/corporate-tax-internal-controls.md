@@ -3,6 +3,7 @@ layout: post
 title: "Corporate Tax: Internal Controls to Finalise Before Your First Return"
 description: "Practical control checkpoints to keep your UAE corporate tax filings audit-ready."
 date: 2025-01-02
+category: "Corporate Tax"
 tags:
   - posts
 permalink: "/blog/corporate-tax-internal-controls/"
