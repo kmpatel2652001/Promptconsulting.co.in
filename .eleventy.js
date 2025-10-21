@@ -1,16 +1,22 @@
-module.exports = function(eleventyConfig) {
-  // Copy the admin folder to the output root
-  eleventyConfig.addPassthroughCopy("blog-src/admin");
+const { DateTime } = require("luxon");
 
-  // Copy static assets folder
-  eleventyConfig.addPassthroughCopy("assets");
+module.exports = function (eleventyConfig) {
+  eleventyConfig.addPassthroughCopy({ "blog-src/assets": "blog/assets" });
+
+  eleventyConfig.addFilter("readableDate", (dateObj) =>
+    DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat("dd LLL yyyy")
+  );
+
+  eleventyConfig.addFilter("isoDate", (dateObj) =>
+    DateTime.fromJSDate(dateObj, { zone: "utc" }).toFormat("yyyy-LL-dd")
+  );
 
   return {
     dir: {
-      input: "blog-src",   // source folder
-      output: ".",         // deploy to root of site
-    },
-    // Optional: disable template processing for static files
-    passthroughFileCopy: true
+      input: "blog-src",
+      includes: "layouts",
+      data: "_data",
+      output: "."
+    }
   };
 };
