@@ -1,6 +1,10 @@
 backend:
-  name: git-gateway
+  name: github
+  repo: kmpatel2652001/Promptconsulting.co.in
   branch: main
+  # After you set up the small OAuth app (below), add:
+  # base_url: https://YOUR-OAUTH-APP-ON-VERCEL.vercel.app
+  # auth_endpoint: /api/auth
 
 media_folder: "assets/uploads"
 public_folder: "/assets/uploads"
