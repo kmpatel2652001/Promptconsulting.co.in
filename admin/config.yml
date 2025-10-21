@@ -2,7 +2,7 @@ backend:
   name: github
   repo: kmpatel2652001/Promptconsulting.co.in
   branch: main
-  base_url: https://YOUR-OAUTH-APP-ON-VERCEL.vercel.app
+  base_url: https://decap-oauth-server.vercel.app
   auth_endpoint: /api/auth
 
 media_folder: "assets/uploads"
