@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>{{ title }} | Prompt Consulting</title>
-  <meta name="description" content="{{ description | safe }}"/>
+  <title>Corporate Tax: Internal Controls to Finalise Before Your First Return | Prompt Consulting</title>
+  <meta name="description" content="Practical control checkpoints to keep your UAE corporate tax filings audit-ready."/>
   <link rel="stylesheet" href="/blog/assets/blog.css"/>
 </head>
 <body>
@@ -22,19 +22,28 @@
   </header>
   <main class="article-wrapper">
     <article class="article">
-      <h1>{{ title }}</h1>
+      <h1>Corporate Tax: Internal Controls to Finalise Before Your First Return</h1>
       <div class="article__meta">
-        {% if category %}<span class="post-tag">{{ category }}</span>{% endif %}
-        {% if author %}<span class="post-author">By {{ author }}</span>{% endif %}
-        {% if date %}<span>Published <time datetime="{{ date | isoDate }}">{{ date | readableDate }}</time></span>{% endif %}
+        <span class="post-tag">Corporate Tax</span>
+        <span class="post-author">By Prompt Consulting Editorial Team</span>
+        <span>Published <time datetime="2025-01-02">02 Jan 2025</time></span>
       </div>
-      {% set featuredImage = image or "/blog/assets/images/blog-default.svg" %}
-      {% set featuredAlt = imageAlt or (title + " featured image") %}
+      
+      
       <figure class="article__featured">
-        <img src="{{ featuredImage }}" alt="{{ featuredAlt }}" loading="lazy" decoding="async"/>
+        <img src="/blog/assets/images/corporate-tax-insights.svg" alt="Finance leader reviewing corporate tax dashboards with a consultant" loading="lazy" decoding="async"/>
       </figure>
       <div class="prose">
-        {{ content | safe }}
+        <p>With UAE corporate tax now in effect, many finance teams are adapting transfer pricing files, general ledger structures, and documentation routines. The most reliable way to stay compliant is to tighten internal controls before the first period close.</p>
+<p>Focus on these areas:</p>
+<ul>
+<li>Assign responsibility for determining taxable versus exempt income and make sure journal approvals are logged.</li>
+<li>Maintain contemporaneous transfer pricing documentation that ties back to your inter-company agreements.</li>
+<li>Reconcile fixed asset registers with capital allowance calculations every quarter.</li>
+<li>Archive signed management representations and board approvals that support tax positions.</li>
+</ul>
+<p>Build these checkpoints into your monthly close checklist. Having evidence ready for the Federal Tax Authority reduces the risk of penalties and speeds up any future refund claims.</p>
+
       </div>
     </article>
   </main>
