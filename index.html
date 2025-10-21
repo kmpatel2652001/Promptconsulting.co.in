@@ -870,6 +870,22 @@
             observer.observe(section);
         });
 
+        // Ensure Latest Insights cards stay unique even if duplicates are injected
+        const blogGrid = document.querySelector('.blog-grid');
+        if (blogGrid) {
+            const seenLinks = new Set();
+            blogGrid.querySelectorAll('.blog-card').forEach(card => {
+                const link = card.querySelector('.blog-link');
+                if (!link) return;
+                const href = link.getAttribute('href');
+                if (seenLinks.has(href)) {
+                    card.remove();
+                } else {
+                    seenLinks.add(href);
+                }
+            });
+        }
+
         // Contact form -> WhatsApp
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
