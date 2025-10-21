@@ -4,6 +4,9 @@ title: "VAT Filing Checklist for UAE SMEs"
 description: "Avoid penalties with a step-by-step VAT filing checklist tailored to UAE small businesses."
 date: 2025-01-15
 category: "VAT"
+author: "Prompt Consulting Editorial Team"
+image: "/blog/assets/images/vat-checklist.svg"
+imageAlt: "Illustration of a UAE VAT filing checklist with compliance reminders"
 tags:
   - posts
 permalink: "/blog/vat-filing-checklist/"

@@ -4,6 +4,9 @@ title: "UAE: Real Estate Employee Ordered to Repay Dh437,000 After Embezzlement 
 description: "What a Dh437,000 fraud case teaches UAE companies about strengthening accounting oversight and internal controls."
 date: 2025-02-10
 category: "Internal Controls"
+author: "Kirtan Patel"
+image: "/blog/assets/images/internal-controls-case.svg"
+imageAlt: "Forensic accounting specialists reviewing controls for a UAE real estate firm"
 tags:
   - posts
 permalink: "/blog/uae-real-estate-employee-repay-dh437000/"

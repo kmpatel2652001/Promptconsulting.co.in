@@ -4,6 +4,9 @@ title: "Why UAE SMEs Choose Outsourced Accounting in 2025"
 description: "Cost and control advantages of outsourcing your finance function to a specialist firm."
 date: 2024-12-18
 category: "Accounting"
+author: "Prompt Consulting Editorial Team"
+image: "/blog/assets/images/outsourced-accounting.svg"
+imageAlt: "Outsourced accounting team collaborating over financial reports"
 tags:
   - posts
 permalink: "/blog/outsourced-accounting-benefits/"

@@ -8,21 +8,31 @@
   <link rel="stylesheet" href="/blog/assets/blog.css"/>
 </head>
 <body>
-  <header class="header">
-    <a class="logo" href="/">Prompt Consulting</a>
-    <nav class="nav">
-      <a href="/">Home</a>
-      <a href="/blog/">Blog</a>
-    </nav>
+  <header class="site-header">
+    <div class="site-header__inner">
+      <a class="site-logo" href="/">Prompt Consulting</a>
+      <nav class="site-nav" aria-label="Primary">
+        <a href="/">Home</a>
+        <a href="/blog/">Blog</a>
+        <a href="/#services">Services</a>
+        <a href="/#about">About</a>
+      </nav>
+      <a class="site-header__cta" href="/#contact">Contact Us</a>
+    </div>
   </header>
-  <main class="container">
+  <main class="article-wrapper">
     <article class="article">
       <h1>UAE: Real Estate Employee Ordered to Repay Dh437,000 After Embezzlement Conviction — A Lesson on Accounting Integrity and Internal Controls</h1>
-      <div class="post-meta">
+      <div class="article__meta">
         <span class="post-tag">Internal Controls</span>
+        <span class="post-author">By Kirtan Patel</span>
         <span>Published <time datetime="2025-02-10">10 Feb 2025</time></span>
       </div>
       
+      
+      <figure class="article__featured">
+        <img src="/blog/assets/images/internal-controls-case.svg" alt="Forensic accounting specialists reviewing controls for a UAE real estate firm" loading="lazy" decoding="async"/>
+      </figure>
       <div class="prose">
         <h2>Background</h2>
 <p>In a recent UAE court ruling, a real estate employee was ordered to repay Dh437,000 after being found guilty of embezzling company funds. The case, though specific, reflects a recurring issue across many UAE businesses — weak accounting systems and the absence of effective internal controls.</p>
@@ -69,8 +79,80 @@ Accountant Consultant | Prompt Consulting, Dubai, UAE<br>
     </article>
   </main>
   <footer class="footer">
-    © <span id="year"></span> Prompt Consulting · <a href="/blog/">All posts</a>
+    <div class="footer__inner">
+      <div>
+        <a class="footer__logo" href="/">Prompt Consulting</a>
+        <p class="footer__value">Helping UAE businesses stay compliant, future-ready, and confident in every financial decision.</p>
+        <div class="footer__social">
+          <a href="https://www.linkedin.com" aria-label="LinkedIn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M4.983 3.5C4.983 4.88 3.88 6 2.49 6h-.03C1.11 6 0 4.88 0 3.5 0 2.12 1.13 1 2.52 1c1.39 0 2.46 1.12 2.49 2.5zM.24 23.5h4.52V7.98H.24V23.5zm7.98-15.52h4.33v2.13h.06c.6-1.14 2.08-2.34 4.28-2.34 4.58 0 5.42 3.02 5.42 6.95V23.5h-4.5v-7.65c0-1.82-.03-4.17-2.54-4.17-2.54 0-2.93 1.98-2.93 4.03V23.5H8.22V7.98z" fill="currentColor"/></svg>
+          </a>
+          <a href="mailto:hello@promptconsulting.co.in" aria-label="Email">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M2 4h20a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm10 7.7L21.2 6H2.8L12 11.7zm-1.2 1.6L2 7.6V18h20V7.6l-8.8 5.7a1 1 0 0 1-1.04 0z" fill="currentColor"/></svg>
+          </a>
+        </div>
+      </div>
+      <div>
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="/">Home</a></li>
+          <li><a href="/blog/">Blog</a></li>
+          <li><a href="/#services">Services</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Services</h4>
+        <ul>
+          <li><a href="/#services">Accounting &amp; Bookkeeping</a></li>
+          <li><a href="/#services">Corporate Tax Advisory</a></li>
+          <li><a href="/#services">Internal Audit Support</a></li>
+          <li><a href="/#services">VAT Compliance</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Newsletter</h4>
+        <p>Monthly updates on compliance deadlines, regulatory changes, and finance best practices.</p>
+        <form class="footer__form" data-js-newsletter>
+          <label class="sr-only" for="newsletter-email">Business email</label>
+          <input type="email" id="newsletter-email" name="email" placeholder="name@company.com" required/>
+          <button type="submit">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© <span data-js-year></span> Prompt Consulting. All rights reserved.</p>
+      <p>Made in Dubai to keep ambitious businesses compliant and confident.</p>
+    </div>
   </footer>
-  <script>document.getElementById('year').textContent=new Date().getFullYear()</script>
+  <script>
+    (function(){
+      const yearTarget=document.querySelector('[data-js-year]');
+      if(yearTarget){yearTarget.textContent=new Date().getFullYear();}
+      const newsletter=document.querySelector('[data-js-newsletter]');
+      if(newsletter){
+        newsletter.addEventListener('submit',function(event){
+          event.preventDefault();
+          const button=this.querySelector('button');
+          const emailInput=this.querySelector('input[type="email"]');
+          if(button){
+            button.textContent='Thanks for subscribing!';
+            button.disabled=true;
+            button.style.background='#2f9b5f';
+          }
+          if(emailInput){
+            emailInput.value='';
+          }
+          setTimeout(()=>{
+            if(button){
+              button.textContent='Subscribe';
+              button.disabled=false;
+              button.style.background='';
+            }
+          },4000);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

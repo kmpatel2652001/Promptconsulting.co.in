@@ -1,0 +1,20 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Prompt Consulting insights abstract</title>
+  <desc id="desc">Abstract gradient background representing business insights.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eef2ff"/>
+      <stop offset="50%" stop-color="#dde7ff"/>
+      <stop offset="100%" stop-color="#cdd9ff"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.3" cy="0.3" r="0.8">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#6a82fb" stop-opacity="0.3"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)" rx="36"/>
+  <circle cx="360" cy="260" r="200" fill="url(#glow)" opacity="0.6"/>
+  <circle cx="760" cy="520" r="260" fill="url(#glow)" opacity="0.4"/>
+  <rect x="260" y="220" width="680" height="360" rx="48" fill="#fff" opacity="0.28"/>
+  <rect x="320" y="280" width="560" height="240" rx="40" fill="#fff" opacity="0.18"/>
+</svg>

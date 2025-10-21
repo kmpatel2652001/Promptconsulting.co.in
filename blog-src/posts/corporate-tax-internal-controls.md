@@ -4,6 +4,9 @@ title: "Corporate Tax: Internal Controls to Finalise Before Your First Return"
 description: "Practical control checkpoints to keep your UAE corporate tax filings audit-ready."
 date: 2025-01-02
 category: "Corporate Tax"
+author: "Prompt Consulting Editorial Team"
+image: "/blog/assets/images/corporate-tax-insights.svg"
+imageAlt: "Finance leader reviewing corporate tax dashboards with a consultant"
 tags:
   - posts
 permalink: "/blog/corporate-tax-internal-controls/"

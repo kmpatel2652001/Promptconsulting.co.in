@@ -1,0 +1,49 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">VAT compliance checklist illustration</title>
+  <desc id="desc">Checklist, documents, and the UAE skyline showing VAT compliance preparation.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5fff9"/>
+      <stop offset="100%" stop-color="#dff9ef"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#009b68"/>
+      <stop offset="100%" stop-color="#41d49f"/>
+    </linearGradient>
+    <linearGradient id="soft" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8fe7c0"/>
+      <stop offset="100%" stop-color="#c3f5de"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="800" fill="url(#bg)" rx="36"/>
+  <g opacity="0.22" transform="translate(140 120)">
+    <circle cx="200" cy="200" r="160" fill="#9ef1c5"/>
+    <circle cx="520" cy="120" r="200" fill="#31c98f"/>
+    <circle cx="780" cy="260" r="180" fill="#72e6b8"/>
+  </g>
+  <g transform="translate(220 220)">
+    <rect width="720" height="360" rx="40" fill="#fff" opacity="0.9"/>
+    <rect x="100" y="80" width="280" height="260" rx="28" fill="#f4fff8"/>
+    <rect x="420" y="120" width="200" height="160" rx="24" fill="#e8fbf1"/>
+  </g>
+  <g transform="translate(280 260)">
+    <rect width="220" height="260" rx="24" fill="#fff"/>
+    <rect x="36" y="60" width="148" height="20" rx="10" fill="#b8efd5"/>
+    <rect x="36" y="100" width="110" height="18" rx="9" fill="#8fe7c0"/>
+    <rect x="36" y="140" width="130" height="18" rx="9" fill="#ccf5e2"/>
+    <rect x="36" y="180" width="160" height="18" rx="9" fill="#defaeb"/>
+    <path d="M60 180 L84 204 L134 154" stroke="url(#accent)" stroke-width="14" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <g transform="translate(540 280)">
+    <rect width="300" height="200" rx="28" fill="#fff"/>
+    <rect x="36" y="48" width="200" height="20" rx="10" fill="#c6f1de"/>
+    <rect x="36" y="88" width="160" height="18" rx="9" fill="#9ce8c8"/>
+    <rect x="36" y="126" width="180" height="18" rx="9" fill="#c6f1de"/>
+    <rect x="36" y="164" width="140" height="18" rx="9" fill="#e2f9ef"/>
+  </g>
+  <g transform="translate(820 420)" opacity="0.4">
+    <circle cx="0" cy="0" r="50" fill="#1ab077"/>
+    <circle cx="80" cy="0" r="42" fill="#36d097"/>
+    <circle cx="38" cy="66" r="34" fill="#8defc6"/>
+  </g>
+</svg>
