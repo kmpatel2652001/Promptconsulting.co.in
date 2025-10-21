@@ -1,10 +1,6 @@
 ---
-pagination:
-  data: collections.posts
-  size: 100
-permalink: "/blog/"
-eleventyComputed:
-  title: "Blog | Prompt Consulting"
+title: "Blog | Prompt Consulting"
+permalink: "/blog/index.html"
 ---
 <!DOCTYPE html>
 <html lang="en">
@@ -28,17 +24,25 @@ eleventyComputed:
       <h1>Insights &amp; Updates</h1>
       <p>Accounting, Audit &amp; UAE Tax updates to help you make better decisions.</p>
     </section>
+    {% if collections.posts | length %}
     <section class="grid">
       {% for post in collections.posts | reverse %}
         <article class="card">
           <h3><a href="{{ post.url }}">{{ post.data.title }}</a></h3>
           <p>{{ post.data.description }}</p>
           <div class="meta">
-            {% if post.date %}Published: <time datetime="{{ post.date | date('yyyy-LL-dd') }}">{{ post.date | date('dd LLL yyyy') }}</time>{% endif %}
+            {% if post.data.category %}<span class="pill">{{ post.data.category }}</span>{% endif %}
+            {% if post.date %}<time datetime="{{ post.date | isoDate }}">{{ post.date | readableDate }}</time>{% endif %}
           </div>
         </article>
       {% endfor %}
     </section>
+    {% else %}
+    <section class="empty-state">
+      <h2>Posts coming soon</h2>
+      <p>We&apos;re preparing fresh guidance on UAE tax, audit, and accounting. Check back shortly.</p>
+    </section>
+    {% endif %}
   </main>
   <footer class="footer">
     © <span id="year"></span> Prompt Consulting · <a href="/">Back to Home</a>
