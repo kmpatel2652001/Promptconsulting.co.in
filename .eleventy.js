@@ -1,11 +1,11 @@
 module.exports = function(eleventyConfig) {
-  // Copy the admin folder to output
+  // Copy the admin folder as-is to output
   eleventyConfig.addPassthroughCopy("blog-src/admin");
 
   return {
     dir: {
       input: "blog-src",
-      output: "blog"
+      output: "."   // <--- deploy to root instead of /blog
     }
   };
 };
