@@ -1,42 +1,7 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Prompt Consulting CMS</title>
-  </head>
+  <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Prompt Consulting CMS</title></head>
   <body>
-    <!-- Netlify Identity widget: required so invite tokens open a password modal -->
-    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-    <!-- Decap (Netlify) CMS -->
     <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
-    <script>
-      // If the user clicks an invite or confirmation link (with #invite_token or #confirmation_token),
-      // open the Identity modal so they can set a password.
-      function hasIdentityToken() {
-        var h = (window.location.hash || "");
-        return h.indexOf("invite_token=") !== -1 || h.indexOf("confirmation_token=") !== -1;
-      }
-
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", function(user) {
-          if (!user && hasIdentityToken()) {
-            window.netlifyIdentity.open("signup"); // opens the set-password/signup flow
-          }
-        });
-
-        // After login, stay on /admin so CMS loads content
-        window.netlifyIdentity.on("login", function() {
-          if (location.pathname !== "/admin/") {
-            location.replace("/admin/");
-          } else {
-            // Refresh to let CMS load with auth
-            location.reload();
-          }
-        });
-      }
-    </script>
   </body>
 </html>
