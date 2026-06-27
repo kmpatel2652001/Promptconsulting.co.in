@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UAE Tax &amp; Regulation — Practice Exam | Prompt Consulting</title>
+<meta name="description" content="Free interactive practice exam for the UAE Tax and Regulation Assessment. Practice mode with instant feedback, organised by topic.">
+<style>
+:root{
+  --navy:#0d2a43; --navy2:#16466b; --teal:#1c8c8c; --gold:#c9a227;
+  --green:#1f9d57; --green-bg:#e7f6ee; --red:#d24b4b; --red-bg:#fce9e9;
+  --ink:#1f2a33; --muted:#5d6b76; --line:#e3e8ec; --bg:#f4f6f8; --card:#ffffff;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;
+  background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px 60px}
+header.site{background:linear-gradient(135deg,var(--navy),var(--navy2));color:#fff;padding:26px 0 22px;
+  border-bottom:4px solid var(--gold)}
+header.site .wrap{padding-bottom:0}
+.brand{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:700}
+header.site h1{margin:6px 0 4px;font-size:26px;font-weight:700}
+header.site p{margin:0;color:#cdd9e4;font-size:14.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:24px;margin-top:22px;
+  box-shadow:0 1px 3px rgba(13,42,67,.05)}
+h2{font-size:19px;margin:0 0 6px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 18px}
+.section-title{font-size:12px;letter-spacing:1.5px;text-transform:uppercase;color:var(--teal);font-weight:700;margin:22px 0 10px}
+.topics{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:620px){.topics{grid-template-columns:1fr}.topics{}}
+.topic{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:11px 13px;
+  cursor:pointer;background:#fbfcfd;transition:.15s;font-size:14px}
+.topic:hover{border-color:var(--teal)}
+.topic.on{border-color:var(--teal);background:#effafa}
+.topic input{accent-color:var(--teal);width:17px;height:17px;flex:none}
+.topic .cnt{margin-left:auto;font-size:12px;color:var(--muted);background:#eef2f5;border-radius:20px;padding:1px 9px}
+.topic.on .cnt{background:#d6efef;color:#0d6b6b}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);background:#fff;border-radius:20px;padding:7px 15px;cursor:pointer;font-size:13.5px;color:var(--muted)}
+.chip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.btn{appearance:none;border:0;border-radius:10px;padding:13px 22px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn-primary{background:var(--teal);color:#fff}
+.btn-primary:hover{background:#15706f}
+.btn-primary:disabled{background:#a9c6c6;cursor:not-allowed}
+.btn-ghost{background:#eef2f5;color:var(--navy)}
+.btn-ghost:hover{background:#e2e8ec}
+.linkrow{margin-top:16px;font-size:13px;color:var(--muted)}
+.mini{display:flex;gap:14px;flex-wrap:wrap;margin-top:8px}
+.mini div{background:#f7f9fb;border:1px solid var(--line);border-radius:8px;padding:8px 12px;font-size:13px}
+.mini b{color:var(--navy)}
+
+/* progress */
+.topbar{display:flex;align-items:center;gap:14px;margin-top:20px}
+.progress{flex:1;height:9px;background:#e6ebef;border-radius:20px;overflow:hidden}
+.progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--green));width:0;transition:.3s}
+.counter{font-size:13px;color:var(--muted);white-space:nowrap}
+.scorepill{font-size:13px;font-weight:700;color:var(--navy);background:#eef6f6;border:1px solid #d4eaea;border-radius:20px;padding:3px 11px}
+
+.qtopic{font-size:11.5px;letter-spacing:1px;text-transform:uppercase;color:var(--teal);font-weight:700}
+.qtype{font-size:11.5px;color:var(--muted);font-weight:600}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:8px}
+.qtext{font-size:18px;font-weight:600;margin:2px 0 4px;color:var(--ink)}
+.hint{font-size:12.5px;color:var(--muted);margin-bottom:14px}
+.opt{display:flex;align-items:flex-start;gap:12px;border:1.5px solid var(--line);border-radius:11px;padding:13px 15px;margin-bottom:10px;
+  cursor:pointer;transition:.12s;background:#fff}
+.opt:hover{border-color:var(--teal);background:#fafdfd}
+.opt.sel{border-color:var(--teal);background:#eefafa}
+.opt .mk{width:20px;height:20px;border-radius:50%;border:2px solid #c2ccd4;flex:none;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;color:#fff}
+.opt.multi .mk{border-radius:6px}
+.opt.sel .mk{border-color:var(--teal);background:var(--teal)}
+.opt .tx{font-size:15px}
+.opt.correct{border-color:var(--green);background:var(--green-bg)}
+.opt.correct .mk{border-color:var(--green);background:var(--green)}
+.opt.wrong{border-color:var(--red);background:var(--red-bg)}
+.opt.wrong .mk{border-color:var(--red);background:var(--red)}
+.opt.locked{cursor:default}
+.opt.locked:hover{background:inherit}
+.feedback{border-radius:11px;padding:13px 15px;margin:6px 0 4px;font-size:14.5px;display:none}
+.feedback.show{display:block}
+.feedback.ok{background:var(--green-bg);border:1px solid #bfe6cf;color:#176a3c}
+.feedback.no{background:var(--red-bg);border:1px solid #f0c9c9;color:#9a3030}
+.feedback b{display:block;margin-bottom:3px}
+.actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:12px}
+
+/* results */
+.result-score{text-align:center;padding:10px 0 4px}
+.result-score .pct{font-size:54px;font-weight:800;color:var(--navy);line-height:1}
+.result-score .lbl{color:var(--muted);font-size:14px;margin-top:4px}
+.verdict{display:inline-block;margin-top:12px;padding:7px 18px;border-radius:24px;font-weight:700;font-size:14px}
+.verdict.pass{background:var(--green-bg);color:#176a3c}
+.verdict.fail{background:var(--red-bg);color:#9a3030}
+.bd{margin-top:18px}
+.bd .br{display:flex;align-items:center;gap:10px;margin:9px 0;font-size:13.5px}
+.bd .nm{width:46%;color:var(--ink)}
+.bd .bar{flex:1;height:8px;background:#e9eef1;border-radius:8px;overflow:hidden}
+.bd .bar > i{display:block;height:100%;background:var(--teal)}
+.bd .vv{width:54px;text-align:right;color:var(--muted)}
+footer.site{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 18px 0}
+footer.site a{color:var(--teal);text-decoration:none}
+.disclaimer{font-size:11.5px;color:#9aa6af;margin-top:10px;line-height:1.5}
+.hidden{display:none}
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand">Prompt Consulting</div>
+    <h1>UAE Tax &amp; Regulation — Practice Exam</h1>
+    <p>Interactive practice with instant feedback · organised by topic</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ START ============ -->
+  <section id="start" class="card">
+    <h2>Build your practice set</h2>
+    <p class="sub">Choose the topics you want to revise and how many questions to attempt. In practice mode the correct answer is revealed immediately after each question.</p>
+
+    <div class="section-title">1 · Choose topics</div>
+    <div class="row" style="margin-bottom:10px">
+      <button class="chip on" id="allTopics" type="button">Select all topics</button>
+      <span class="counter" id="poolInfo"></span>
+    </div>
+    <div class="topics" id="topicList"></div>
+
+    <div class="section-title">2 · Number of questions</div>
+    <div class="chips" id="countChips"></div>
+
+    <div class="section-title">3 · Order</div>
+    <div class="chips" id="orderChips">
+      <button class="chip on" data-order="shuffle" type="button">Shuffle</button>
+      <button class="chip" data-order="ordered" type="button">By topic</button>
+    </div>
+
+    <div class="actions">
+      <span class="counter" id="selInfo"></span>
+      <button class="btn btn-primary" id="startBtn" type="button">Start practice →</button>
+    </div>
+    <div class="disclaimer">Study aid only — questions and answers were compiled from the UAE Tax and Regulation Assessment for revision purposes and do not constitute tax or legal advice.</div>
+  </section>
+
+  <!-- ============ QUIZ ============ -->
+  <section id="quiz" class="hidden">
+    <div class="topbar">
+      <div class="progress"><i id="bar"></i></div>
+      <span class="counter" id="counter">1 / 10</span>
+      <span class="scorepill" id="scorePill">0 correct</span>
+    </div>
+
+    <div class="card">
+      <div class="qhead">
+        <span class="qtopic" id="qTopic"></span>
+        <span class="qtype" id="qType"></span>
+      </div>
+      <div class="qtext" id="qText"></div>
+      <div class="hint" id="qHint"></div>
+      <div id="opts"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="quitBtn" type="button">Quit</button>
+        <button class="btn btn-primary" id="actBtn" type="button">Check answer</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RESULTS ============ -->
+  <section id="results" class="hidden">
+    <div class="card">
+      <div class="result-score">
+        <div class="pct" id="rPct">0%</div>
+        <div class="lbl" id="rLbl">0 of 0 correct</div>
+        <div id="rVerdict"></div>
+      </div>
+      <div class="bd" id="rBreak"></div>
+      <div class="actions" style="margin-top:22px">
+        <button class="btn btn-ghost" id="reviewAgain" type="button">Retry these topics</button>
+        <button class="btn btn-primary" id="newSet" type="button">New practice set</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site">
+    <div>© <span id="yr"></span> Prompt Consulting · UAE Tax &amp; Regulation revision tool</div>
+    <div class="disclaimer">Built as a free revision resource. Verify all positions against the current UAE legislation and FTA guidance.</div>
+  </footer>
+</div>
+
+<script>
+/* UAE Tax & Regulation — Practice Question Bank
+   Compiled and verified from the UAE Tax and Regulation Assessment screenshots. */
+const QUESTIONS = [
+  {topic:"AML & Financial Crime", type:"single",
+   q:"Which institution analyses suspicious transactions?",
+   options:[{t:"Police"},{t:"Financial Intelligence Unit",c:1},{t:"Insurance Commissioner"},{t:"Department of Economic Development"}]},
+  {topic:"AML & Financial Crime", type:"single",
+   q:"Which of the following is used to file a Suspicious Activity Report?",
+   options:[{t:"Emirates Post"},{t:"DHL"},{t:"goAML",c:1},{t:"Legal professional"}]},
+  {topic:"AML & Financial Crime", type:"multi",
+   q:"Which of the following are Designated Non-Financial Businesses and Professions (DNFBPs)?",
+   options:[{t:"Architect"},{t:"Real estate broker",c:1},{t:"Accountant",c:1},{t:"Auditor",c:1}]},
+  {topic:"AML & Financial Crime", type:"multi",
+   q:"Under the anti-terrorism decision, a Financial Institution or a Designated Non-Financial Business or Profession has which of the following obligations?",
+   options:[
+     {t:"Regularly screen databases and transactions for prohibited persons",c:1},
+     {t:"Employing lawyers in the money laundering reporting officer function"},
+     {t:"Reporting if it suspects a current/former customer and a Listed Person have a business relationship",c:1},
+     {t:"Establishing internal compliance controls",c:1}]},
+
+  {topic:"UAE Business & Company Law", type:"multi",
+   q:"Which of the following business entity forms are companies?",
+   options:[{t:"Limited Liability Company",c:1},{t:"Sole trader"},{t:"Joint stock company",c:1},{t:"Limited liability partnership",c:1}]},
+  {topic:"UAE Business & Company Law", type:"multi",
+   q:"The manager of a Limited Liability Company is liable to which of the following for any fraudulent acts?",
+   options:[{t:"The company's employees"},{t:"The Company",c:1},{t:"The Partners",c:1},{t:"Third parties",c:1}]},
+  {topic:"UAE Business & Company Law", type:"multi",
+   q:"Under the Anti-Concealment laws, which of the following are consequences for an entity whose participation has been concealed?",
+   options:[
+     {t:"Donating the concealed activity's profits to the Ministry of Finance"},
+     {t:"Striking off from the commercial register",c:1},
+     {t:"Cancellation of the licence granted",c:1},
+     {t:"Deprivation of business activity for between two and five years",c:1}]},
+  {topic:"UAE Business & Company Law", type:"multi",
+   q:"Which of the following are trade licence categories?",
+   options:[{t:"Professional licence",c:1},{t:"Commercial licence",c:1},{t:"Industrial licence",c:1},{t:"Government licence"}]},
+  {topic:"UAE Business & Company Law", type:"single",
+   q:"Which accounting standards are used when preparing a UAE company's financial statements?",
+   options:[{t:"UAE Accounting Standards"},{t:"GCC Accounting Standards"},{t:"International Financial Reporting Standards (IFRS)",c:1},{t:"Any country's standards chosen by the Board"}]},
+  {topic:"UAE Business & Company Law", type:"single",
+   q:"Which UAE Government Department provides beneficial owner information on request to foreign governments?",
+   options:[{t:"Ministry of Finance"},{t:"Ministry of Economy",c:1},{t:"Ministry of Foreign Affairs"},{t:"Ministry of Justice"}]},
+  {topic:"UAE Business & Company Law", type:"single",
+   q:"Which of these Emirates houses the most Free Zones?",
+   options:[{t:"Dubai",c:1},{t:"Abu Dhabi"},{t:"Sharjah"},{t:"Fujairah"}]},
+  {topic:"UAE Business & Company Law", type:"multi",
+   q:"The Companies legislation requires the company auditor to carry out which of the following functions?",
+   options:[
+     {t:"Audit the accounts of the Company",c:1},
+     {t:"Review the transactions of the Company with related parties",c:1},
+     {t:"Inspect the balance sheet and the profit and loss account",c:1},
+     {t:"Inspect security arrangements at the company's head office and warehouse/factory sites"}]},
+  {topic:"UAE Business & Company Law", type:"multi",
+   q:"Which of the following correctly describe the additional conditions for practical auditing experience that a non-UAE national is required to have?",
+   options:[
+     {t:"One year if the person's auditing experience outside the UAE exceeds ten years",c:1},
+     {t:"Two years if the person's auditing experience outside the UAE is from five to ten years",c:1},
+     {t:"Three years if the person's auditing experience outside the UAE is from two to five years",c:1},
+     {t:"Four years if the person's auditing experience outside the UAE is from one to two years"}]},
+  {topic:"UAE Business & Company Law", type:"multi",
+   q:"Under the Copyright and Neighbouring Rights law (Federal Decree-Law No. 38 of 2021), which of the following works are protected?",
+   options:[
+     {t:"Books, brochures, articles and other written works",c:1},
+     {t:"Laws, regulations, judicial decisions and international agreements"},
+     {t:"Computer programmes, applications and databases",c:1},
+     {t:"Three-dimensional works of geography, topography and architecture, and plans",c:1}]},
+
+  {topic:"VAT", type:"single",
+   q:"Which of the following terms best describes VAT?",
+   options:[{t:"Consumption tax",c:1},{t:"Income tax"},{t:"Sales tax"},{t:"Payroll tax"}]},
+  {topic:"VAT", type:"single",
+   q:"Which of the following acts is considered Tax Evasion?",
+   options:[
+     {t:"Rounding up the input tax to the nearest Dirham"},
+     {t:"A person who is not a Registrant acquiring relevant goods, claiming he is a Registrant",c:1},
+     {t:"A Registrant disclosing an incorrect tax registration number on a supplier invoice caused by a simple mistake"},
+     {t:"A Registrant not disclosing a sequential invoice number on the invoice"}]},
+  {topic:"VAT", type:"single",
+   q:"How much VAT should a UAE supplier charge to a Saudi company's UAE place of establishment purchasing a machine for AED 10,000?",
+   options:[{t:"AED 500",c:1},{t:"AED 350"},{t:"AED 0"},{t:"AED 1,000"}]},
+  {topic:"VAT", type:"multi",
+   q:"Which of the following is required to ensure that an invoice is a qualifying tax invoice?",
+   options:[
+     {t:"The words “Tax Invoice” clearly displayed on the invoice",c:1},
+     {t:"The date of supply, if different from the date the Tax Invoice was issued",c:1},
+     {t:"The payer's bank account coordinates"},
+     {t:"The name, address and Tax Registration Number of the Recipient where he is a Registrant",c:1}]},
+  {topic:"VAT", type:"multi",
+   q:"Which of the following dates are relevant to determining when an output tax is payable?",
+   options:[
+     {t:"The date on which the goods were transferred",c:1},
+     {t:"The date on which the goods recipient took possession of the goods",c:1},
+     {t:"The date on which the goods were ordered"},
+     {t:"The date on which the assembly or installation of the goods was completed",c:1}]},
+
+  {topic:"Corporate Tax", type:"single",
+   q:"How many months are there in a Tax Period?",
+   options:[{t:"Three months"},{t:"Six months"},{t:"Nine months"},{t:"Twelve months",c:1}]},
+  {topic:"Corporate Tax", type:"single",
+   q:"A Taxable Person's Tax Period ends 31st July 2024. By when is the Taxable Person obligated to pay the corporate tax for that Tax Period?",
+   options:[{t:"October 2024"},{t:"January 2025"},{t:"31st July 2025"},{t:"April 2025",c:1}]},
+  {topic:"Corporate Tax", type:"single",
+   q:"Which of the following persons does the Ministry of Finance delegate its powers to in relation to corporate income tax?",
+   options:[{t:"Federal Tax Authority",c:1},{t:"Dubai International Financial Centre"},{t:"Dubai Financial Services Authority"},{t:"The Central Bank"}]},
+  {topic:"Corporate Tax", type:"multi",
+   q:"Which of the following requirements must be met for the participation exemption to apply?",
+   options:[
+     {t:"Hold stock entitling the holder to not less than 5% of the vote, 5% of the dividends and 5% of the capital on liquidation",c:1},
+     {t:"Be entitled to appoint a person to the board of the target"},
+     {t:"Have owned the holding in the target for not less than 12 months",c:1},
+     {t:"The target is subject to corporation tax at a rate not less than the UAE main rate (currently 9%)",c:1}]},
+  {topic:"Corporate Tax", type:"multi",
+   q:"A Taxable Person's deduction for entertainment, amusement or recreation expenditure is limited to 50%. Which of the following are examples of expenditure subject to the limitation?",
+   options:[
+     {t:"Meals and accommodation",c:1},
+     {t:"Hiring marketing consultants to identify which entertainment most increases brand value"},
+     {t:"Facilities and equipment used in connection with entertainment, amusement or recreation",c:1},
+     {t:"Transportation and admission fees",c:1}]},
+  {topic:"Corporate Tax", type:"single",
+   q:"A natural person can be liable to corporation tax. On which of the following sources of income is a natural person likely to be liable to pay corporation tax?",
+   options:[
+     {t:"Income from the conduct of a Business or Business Activity, whether derived in or outside the UAE",c:1},
+     {t:"Dividends from a less-than-5% stock holding in a British Virgin Islands company"},
+     {t:"Interest earned from a AED 500,000 deposit placed with a UAE financial institution"},
+     {t:"Royalty income from a copyright acquired in 2024, the person owning no other works"}]},
+  {topic:"Corporate Tax", type:"multi",
+   q:"Decree-Law 47 of 2022 provides examples of categories of income which are UAE-sourced income. Which of the following are categories of UAE-sourced income?",
+   options:[
+     {t:"Income from the sale of goods in the UAE",c:1},
+     {t:"Income from services rendered, utilised or benefitted from in the UAE",c:1},
+     {t:"Income from the use, outside the UAE, of intellectual or intangible property"},
+     {t:"Income from a contract insofar as it is wholly or partly performed or benefitted from in the UAE",c:1}]},
+  {topic:"Corporate Tax", type:"multi",
+   q:"The Business concept is fundamental to determining which natural persons are liable to corporation tax. Which of the following are referenced in the Decree-Law 47 of 2022 Business definition?",
+   options:[
+     {t:"Industrial or commercial activities",c:1},
+     {t:"Agricultural, vocational, professional, service or excavation activities",c:1},
+     {t:"Any activity related to the use of tangible or intangible property",c:1},
+     {t:"None of these activities are referenced in the Business definition"}]},
+  {topic:"Corporate Tax", type:"multi",
+   q:"Which of the following is an indicating factor of a Permanent Establishment having a Temporary and Exceptional Presence in the UAE?",
+   options:[
+     {t:"The exceptional circumstances were well known to the natural person before arriving in the UAE"},
+     {t:"The presence of the natural person in the State is a consequence of exceptional circumstances of a public or private nature",c:1},
+     {t:"The natural person did not express any intention to remain in the State when the exceptional circumstances end",c:1},
+     {t:"The Non-Resident Person did not have a Permanent Establishment in the UAE before the exceptional circumstances",c:1}]},
+
+  {topic:"Transfer Pricing", type:"multi",
+   q:"Which of the following are relevant when determining whether a person has a UAE Place of Establishment?",
+   options:[
+     {t:"The place where a business is legally established pursuant to the decision of its establishment",c:1},
+     {t:"The place where significant management decisions are taken",c:1},
+     {t:"The place where central management functions are conducted",c:1},
+     {t:"The place where the company's books and records are kept"}]},
+  {topic:"Transfer Pricing", type:"multi",
+   q:"Which of the following are relationships for Transfer Pricing purposes?",
+   options:[
+     {t:"A person who is the trustee, founder, settlor or beneficiary of a trust or foundation, and its Related Parties",c:1},
+     {t:"A person and its Independent Agent"},
+     {t:"Two or more persons that are partners in the same Unincorporated Partnership",c:1},
+     {t:"A person and its Permanent Establishment"}]},
+
+  {topic:"International Tax & BEPS", type:"single",
+   q:"What do the initials BEPS stand for?",
+   options:[{t:"Base Erosion and Profit Shifting",c:1},{t:"Buying Economics and Palatial Services"},{t:"Bite Environment and Safety Services"},{t:"Band Economics and Prune Services"}]},
+  {topic:"International Tax & BEPS", type:"multi",
+   q:"Which of the following are outbound payments likely to be covered by an investment treaty?",
+   options:[
+     {t:"A refund of corporation tax to the investor achieved by entering into an avoidance transaction"},
+     {t:"Contributions to the company's capital, including the initial contribution at incorporation",c:1},
+     {t:"Financial returns on the investment, including dividends on stock",c:1},
+     {t:"Earnings and remuneration of foreign personnel connected with the covered investment",c:1}]},
+  {topic:"International Tax & BEPS", type:"multi",
+   q:"Which of the following were implemented by the UAE in response to the BEPS Minimum Standards?",
+   options:[
+     {t:"Dispute resolution mechanisms (Action Report 14)"},
+     {t:"The Economic Substance Rules (Action Report 5)",c:1},
+     {t:"The Multilateral Instrument (Action Reports 6 and 15)",c:1},
+     {t:"Country-by-Country Reporting (Action Report 13)",c:1}]},
+  {topic:"International Tax & BEPS", type:"multi",
+   q:"Which of the following are anticipated features of the OECD's proposed BEPS 2.0 Pillar Two?",
+   options:[
+     {t:"An Income Inclusion Rule (IIR) imposing a top-up tax on a parent entity for low-taxed income of a constituent entity",c:1},
+     {t:"An Undertaxed Payment Rule (UTPR) denying deductions for low-taxed income not taxed by the IIR",c:1},
+     {t:"A special deduction of 160% of income untaxed in the foreign jurisdiction on repatriation to the residence country"},
+     {t:"A Subject to Tax Rule (STTR) allowing source jurisdictions to tax certain related-party payments taxed below a minimum rate",c:1}]},
+  {topic:"International Tax & BEPS", type:"single",
+   q:"What is the minimum rate for the Income Inclusion Rule (IIR) and the Undertaxed Payment Rule (UTPR)?",
+   options:[{t:"15%",c:1},{t:"9%"},{t:"10%"},{t:"12%"}]},
+
+  {topic:"Tax Treaties & Disputes", type:"single",
+   q:"True or false? The UAE does not favour using arbitration to resolve cross-border tax disputes.",
+   options:[{t:"True",c:1},{t:"False"}]},
+  {topic:"Tax Treaties & Disputes", type:"single",
+   q:"True or false? Independently of the UAE Federal Court position, the DIFC Courts can determine whether arbitration can be used to resolve a cross-border tax dispute.",
+   options:[{t:"True"},{t:"False",c:1}]},
+  {topic:"Tax Treaties & Disputes", type:"single",
+   q:"True or false? The UAE consists of six Emirates.",
+   options:[{t:"True"},{t:"False",c:1}]},
+  {topic:"Tax Treaties & Disputes", type:"single",
+   q:"Under the UAE's investment treaties, which of the following is an unacceptable justification for an act of expropriation carried out by a government?",
+   options:[
+     {t:"It had a public purpose"},
+     {t:"It was arranged in a non-discriminatory manner"},
+     {t:"It compensated the investor an amount equal to the asset's book written-down value",c:1},
+     {t:"Compensation was paid on a prompt, adequate and effective basis"}]},
+
+  {topic:"Tax Procedures & Penalties", type:"multi",
+   q:"Which of the following are reasons for the FTA to charge an Administrative Penalty?",
+   options:[
+     {t:"The Person has a reasonable excuse for submitting a Tax Return late"},
+     {t:"Failing to keep the required records and information",c:1},
+     {t:"Failing to submit the data, records and documents related to tax (in Arabic) when requested",c:1},
+     {t:"Failing to submit a Tax Registration application within the timeframe in the Tax Law",c:1}]},
+  {topic:"Tax Procedures & Penalties", type:"single",
+   q:"Which of the following statements about the FTA's Tax Audit powers is correct?",
+   options:[
+     {t:"The FTA must notify the Person of a Tax Audit no more than 5 business days before conducting it"},
+     {t:"The FTA may only perform the Tax Audit at the place of business of the Person being audited"},
+     {t:"The FTA may only perform the Tax Audit at the FTA's place of business"},
+     {t:"The FTA may perform a Tax Audit on any Person to verify that Person's compliance with Decree-Law 47 of 2022",c:1}]},
+
+  {topic:"Economic Substance & Information Exchange", type:"multi",
+   q:"Which of the following criteria are essential to satisfy the economic substance test in the UAE?",
+   options:[
+     {t:"Accounting function carried out in the UAE"},
+     {t:"The core income-generating activities conducted in the UAE",c:1},
+     {t:"Board meetings physically held in the UAE",c:1},
+     {t:"An adequate number of qualified employees physically present in the UAE",c:1}]},
+  {topic:"Economic Substance & Information Exchange", type:"multi",
+   q:"Which of the following are Relevant Activities for the purposes of the Economic Substance Regulations?",
+   options:[{t:"Banking business",c:1},{t:"Shipping business",c:1},{t:"Real estate"},{t:"Lease-finance business",c:1}]},
+  {topic:"Economic Substance & Information Exchange", type:"single",
+   q:"Which country established the FATCA system?",
+   options:[{t:"French Republic"},{t:"Arab Republic of Egypt"},{t:"United Arab Emirates"},{t:"United States of America",c:1}]},
+  {topic:"Economic Substance & Information Exchange", type:"multi",
+   q:"For FATCA purposes, which of the following is a foreign financial institution?",
+   options:[
+     {t:"A non-US entity collecting information coded into an Emirates ID card"},
+     {t:"A non-US entity which accepts deposits in the ordinary course of banking or a similar business",c:1},
+     {t:"An entity which holds financial assets for others as a substantial portion of its business",c:1},
+     {t:"A non-US entity primarily engaged in investing, reinvesting or trading securities",c:1}]},
+
+  {topic:"Trade & Anti-Dumping", type:"multi",
+   q:"Which of the following categories are considered harmful practices for 'dumping' purposes?",
+   options:[
+     {t:"A government quality guarantee in the country of origin"},
+     {t:"Export price lower than the seller country's ordinary value",c:1},
+     {t:"A government subsidy in the country of origin",c:1},
+     {t:"Flooding the market",c:1}]},
+
+  {topic:"UAE Overview & Constitution", type:"single",
+   q:"The Cabinet submits bills to which body for approval before passing them to the President for signature?",
+   options:[{t:"Supreme Council"},{t:"Federal National Council",c:1},{t:"Prime Minister"},{t:"Securities and Commodities Authority"}]},
+  {topic:"UAE Overview & Constitution", type:"single",
+   q:"How many categories are on the Foreign Direct Investment 'negative list'?",
+   options:[{t:"25"},{t:"16"},{t:"13",c:1},{t:"4"}]},
+  {topic:"UAE Overview & Constitution", type:"single",
+   q:"What was the population of the UAE in 2021?",
+   options:[{t:"9,900,000",c:1},{t:"5,000,000"},{t:"12,500,000"},{t:"15,000,000"}]}
+];
+</script>
+<script>
+/* ---------- state ---------- */
+var TOPICS = [];
+var state = {selectedTopics:new Set(), count:10, order:"shuffle", set:[], i:0, correct:0, answered:false, perTopic:{}};
+
+/* ---------- helpers ---------- */
+function byId(id){return document.getElementById(id);}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t;}return a;}
+function topicCounts(){var m={};QUESTIONS.forEach(function(q){m[q.topic]=(m[q.topic]||0)+1;});return m;}
+
+/* ---------- build start screen ---------- */
+function initStart(){
+  var counts = topicCounts();
+  TOPICS = Object.keys(counts);
+  var host = byId("topicList"); host.innerHTML="";
+  TOPICS.forEach(function(t){
+    state.selectedTopics.add(t);
+    var el=document.createElement("label");
+    el.className="topic on";
+    el.innerHTML='<input type="checkbox" checked> <span>'+t+'</span><span class="cnt">'+counts[t]+'</span>';
+    el.querySelector("input").addEventListener("change",function(e){
+      if(e.target.checked){state.selectedTopics.add(t);el.classList.add("on");}
+      else{state.selectedTopics.delete(t);el.classList.remove("on");}
+      refreshAllChip(); updateSelInfo();
+    });
+    host.appendChild(el);
+  });
+  // count chips
+  var cc=byId("countChips");
+  [10,20,"All"].forEach(function(n,idx){
+    var b=document.createElement("button");b.type="button";b.className="chip"+(idx===0?" on":"");
+    b.textContent=(n==="All"?"All":n+" questions");b.dataset.count=n;
+    b.addEventListener("click",function(){
+      cc.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});
+      b.classList.add("on");state.count=n;updateSelInfo();
+    });
+    cc.appendChild(b);
+  });
+  // order chips
+  byId("orderChips").querySelectorAll(".chip").forEach(function(b){
+    b.addEventListener("click",function(){
+      byId("orderChips").querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});
+      b.classList.add("on");state.order=b.dataset.order;
+    });
+  });
+  byId("allTopics").addEventListener("click",function(){
+    var allOn = state.selectedTopics.size===TOPICS.length;
+    state.selectedTopics = new Set(allOn?[]:TOPICS);
+    host.querySelectorAll(".topic").forEach(function(el,idx){
+      var on=!allOn; el.classList.toggle("on",on); el.querySelector("input").checked=on;
+    });
+    refreshAllChip(); updateSelInfo();
+  });
+  byId("poolInfo").textContent = QUESTIONS.length+" questions available";
+  updateSelInfo();
+}
+function refreshAllChip(){
+  byId("allTopics").classList.toggle("on", state.selectedTopics.size===TOPICS.length);
+}
+function pool(){return QUESTIONS.filter(function(q){return state.selectedTopics.has(q.topic);});}
+function updateSelInfo(){
+  var p=pool().length;
+  var n = state.count==="All"?p:Math.min(state.count,p);
+  byId("selInfo").textContent = p? (n+" questions from "+state.selectedTopics.size+" topic"+(state.selectedTopics.size>1?"s":"")) : "Select at least one topic";
+  byId("startBtn").disabled = p===0;
+}
+
+/* ---------- run quiz ---------- */
+function startQuiz(){
+  var p = pool();
+  p = state.order==="shuffle" ? shuffle(p) : p.slice().sort(function(a,b){return TOPICS.indexOf(a.topic)-TOPICS.indexOf(b.topic);});
+  var n = state.count==="All"?p.length:Math.min(state.count,p.length);
+  // each question: shuffle its options
+  state.set = p.slice(0,n).map(function(q){
+    return {topic:q.topic,type:q.type,q:q.q,options:shuffle(q.options)};
+  });
+  state.i=0;state.correct=0;state.answered=false;state.perTopic={};
+  byId("start").classList.add("hidden");
+  byId("results").classList.add("hidden");
+  byId("quiz").classList.remove("hidden");
+  renderQ();
+}
+function renderQ(){
+  var q=state.set[state.i];
+  state.answered=false;
+  byId("qTopic").textContent=q.topic;
+  byId("qType").textContent = q.type==="multi" ? "Select all that apply" : "Select one";
+  byId("qText").textContent=q.q;
+  var nCorrect=q.options.filter(function(o){return o.c;}).length;
+  byId("qHint").textContent = q.type==="multi" ? ("Tip: "+nCorrect+" answers are correct.") : "";
+  var host=byId("opts");host.innerHTML="";
+  q.options.forEach(function(o,idx){
+    var el=document.createElement("div");
+    el.className="opt"+(q.type==="multi"?" multi":"");
+    el.dataset.idx=idx;
+    el.innerHTML='<span class="mk">'+(q.type==="multi"?"✓":"")+'</span><span class="tx">'+o.t+'</span>';
+    el.addEventListener("click",function(){onPick(el,q);});
+    host.appendChild(el);
+  });
+  byId("feedback").className="feedback";byId("feedback").innerHTML="";
+  var act=byId("actBtn");act.textContent="Check answer";act.disabled=true;
+  // counter + progress
+  byId("counter").textContent=(state.i+1)+" / "+state.set.length;
+  byId("bar").style.width=((state.i)/state.set.length*100)+"%";
+  byId("scorePill").textContent=state.correct+" correct";
+}
+function onPick(el,q){
+  if(state.answered)return;
+  if(q.type==="single"){
+    byId("opts").querySelectorAll(".opt").forEach(function(x){x.classList.remove("sel");});
+    el.classList.add("sel");
+  }else{
+    el.classList.toggle("sel");
+  }
+  byId("actBtn").disabled = byId("opts").querySelectorAll(".opt.sel").length===0;
+}
+function gradeQ(){
+  var q=state.set[state.i];
+  var els=byId("opts").querySelectorAll(".opt");
+  var ok=true;
+  els.forEach(function(el){
+    var o=q.options[+el.dataset.idx];
+    var sel=el.classList.contains("sel");
+    el.classList.add("locked");
+    if(o.c){el.classList.add("correct");}
+    if(sel&&!o.c){el.classList.add("wrong");ok=false;}
+    if(!sel&&o.c){ok=false;}
+    // fill marks for clarity
+    if(o.c){el.querySelector(".mk").textContent="✓";}
+    else if(sel){el.querySelector(".mk").textContent="✕";}
+  });
+  state.answered=true;
+  if(ok)state.correct++;
+  // per-topic tally
+  var pt=state.perTopic[q.topic]||(state.perTopic[q.topic]={c:0,t:0});
+  pt.t++; if(ok)pt.c++;
+  // feedback
+  var corr=q.options.filter(function(o){return o.c;}).map(function(o){return o.t;});
+  var fb=byId("feedback");
+  fb.className="feedback show "+(ok?"ok":"no");
+  fb.innerHTML="<b>"+(ok?"Correct":"Not quite")+"</b>"+
+     (q.type==="multi"?("Correct answer"+(corr.length>1?"s":"")+": "+corr.join("; ")):("Correct answer: "+corr[0]));
+  byId("scorePill").textContent=state.correct+" correct";
+  byId("bar").style.width=((state.i+1)/state.set.length*100)+"%";
+  var act=byId("actBtn");
+  act.disabled=false;
+  act.textContent = (state.i===state.set.length-1)?"See results →":"Next question →";
+}
+function next(){
+  if(state.i<state.set.length-1){state.i++;renderQ();}
+  else showResults();
+}
+function onAct(){
+  if(!state.answered)gradeQ();
+  else next();
+}
+function showResults(){
+  byId("quiz").classList.add("hidden");
+  byId("results").classList.remove("hidden");
+  var tot=state.set.length, c=state.correct, pct=Math.round(c/tot*100);
+  byId("rPct").textContent=pct+"%";
+  byId("rLbl").textContent=c+" of "+tot+" correct";
+  var pass=pct>=70;
+  byId("rVerdict").innerHTML='<span class="verdict '+(pass?"pass":"fail")+'">'+(pass?"Pass — well done":"Keep practising")+'</span>';
+  // breakdown
+  var host=byId("rBreak");host.innerHTML='<div class="section-title">By topic</div>';
+  Object.keys(state.perTopic).forEach(function(t){
+    var p=state.perTopic[t];var pc=Math.round(p.c/p.t*100);
+    var row=document.createElement("div");row.className="br";
+    row.innerHTML='<span class="nm">'+t+'</span><span class="bar"><i style="width:'+pc+'%"></i></span><span class="vv">'+p.c+'/'+p.t+'</span>';
+    host.appendChild(row);
+  });
+}
+
+/* ---------- wire up ---------- */
+byId("startBtn").addEventListener("click",startQuiz);
+byId("actBtn").addEventListener("click",onAct);
+byId("quitBtn").addEventListener("click",function(){byId("quiz").classList.add("hidden");byId("start").classList.remove("hidden");});
+byId("reviewAgain").addEventListener("click",startQuiz);
+byId("newSet").addEventListener("click",function(){byId("results").classList.add("hidden");byId("start").classList.remove("hidden");});
+document.addEventListener("keydown",function(e){
+  if(e.key==="Enter"&&!byId("quiz").classList.contains("hidden")&&!byId("actBtn").disabled){onAct();}
+});
+byId("yr").textContent=new Date().getFullYear();
+initStart();
+</script>
+</body>
+</html>
