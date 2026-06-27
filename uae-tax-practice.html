@@ -44,6 +44,7 @@ h2{font-size:19px;margin:0 0 6px}
 .btn-primary{background:var(--teal);color:#fff}
 .btn-primary:hover{background:#15706f}
 .btn-primary:disabled{background:#a9c6c6;cursor:not-allowed}
+.btn-ghost:disabled{opacity:.4;cursor:not-allowed}
 .btn-ghost{background:#eef2f5;color:var(--navy)}
 .btn-ghost:hover{background:#e2e8ec}
 .linkrow{margin-top:16px;font-size:13px;color:var(--muted)}
@@ -160,7 +161,10 @@ footer.site a{color:var(--teal);text-decoration:none}
       <div id="opts"></div>
       <div class="feedback" id="feedback"></div>
       <div class="actions">
-        <button class="btn btn-ghost" id="quitBtn" type="button">Quit</button>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-ghost" id="quitBtn" type="button">Quit</button>
+          <button class="btn btn-ghost" id="prevBtn" type="button">&larr; Previous</button>
+        </div>
         <button class="btn btn-primary" id="actBtn" type="button">Check answer</button>
       </div>
     </div>
@@ -196,7 +200,7 @@ const QUESTIONS = [{"topic": "AML & Financial Crime", "type": "multi", "q": "The
 <script>
 /* ---------- state ---------- */
 var TOPICS = [];
-var state = {selectedTopics:new Set(), count:10, order:"shuffle", set:[], i:0, correct:0, answered:false, perTopic:{}};
+var state = {selectedTopics:new Set(), count:10, order:"shuffle", set:[], i:0, answers:[], answered:false};
 
 /* ---------- helpers ---------- */
 function byId(id){return document.getElementById(id);}
@@ -269,15 +273,15 @@ function startQuiz(){
   state.set = p.slice(0,n).map(function(q){
     return {topic:q.topic,type:q.type,q:q.q,options:shuffle(q.options)};
   });
-  state.i=0;state.correct=0;state.answered=false;state.perTopic={};
+  state.i=0;state.answers=[];state.answered=false;
   byId("start").classList.add("hidden");
   byId("results").classList.add("hidden");
   byId("quiz").classList.remove("hidden");
   renderQ();
 }
+function scoreCount(){var n=0;state.answers.forEach(function(a){if(a&&a.ok)n++;});return n;}
 function renderQ(){
   var q=state.set[state.i];
-  state.answered=false;
   byId("qTopic").textContent=q.topic;
   byId("qType").textContent = q.type==="multi" ? "Select all that apply" : "Select one";
   byId("qText").textContent=q.q;
@@ -293,11 +297,21 @@ function renderQ(){
     host.appendChild(el);
   });
   byId("feedback").className="feedback";byId("feedback").innerHTML="";
-  var act=byId("actBtn");act.textContent="Check answer";act.disabled=true;
-  // counter + progress
+  byId("prevBtn").disabled = state.i===0;
   byId("counter").textContent=(state.i+1)+" / "+state.set.length;
-  byId("bar").style.width=((state.i)/state.set.length*100)+"%";
-  byId("scorePill").textContent=state.correct+" correct";
+  byId("scorePill").textContent=scoreCount()+" correct";
+  var ans=state.answers[state.i];
+  if(ans){
+    state.answered=true;
+    byId("opts").querySelectorAll(".opt").forEach(function(el){
+      if(ans.sel.indexOf(+el.dataset.idx)>=0) el.classList.add("sel");
+    });
+    showGraded(q);
+  }else{
+    state.answered=false;
+    var act=byId("actBtn");act.textContent="Check answer";act.disabled=true;
+    byId("bar").style.width=((state.i)/state.set.length*100)+"%";
+  }
 }
 function onPick(el,q){
   if(state.answered)return;
@@ -309,38 +323,42 @@ function onPick(el,q){
   }
   byId("actBtn").disabled = byId("opts").querySelectorAll(".opt.sel").length===0;
 }
-function gradeQ(){
-  var q=state.set[state.i];
+function showGraded(q){
   var els=byId("opts").querySelectorAll(".opt");
-  var ok=true;
   els.forEach(function(el){
     var o=q.options[+el.dataset.idx];
     var sel=el.classList.contains("sel");
-    el.classList.add("locked");
-    if(o.c){el.classList.add("correct");}
-    if(sel&&!o.c){el.classList.add("wrong");ok=false;}
-    if(!sel&&o.c){ok=false;}
-    // fill marks for clarity
-    if(o.c){el.querySelector(".mk").textContent="✓";}
-    else if(sel){el.querySelector(".mk").textContent="✕";}
+    el.classList.add("locked");el.classList.remove("correct","wrong");
+    if(o.c){el.classList.add("correct");el.querySelector(".mk").textContent="✓";}
+    else if(sel){el.classList.add("wrong");el.querySelector(".mk").textContent="✕";}
   });
-  state.answered=true;
-  if(ok)state.correct++;
-  // per-topic tally
-  var pt=state.perTopic[q.topic]||(state.perTopic[q.topic]={c:0,t:0});
-  pt.t++; if(ok)pt.c++;
-  // feedback
+  var ok=state.answers[state.i].ok;
   var corr=q.options.filter(function(o){return o.c;}).map(function(o){return o.t;});
   var fb=byId("feedback");
   fb.className="feedback show "+(ok?"ok":"no");
   fb.innerHTML="<b>"+(ok?"Correct":"Not quite")+"</b>"+
      (q.type==="multi"?("Correct answer"+(corr.length>1?"s":"")+": "+corr.join("; ")):("Correct answer: "+corr[0]));
-  byId("scorePill").textContent=state.correct+" correct";
   byId("bar").style.width=((state.i+1)/state.set.length*100)+"%";
-  var act=byId("actBtn");
-  act.disabled=false;
+  var act=byId("actBtn");act.disabled=false;
   act.textContent = (state.i===state.set.length-1)?"See results →":"Next question →";
 }
+function gradeQ(){
+  var q=state.set[state.i];
+  var els=byId("opts").querySelectorAll(".opt");
+  var ok=true, sel=[];
+  els.forEach(function(el){
+    var o=q.options[+el.dataset.idx];
+    var s=el.classList.contains("sel");
+    if(s)sel.push(+el.dataset.idx);
+    if(s&&!o.c)ok=false;
+    if(!s&&o.c)ok=false;
+  });
+  state.answers[state.i]={sel:sel,ok:ok};
+  state.answered=true;
+  showGraded(q);
+  byId("scorePill").textContent=scoreCount()+" correct";
+}
+function prev(){ if(state.i>0){state.i--;renderQ();} }
 function next(){
   if(state.i<state.set.length-1){state.i++;renderQ();}
   else showResults();
@@ -352,15 +370,20 @@ function onAct(){
 function showResults(){
   byId("quiz").classList.add("hidden");
   byId("results").classList.remove("hidden");
-  var tot=state.set.length, c=state.correct, pct=Math.round(c/tot*100);
+  var tot=state.set.length, c=scoreCount(), pct=Math.round(c/tot*100);
   byId("rPct").textContent=pct+"%";
   byId("rLbl").textContent=c+" of "+tot+" correct";
   var pass=pct>=70;
-  byId("rVerdict").innerHTML='<span class="verdict '+(pass?"pass":"fail")+'">'+(pass?"Pass — well done":"Keep practising")+'</span>';
-  // breakdown
+  byId("rVerdict").innerHTML='<span class="verdict '+(pass?"pass":"fail")+'">'+(pass?"Pass \u2014 well done":"Keep practising")+'</span>';
+  var perTopic={};
+  state.set.forEach(function(q,idx){
+    var a=state.answers[idx]; if(!a)return;
+    var pt=perTopic[q.topic]||(perTopic[q.topic]={c:0,t:0});
+    pt.t++; if(a.ok)pt.c++;
+  });
   var host=byId("rBreak");host.innerHTML='<div class="section-title">By topic</div>';
-  Object.keys(state.perTopic).forEach(function(t){
-    var p=state.perTopic[t];var pc=Math.round(p.c/p.t*100);
+  Object.keys(perTopic).forEach(function(t){
+    var p=perTopic[t];var pc=Math.round(p.c/p.t*100);
     var row=document.createElement("div");row.className="br";
     row.innerHTML='<span class="nm">'+t+'</span><span class="bar"><i style="width:'+pc+'%"></i></span><span class="vv">'+p.c+'/'+p.t+'</span>';
     host.appendChild(row);
@@ -370,6 +393,7 @@ function showResults(){
 /* ---------- wire up ---------- */
 byId("startBtn").addEventListener("click",startQuiz);
 byId("actBtn").addEventListener("click",onAct);
+byId("prevBtn").addEventListener("click",prev);
 byId("quitBtn").addEventListener("click",function(){byId("quiz").classList.add("hidden");byId("start").classList.remove("hidden");});
 byId("reviewAgain").addEventListener("click",startQuiz);
 byId("newSet").addEventListener("click",function(){byId("results").classList.add("hidden");byId("start").classList.remove("hidden");});
