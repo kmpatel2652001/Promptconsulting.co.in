@@ -285,7 +285,7 @@ const QUESTIONS = [{"type": "multi", "q": "The Supreme Council for National Secu
 <script>
 /* ===== config ===== */
 var MASTER_PIN = "prompt2026";              // change this passcode any time
-var API = "/.netlify/functions/attempts";    // backend (Netlify function); falls back to localStorage
+var APIS = ["/api/attempts","/.netlify/functions/attempts"]; // backend endpoints (Vercel, then Netlify); falls back to localStorage
 
 /* ===== helpers ===== */
 function byId(id){return document.getElementById(id);}
@@ -300,8 +300,16 @@ function show(id){["gate","home","quiz","results","myreport","masterPin","master
 var BACKEND=false;
 function lsAll(){try{return JSON.parse(localStorage.getItem("qz_attempts")||"[]");}catch(e){return [];}}
 function lsPush(r){var a=lsAll();a.push(r);try{localStorage.setItem("qz_attempts",JSON.stringify(a));}catch(e){}}
-function apiSave(r){return fetch(API,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(r)}).then(function(x){return x.ok;}).catch(function(){return false;});}
-function apiAll(){return fetch(API,{headers:{"cache-control":"no-store"}}).then(function(x){return x.ok?x.json():null;}).catch(function(){return null;});}
+function apiSave(r){
+  return (function go(i){ if(i>=APIS.length) return Promise.resolve(false);
+    return fetch(APIS[i],{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(r)}).then(function(x){return x.ok?true:go(i+1);}).catch(function(){return go(i+1);});
+  })(0);
+}
+function apiAll(){
+  return (function go(i){ if(i>=APIS.length) return Promise.resolve(null);
+    return fetch(APIS[i],{headers:{"cache-control":"no-store"}}).then(function(x){return x.ok?x.json():go(i+1);}).catch(function(){return go(i+1);});
+  })(0);
+}
 function saveAttempt(r){lsPush(r);return apiSave(r).then(function(ok){BACKEND=BACKEND||ok;return ok;});}
 function loadAttempts(){return apiAll().then(function(rows){if(rows){BACKEND=true;return rows;}return lsAll();});}
 
