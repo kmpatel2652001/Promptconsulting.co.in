@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qualification Roadmap 2026 | Prompt Consulting</title>
+  <meta name="description" content="Live progress tracker for ACCA, CPA Australia and UAE CA (UAECA) goals through the rest of 2026.">
+  <meta name="robots" content="noindex, nofollow">
+</head>
+<body>
+<style>
+  * { box-sizing: border-box; }
+
+  :root {
+    --paper:      #EEF2F1;
+    --paper-2:    #E6EBE9;
+    --card:       #FBFCFB;
+    --card-2:     #F3F6F5;
+    --ink:        #16211F;
+    --ink-2:      #495451;
+    --ink-3:      #737D7B;
+    --line:       #DBE1DF;
+    --line-2:     #C6CFCC;
+    --accent:     #0F6A67;
+    --accent-2:   #0B4F4D;
+    --accent-soft:#DBEBEA;
+    --good:       #2E7D5B;
+    --warn:       #B5760F;
+    --warn-soft:  #F6E7C9;
+    --crit:       #BE451F;
+    --crit-soft:  #F6DACF;
+    --acca:       #0F6A67;
+    --cpa:        #3D53A8;
+    --uae:        #8A3B54;
+    --acca-soft:  #DBEBEA;
+    --cpa-soft:   #E0E4F5;
+    --uae-soft:   #F3E1E7;
+    --shadow:     0 1px 2px rgba(20,33,31,.05), 0 8px 24px rgba(20,33,31,.05);
+
+    --font-display: "Palatino Linotype","Book Antiqua",Georgia,"Times New Roman",serif;
+    --font-sans: system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono: ui-monospace,"Cascadia Code",Consolas,"SFMono-Regular",Menlo,monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #0D1312;
+      --paper-2:    #111917;
+      --card:       #161F1D;
+      --card-2:     #1B2523;
+      --ink:        #E8EDEB;
+      --ink-2:      #A6B1AE;
+      --ink-3:      #7B8583;
+      --line:       #263130;
+      --line-2:     #34413F;
+      --accent:     #35A8A2;
+      --accent-2:   #8FD8D3;
+      --accent-soft:#153F3D;
+      --good:       #4FB587;
+      --warn:       #E0A64F;
+      --warn-soft:  #3A2E14;
+      --crit:       #E37D57;
+      --crit-soft:  #3A2117;
+      --acca:       #35A8A2;
+      --cpa:        #8090E8;
+      --uae:        #CA7E97;
+      --acca-soft:  #153F3D;
+      --cpa-soft:   #1E2440;
+      --uae-soft:   #351A25;
+      --shadow:     0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --paper:      #0D1312;
+    --paper-2:    #111917;
+    --card:       #161F1D;
+    --card-2:     #1B2523;
+    --ink:        #E8EDEB;
+    --ink-2:      #A6B1AE;
+    --ink-3:      #7B8583;
+    --line:       #263130;
+    --line-2:     #34413F;
+    --accent:     #35A8A2;
+    --accent-2:   #8FD8D3;
+    --accent-soft:#153F3D;
+    --good:       #4FB587;
+    --warn:       #E0A64F;
+    --warn-soft:  #3A2E14;
+    --crit:       #E37D57;
+    --crit-soft:  #3A2117;
+    --acca:       #35A8A2;
+    --cpa:        #8090E8;
+    --uae:        #CA7E97;
+    --acca-soft:  #153F3D;
+    --cpa-soft:   #1E2440;
+    --uae-soft:   #351A25;
+    --shadow:     0 1px 2px rgba(0,0,0,.3), 0 10px 30px rgba(0,0,0,.35);
+  }
+
+  :root[data-theme="light"] {
+    --paper:      #EEF2F1;
+    --paper-2:    #E6EBE9;
+    --card:       #FBFCFB;
+    --card-2:     #F3F6F5;
+    --ink:        #16211F;
+    --ink-2:      #495451;
+    --ink-3:      #737D7B;
+    --line:       #DBE1DF;
+    --line-2:     #C6CFCC;
+    --accent:     #0F6A67;
+    --accent-2:   #0B4F4D;
+    --accent-soft:#DBEBEA;
+    --good:       #2E7D5B;
+    --warn:       #B5760F;
+    --warn-soft:  #F6E7C9;
+    --crit:       #BE451F;
+    --crit-soft:  #F6DACF;
+    --acca:       #0F6A67;
+    --cpa:        #3D53A8;
+    --uae:        #8A3B54;
+    --acca-soft:  #DBEBEA;
+    --cpa-soft:   #E0E4F5;
+    --uae-soft:   #F3E1E7;
+    --shadow:     0 1px 2px rgba(20,33,31,.05), 0 8px 24px rgba(20,33,31,.05);
+  }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: clamp(20px, 4vw, 44px) clamp(16px, 4vw, 40px) 64px;
+  }
+
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+  .mono { font-family: var(--font-mono); }
+
+  /* ---------- Header ---------- */
+  .topbar { margin-bottom: 26px; }
+  .eyebrow {
+    font-size: 11.5px; letter-spacing: .16em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600; margin: 0 0 8px;
+  }
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.85rem, 4vw, 2.5rem);
+    line-height: 1.08;
+    margin: 0 0 8px;
+    letter-spacing: -.01em;
+    text-wrap: balance;
+  }
+  .sub { color: var(--ink-2); max-width: 60ch; margin: 0; }
+  .sub strong { color: var(--ink); font-weight: 600; }
+
+  /* ---------- Summary tiles ---------- */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 22px;
+  }
+  .tile {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 14px 16px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+  }
+  .tile::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 4px;
+    background: var(--tint, var(--accent));
+  }
+  .tile .k {
+    font-size: 11px; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--ink-3); font-weight: 600; display: flex; align-items: center; gap: 7px;
+  }
+  .tile .v {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 1.85rem; line-height: 1.1; margin-top: 6px;
+  }
+  .tile .v small { font-size: .95rem; color: var(--ink-3); font-family: var(--font-mono); font-weight: 400; }
+  .tile .bar {
+    height: 5px; border-radius: 99px; background: var(--paper-2); margin-top: 10px; overflow: hidden;
+  }
+  .tile .bar > i { display: block; height: 100%; width: 0; background: var(--tint, var(--accent)); border-radius: 99px; transition: width .6s cubic-bezier(.2,.7,.2,1); }
+  .tile .cap { font-size: 11.5px; color: var(--ink-3); margin-top: 8px; }
+
+  /* ---------- Section scaffolding ---------- */
+  section { margin-top: 30px; }
+  .sec-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; flex-wrap: wrap; }
+  .sec-head h2 {
+    font-family: var(--font-display); font-weight: 700; font-size: 1.28rem; margin: 0;
+    letter-spacing: -.01em;
+  }
+  .sec-head .hint { font-size: 12.5px; color: var(--ink-3); }
+
+  /* ---------- Next up strip ---------- */
+  .nextup { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+  .up {
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    padding: 14px 16px; box-shadow: var(--shadow); display: flex; flex-direction: column; gap: 4px;
+    position: relative;
+  }
+  .up[data-heat="crit"] { border-color: color-mix(in srgb, var(--crit) 45%, var(--line)); background: color-mix(in srgb, var(--crit-soft) 55%, var(--card)); }
+  .up[data-heat="warn"] { border-color: color-mix(in srgb, var(--warn) 40%, var(--line)); }
+  .up .when { font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .up .cd {
+    font-weight: 700; font-size: 11px; letter-spacing: .03em; padding: 2px 8px; border-radius: 99px;
+    background: var(--accent-soft); color: var(--accent-2); white-space: nowrap;
+  }
+  .up[data-heat="crit"] .cd { background: var(--crit); color: #fff; }
+  .up[data-heat="warn"] .cd { background: var(--warn); color: #fff; }
+  .up .title { font-weight: 600; font-size: 14.5px; line-height: 1.25; }
+  .up .who { font-size: 11.5px; letter-spacing: .04em; text-transform: uppercase; font-weight: 700; }
+
+  /* ---------- Timeline ---------- */
+  .tl-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 6px; }
+  .tl-scroll { overflow-x: auto; padding: 10px 8px 4px; }
+  .tl { position: relative; min-width: 860px; height: 224px; }
+  .tl .months { position: absolute; inset: 0; }
+  .tl .mo { position: absolute; top: 0; bottom: 26px; border-left: 1px dashed var(--line-2); }
+  .tl .mo span { position: absolute; top: 4px; left: 7px; font-size: 10.5px; letter-spacing: .12em; font-weight: 700; color: var(--ink-3); }
+  .tl .axis { position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: var(--line-2); border-radius: 2px; }
+  .tl .today { position: absolute; top: 6px; bottom: 26px; width: 2px; background: var(--crit); }
+  .tl .today b { position: absolute; top: -2px; left: 50%; transform: translateX(-50%); font-size: 9.5px; letter-spacing: .12em; font-weight: 800; color: #fff; background: var(--crit); padding: 1px 6px; border-radius: 99px; white-space: nowrap; }
+
+  .ev { position: absolute; top: 50%; }
+  .ev .dot { position: absolute; top: 50%; left: 0; transform: translate(-50%,-50%); }
+  .ev .dot.point { width: 12px; height: 12px; border-radius: 99px; background: var(--c); border: 2px solid var(--card); box-shadow: 0 0 0 1.5px var(--c); }
+  .ev .dot.result { width: 12px; height: 12px; border-radius: 99px; background: var(--card); border: 2.5px solid var(--c); }
+  .ev .dot.deadline { width: 13px; height: 13px; background: var(--c); border: 2px solid var(--card); box-shadow: 0 0 0 1.5px var(--c); border-radius: 3px; transform: translate(-50%,-50%) rotate(45deg); }
+  .ev .bar { position: absolute; top: 50%; transform: translateY(-50%); height: 11px; background: var(--c); border-radius: 99px; opacity: .92; border: 2px solid var(--card); }
+  .ev .lab {
+    position: absolute; left: 0; width: 132px; font-size: 11.5px; line-height: 1.25;
+  }
+  .ev.up-lab .lab { bottom: calc(50% + 16px); transform: translateX(-6px); }
+  .ev.dn-lab .lab { top: calc(50% + 16px); transform: translateX(-6px); }
+  .ev .lab .d { font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-3); }
+  .ev .lab .t { color: var(--ink); font-weight: 600; }
+  .ev .conn { position: absolute; left: 0; width: 1.5px; background: var(--c); opacity: .5; }
+  .ev.up-lab .conn { bottom: 50%; height: 14px; }
+  .ev.dn-lab .conn { top: 50%; height: 14px; }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 14px 20px; padding: 12px 16px 6px; border-top: 1px solid var(--line); margin-top: 2px; }
+  .legend .g { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--ink-2); }
+  .legend .sw { width: 12px; height: 12px; border-radius: 99px; }
+  .legend .sw.sq { border-radius: 3px; }
+  .legend .sw.ho { background: var(--card) !important; border: 2.5px solid var(--x); }
+
+  /* ---------- Qualification cards ---------- */
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .qcard {
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column;
+    border-top: 3px solid var(--c);
+  }
+  .qhead { display: flex; align-items: center; gap: 14px; }
+  .donut { flex: none; }
+  .qhead .meta { min-width: 0; }
+  .qhead .nm { font-family: var(--font-display); font-weight: 700; font-size: 1.24rem; line-height: 1.05; }
+  .qhead .rl { font-size: 11.5px; color: var(--ink-2); margin-top: 2px; }
+  .qhead .pct { font-family: var(--font-mono); font-weight: 700; font-size: 1rem; }
+
+  .dates { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 4px; }
+  .chip {
+    font-size: 11px; font-family: var(--font-mono); padding: 3px 8px; border-radius: 8px;
+    background: var(--soft); color: var(--ink); border: 1px solid color-mix(in srgb, var(--c) 22%, transparent);
+  }
+  .chip b { color: var(--c); }
+  .qnote {
+    font-size: 12px; color: var(--ink-2); background: var(--card-2); border: 1px solid var(--line);
+    border-radius: 10px; padding: 9px 11px; margin: 12px 0 4px; line-height: 1.4;
+  }
+
+  .grp { margin-top: 14px; }
+  .grp > .gl {
+    font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
+    color: var(--ink-3); margin-bottom: 6px; display: flex; justify-content: space-between; gap: 8px;
+  }
+  .grp > .gl .cnt { color: var(--c); font-family: var(--font-mono); }
+
+  .chk { display: flex; align-items: flex-start; gap: 10px; padding: 5px 6px; border-radius: 8px; cursor: pointer; position: relative; }
+  .chk:hover { background: var(--card-2); }
+  .chk input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .chk .box {
+    flex: none; width: 17px; height: 17px; margin-top: 1px; border-radius: 5px;
+    border: 1.5px solid var(--line-2); background: var(--card); display: grid; place-items: center;
+    transition: background .15s, border-color .15s;
+  }
+  .chk .box svg { width: 11px; height: 11px; opacity: 0; transform: scale(.6); transition: .15s; }
+  .chk input:checked ~ .box { background: var(--c); border-color: var(--c); }
+  .chk input:checked ~ .box svg { opacity: 1; transform: scale(1); }
+  .chk input:focus-visible ~ .box { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .chk .lbl { font-size: 13px; line-height: 1.35; }
+  .chk .lbl small { color: var(--ink-3); }
+  .chk input:checked ~ .lbl { color: var(--ink-3); text-decoration: line-through; text-decoration-color: color-mix(in srgb, var(--c) 60%, transparent); }
+
+  .extras { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--line); }
+  .mchip { position: relative; display: inline-flex; }
+  .mchip input { position: absolute; opacity: 0; inset: 0; cursor: pointer; }
+  .mchip .t {
+    font-size: 11.5px; padding: 4px 10px; border-radius: 99px; border: 1px solid var(--line-2);
+    color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  }
+  .mchip .t::before { content: ""; width: 7px; height: 7px; border-radius: 99px; background: var(--line-2); }
+  .mchip input:checked ~ .t { background: var(--soft); border-color: var(--c); color: var(--ink); }
+  .mchip input:checked ~ .t::before { background: var(--c); }
+  .mchip input:focus-visible ~ .t { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  /* ---------- Actions ---------- */
+  .actions-wrap { background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 6px 8px; }
+  .act {
+    display: flex; align-items: flex-start; gap: 12px; padding: 12px 12px; cursor: pointer;
+    border-bottom: 1px solid var(--line); position: relative;
+  }
+  .act:last-child { border-bottom: 0; }
+  .act:hover { background: var(--card-2); }
+  .act input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+  .act .box {
+    flex: none; width: 20px; height: 20px; margin-top: 1px; border-radius: 6px;
+    border: 1.5px solid var(--line-2); background: var(--card); display: grid; place-items: center; transition: .15s;
+  }
+  .act .box svg { width: 12px; height: 12px; opacity: 0; transform: scale(.6); transition: .15s; }
+  .act input:checked ~ .box { background: var(--accent); border-color: var(--accent); }
+  .act input:checked ~ .box svg { opacity: 1; transform: scale(1); }
+  .act input:focus-visible ~ .box { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .act .body { min-width: 0; }
+  .act .body .t { font-weight: 600; font-size: 14px; }
+  .act .body .d { font-size: 12.5px; color: var(--ink-2); margin-top: 2px; }
+  .act input:checked ~ .body .t { color: var(--ink-3); text-decoration: line-through; }
+  .act .tag {
+    flex: none; font-size: 10px; letter-spacing: .05em; font-weight: 800; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 99px; background: var(--soft); color: var(--c); align-self: center;
+  }
+  .act .due { flex: none; font-family: var(--font-mono); font-size: 11.5px; color: var(--ink-3); align-self: center; white-space: nowrap; }
+
+  /* ---------- Footer ---------- */
+  footer { margin-top: 34px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--ink-3); font-size: 12px; }
+  footer a { color: var(--accent); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); }
+  footer a:hover { border-bottom-color: var(--accent); }
+  .foot-row { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: center; }
+  .btn {
+    font-family: var(--font-sans); font-size: 12.5px; font-weight: 600; color: var(--ink-2);
+    background: var(--card); border: 1px solid var(--line-2); border-radius: 9px; padding: 7px 13px; cursor: pointer;
+  }
+  .btn:hover { border-color: var(--crit); color: var(--crit); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .srcs { margin-top: 10px; line-height: 1.7; }
+
+  @media (max-width: 860px) {
+    .tiles { grid-template-columns: repeat(2, 1fr); }
+    .cards { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+</style>
+
+<div class="page">
+  <header class="topbar">
+    <p class="eyebrow">Professional Qualifications &middot; Progress Tracker</p>
+    <h1>The Road to Three Charters</h1>
+    <p class="sub">A live plan for <strong>Kirtan&rsquo;s</strong> ACCA, CPA Australia and UAE&nbsp;CA (UAECA) goals across the <strong>rest of 2026</strong> &mdash; Jul&nbsp;through&nbsp;Dec. Tick off what you&rsquo;ve already done to set your starting point; progress and countdowns update and save automatically in this browser.</p>
+
+    <div class="tiles" id="tiles"></div>
+  </header>
+
+  <section>
+    <div class="sec-head">
+      <h2>Next up</h2>
+      <span class="hint">The nearest fixed deadlines &mdash; miss these and the whole session slips a quarter.</span>
+    </div>
+    <div class="nextup" id="nextup"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>2026 timeline &mdash; second half</h2>
+      <span class="hint">Every dated checkpoint across the three tracks. Scroll sideways on a narrow screen.</span>
+    </div>
+    <div class="tl-wrap">
+      <div class="tl-scroll">
+        <div class="tl" id="tl"></div>
+      </div>
+      <div class="legend">
+        <span class="g"><span class="sw" style="background:var(--acca)"></span>ACCA</span>
+        <span class="g"><span class="sw" style="background:var(--cpa)"></span>CPA Australia</span>
+        <span class="g"><span class="sw" style="background:var(--uae)"></span>UAE CA (UAECA)</span>
+        <span class="g" style="margin-left:auto"><span class="sw sq" style="background:var(--ink-3)"></span>Entry deadline</span>
+        <span class="g"><span class="sw" style="background:var(--ink-3)"></span>Exam window</span>
+        <span class="g"><span class="sw ho" style="--x:var(--ink-3)"></span>Results</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>The three tracks</h2>
+      <span class="hint">Check each paper / subject / milestone you&rsquo;ve completed.</span>
+    </div>
+    <div class="cards" id="cards"></div>
+  </section>
+
+  <section>
+    <div class="sec-head">
+      <h2>Do this in the next few weeks</h2>
+      <span class="hint">Concrete moves while the late-July window is open.</span>
+    </div>
+    <div class="actions-wrap" id="actions"></div>
+  </section>
+
+  <footer>
+    <div class="foot-row">
+      <div>Progress is saved only in this browser. Not affiliated with ACCA, CPA&nbsp;Australia or EAAA. &middot; <a href="index.html">Prompt Consulting home</a></div>
+      <button class="btn" id="reset">Reset all progress</button>
+    </div>
+    <div class="srcs">
+      Verify official dates before paying:
+      <a href="https://www.accaglobal.com/gb/en/student/exam-entry-and-administration/exam-timetables.html" target="_blank" rel="noopener">ACCA exam timetables</a> &middot;
+      <a href="https://www.cpaaustralia.com.au/your-cpa-program/important-dates-and-fees" target="_blank" rel="noopener">CPA Australia important dates</a> &middot;
+      <a href="https://aaa4uae.ae/site/en/individual-memberships" target="_blank" rel="noopener">EAAA (UAECA) membership</a>.
+      <br>The CPA S2/26 enrolment <em>closing</em> date isn&rsquo;t officially posted yet &mdash; confirm it before the semester starts on 27&nbsp;Jul.
+    </div>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var CHECK = '<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12.5l5 5L20 6"/></svg>';
+  var KEY = "kp-quals-2026-v2";
+  var state = {};
+  try { state = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { state = {}; }
+  function save() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+  function on(id) { return !!state[id]; }
+  function set(id, v) { state[id] = v; save(); }
+
+  /* ----- date helpers ----- */
+  function D(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  var TODAY = (function () { var n = new Date(); return new Date(n.getFullYear(), n.getMonth(), n.getDate()); })();
+  var START = D("2026-07-01"), END = D("2026-12-31");
+  var SPAN = (END - START) / 86400000;
+  function pct(dstr) { var d = D(dstr); return Math.max(0, Math.min(100, ((d - START) / 86400000) / SPAN * 100)); }
+  function daysFrom(dstr) { return Math.round((D(dstr) - TODAY) / 86400000); }
+  var MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+  function fmt(dstr) { var d = D(dstr); return d.getDate() + " " + MON[d.getMonth()]; }
+  function countdown(dstr) {
+    var n = daysFrom(dstr);
+    if (n < 0) return "passed";
+    if (n === 0) return "today";
+    if (n === 1) return "tomorrow";
+    if (n < 42) return "in " + n + " days";
+    var w = Math.round(n / 7);
+    return "in ~" + w + " wks";
+  }
+
+  /* ================= DATA ================= */
+  var QUALS = [
+    {
+      id: "acca", name: "ACCA", tint: "acca",
+      role: "13 exams &middot; Ethics module &middot; 36-month experience",
+      note: "In the UAE, ACCA exams are co-badged with EAAA under the Joint Examination Scheme &mdash; so finishing ACCA is also the engine for your UAECA below.",
+      dates: [
+        { l: "Sep sitting", v: "7&ndash;11 Sep" },
+        { l: "entry by", v: "27 Jul" },
+        { l: "Dec sitting", v: "1&ndash;5 Dec" },
+        { l: "entry by", v: "2 Nov" }
+      ],
+      groups: [
+        { label: "Applied Knowledge", items: [
+          { id: "acca-bt", t: "BT &mdash; Business & Technology" },
+          { id: "acca-ma", t: "MA &mdash; Management Accounting" },
+          { id: "acca-fa", t: "FA &mdash; Financial Accounting" }
+        ]},
+        { label: "Applied Skills", items: [
+          { id: "acca-lw", t: "LW &mdash; Corporate & Business Law" },
+          { id: "acca-pm", t: "PM &mdash; Performance Management" },
+          { id: "acca-tx", t: "TX &mdash; Taxation" },
+          { id: "acca-fr", t: "FR &mdash; Financial Reporting" },
+          { id: "acca-aa", t: "AA &mdash; Audit & Assurance" },
+          { id: "acca-fm", t: "FM &mdash; Financial Management" }
+        ]},
+        { label: "Strategic Professional &mdash; Essentials", items: [
+          { id: "acca-sbl", t: "SBL &mdash; Strategic Business Leader" },
+          { id: "acca-sbr", t: "SBR &mdash; Strategic Business Reporting" }
+        ]},
+        { label: "Strategic Professional &mdash; Options", choose: 2, items: [
+          { id: "acca-afm", t: "AFM &mdash; Adv. Financial Management" },
+          { id: "acca-apm", t: "APM &mdash; Adv. Performance Management" },
+          { id: "acca-atx", t: "ATX &mdash; Advanced Taxation" },
+          { id: "acca-aaa", t: "AAA &mdash; Adv. Audit & Assurance" }
+        ]}
+      ],
+      extras: [
+        { id: "acca-eps", t: "Ethics & Professional Skills Module" },
+        { id: "acca-per", t: "36-month Practical Experience (PER)" }
+      ]
+    },
+    {
+      id: "cpa", name: "CPA Australia", tint: "cpa",
+      role: "6 subjects &middot; experience &middot; Semester 2/26",
+      note: "Global Strategy & Leadership is the capstone &mdash; it must be your last subject. Enrol for S2/26 before the semester opens 27 Jul.",
+      dates: [
+        { l: "Semester", v: "starts 27 Jul" },
+        { l: "Exams", v: "5&ndash;20 Oct" },
+        { l: "Results", v: "27 Nov" }
+      ],
+      groups: [
+        { label: "Compulsory", items: [
+          { id: "cpa-eg", t: "Ethics & Governance" },
+          { id: "cpa-fr", t: "Financial Reporting" },
+          { id: "cpa-sma", t: "Strategic Management Accounting" },
+          { id: "cpa-gsl", t: "Global Strategy & Leadership <small>(capstone &mdash; last)</small>" }
+        ]},
+        { label: "Electives", choose: 2, items: [
+          { id: "cpa-atx", t: "Advanced Taxation" },
+          { id: "cpa-aaa", t: "Advanced Audit & Assurance" },
+          { id: "cpa-frm", t: "Financial Risk Management" },
+          { id: "cpa-cbi", t: "Contemporary Business Issues" },
+          { id: "cpa-dfin", t: "Digital Finance" },
+          { id: "cpa-fpf", t: "Financial Planning Fundamentals" }
+        ]}
+      ],
+      extras: [
+        { id: "cpa-assess", t: "Entry / degree assessment done" },
+        { id: "cpa-exp", t: "Your Experience program" }
+      ]
+    },
+    {
+      id: "uae", name: "UAE CA (UAECA)", tint: "uae",
+      role: "EAAA membership route &middot; no separate exam",
+      note: "UAECA isn&rsquo;t an exam track &mdash; it&rsquo;s an EAAA fellowship you apply for once you hold a recognised charter (ACCA counts) plus experience. Your ACCA work above is what unlocks it.",
+      dates: [
+        { l: "Basis", v: "ACCA / CA / CPA" },
+        { l: "Experience", v: "5&ndash;7 yrs" },
+        { l: "Route", v: "application" }
+      ],
+      groups: [
+        { label: "Eligibility milestones", items: [
+          { id: "uae-qual", t: "Hold a recognised charter (ACCA / CA / CPA)" },
+          { id: "uae-exp", t: "5&ndash;7 years relevant experience" },
+          { id: "uae-mem", t: "Active EAAA-UAE membership" },
+          { id: "uae-doss", t: "Dossier submitted <small>(transcripts, CV, references)</small>" },
+          { id: "uae-rev", t: "Fellowship review / interview cleared" }
+        ]}
+      ],
+      extras: []
+    }
+  ];
+
+  var EVENTS = [
+    { d: "2026-07-27", who: "acca", kind: "deadline", t: "September entry deadline (standard fee)" },
+    { d: "2026-07-27", who: "cpa", kind: "point", t: "S2/26 semester begins" },
+    { d: "2026-08-03", who: "acca", kind: "deadline", t: "September late entry deadline" },
+    { d: "2026-08-21", end: "2026-09-01", who: "cpa", kind: "range", t: "Mid-semester test window" },
+    { d: "2026-09-07", end: "2026-09-11", who: "acca", kind: "range", t: "September exams" },
+    { d: "2026-10-05", end: "2026-10-20", who: "cpa", kind: "range", t: "S2/26 exams" },
+    { d: "2026-10-19", who: "acca", kind: "result", t: "September results" },
+    { d: "2026-11-02", who: "acca", kind: "deadline", t: "December entry deadline (standard fee)" },
+    { d: "2026-11-27", who: "cpa", kind: "result", t: "S2/26 results" },
+    { d: "2026-12-01", end: "2026-12-05", who: "acca", kind: "range", t: "December exams" }
+  ];
+
+  var ACTIONS = [
+    { id: "act-map", tag: "ACCA", due: "This week", t: "Map remaining papers to Sep vs Dec", d: "Decide which exams you sit on 7–11 Sep and which slide to 1–5 Dec, then work back the study plan." },
+    { id: "act-acca-entry", tag: "ACCA", due: "By 27 Jul", t: "Book September exam entries at the standard fee", d: "The standard-fee window closes 27 Jul; after that you pay the late fee up to 3 Aug." },
+    { id: "act-cpa-enrol", tag: "CPA", due: "Before 27 Jul", t: "Enrol in your S2/26 subject", d: "Confirm the closing date, then enrol — keep Global Strategy & Leadership for last." },
+    { id: "act-cpa-sched", tag: "CPA", due: "After enrol", t: "Schedule the CPA exam slot (5–20 Oct)", d: "Slots at your test centre fill up — book as soon as enrolment lets you." },
+    { id: "act-per", tag: "UAECA", due: "Ongoing", t: "Log experience toward the 5–7 year requirement", d: "Keep your PER / experience record current — it feeds both ACCA membership and the UAECA fellowship." },
+    { id: "act-eaaa", tag: "UAECA", due: "This month", t: "Confirm your EAAA-UAE membership status", d: "Check whether you’re already an EAAA member and what the UAECA application needs." }
+  ];
+
+  /* ================= PROGRESS ================= */
+  function qProgress(q) {
+    var done = 0, denom = 0;
+    q.groups.forEach(function (g) {
+      var need = g.choose || g.items.length;
+      denom += need;
+      var c = g.items.reduce(function (a, it) { return a + (on(it.id) ? 1 : 0); }, 0);
+      done += Math.min(c, need);
+    });
+    return { done: done, denom: denom, frac: denom ? done / denom : 0 };
+  }
+
+  /* ================= RENDER: donut ================= */
+  function donut(color, frac, size) {
+    var r = (size - 8) / 2, c = 2 * Math.PI * r, off = c * (1 - frac);
+    return '<svg class="donut" width="' + size + '" height="' + size + '" viewBox="0 0 ' + size + ' ' + size + '">' +
+      '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="var(--paper-2)" stroke-width="6"/>' +
+      '<circle cx="' + size/2 + '" cy="' + size/2 + '" r="' + r + '" fill="none" stroke="' + color + '" stroke-width="6" stroke-linecap="round" ' +
+      'stroke-dasharray="' + c.toFixed(1) + '" stroke-dashoffset="' + off.toFixed(1) + '" transform="rotate(-90 ' + size/2 + ' ' + size/2 + ')" style="transition:stroke-dashoffset .7s cubic-bezier(.2,.7,.2,1)"/>' +
+      '</svg>';
+  }
+
+  /* ================= RENDER: tiles ================= */
+  function renderTiles() {
+    var host = document.getElementById("tiles");
+    var html = "";
+    QUALS.forEach(function (q) {
+      var p = qProgress(q);
+      html += '<div class="tile" style="--tint:var(--' + q.tint + ')">' +
+        '<div class="k"><span class="sw" style="width:9px;height:9px;border-radius:99px;background:var(--' + q.tint + ')"></span>' + q.name + '</div>' +
+        '<div class="v num">' + Math.round(p.frac * 100) + '<small>%</small></div>' +
+        '<div class="bar"><i style="width:' + (p.frac * 100) + '%"></i></div>' +
+        '<div class="cap num">' + p.done + ' of ' + p.denom + ' complete</div>' +
+      '</div>';
+    });
+    var dleft = daysFrom("2026-12-31");
+    html += '<div class="tile" style="--tint:var(--warn)">' +
+      '<div class="k">2026 remaining</div>' +
+      '<div class="v num">' + Math.max(0, dleft) + '<small> days</small></div>' +
+      '<div class="cap">until 31 Dec 2026</div>' +
+    '</div>';
+    host.innerHTML = html;
+  }
+
+  /* ================= RENDER: next up ================= */
+  function renderNext() {
+    var host = document.getElementById("nextup");
+    var up = EVENTS.filter(function (e) { return daysFrom(e.d) >= 0; })
+      .sort(function (a, b) { return D(a.d) - D(b.d); }).slice(0, 4);
+    if (!up.length) { host.innerHTML = '<div class="up"><div class="title">All 2026 checkpoints are behind you — nice.</div></div>'; return; }
+    host.innerHTML = up.map(function (e) {
+      var n = daysFrom(e.d);
+      var heat = (e.kind === "deadline" && n <= 21) ? "crit" : (n <= 14 ? "warn" : "");
+      var whoName = e.who === "acca" ? "ACCA" : e.who === "cpa" ? "CPA Australia" : "UAECA";
+      return '<div class="up" data-heat="' + heat + '">' +
+        '<div class="when"><span>' + fmt(e.d) + (e.end ? " – " + fmt(e.end) : "") + '</span><span class="cd num">' + countdown(e.d) + '</span></div>' +
+        '<div class="title">' + e.t + '</div>' +
+        '<div class="who" style="color:var(--' + e.who + ')">' + whoName + '</div>' +
+      '</div>';
+    }).join("");
+  }
+
+  /* ================= RENDER: timeline ================= */
+  function renderTimeline() {
+    var host = document.getElementById("tl");
+    var html = '<div class="months">';
+    ["2026-07-01","2026-08-01","2026-09-01","2026-10-01","2026-11-01","2026-12-01"].forEach(function (m) {
+      html += '<div class="mo" style="left:' + pct(m) + '%"><span>' + MON[D(m).getMonth()].toUpperCase() + '</span></div>';
+    });
+    html += '</div><div class="axis"></div>';
+
+    if (TODAY >= START && TODAY <= END) {
+      var tp = ((TODAY - START) / 86400000) / SPAN * 100;
+      html += '<div class="today" style="left:' + tp + '%"><b>TODAY</b></div>';
+    }
+
+    EVENTS.forEach(function (e, i) {
+      var x = pct(e.d);
+      var side = (i % 2 === 0) ? "up-lab" : "dn-lab";
+      var inner, evStyle = "--c:var(--" + e.who + ");left:" + x + "%";
+      if (e.kind === "range") {
+        evStyle += ";width:calc(" + pct(e.end) + "% - " + x + "%)";
+        inner = '<div class="bar" style="left:0;width:100%"></div>';
+      } else {
+        inner = '<div class="dot ' + e.kind + '"></div>';
+      }
+      html += '<div class="ev ' + side + '" style="' + evStyle + '">' +
+        inner +
+        '<div class="conn"></div>' +
+        '<div class="lab"><span class="d num">' + fmt(e.d) + (e.end ? "–" + fmt(e.end) : "") + '</span><br><span class="t">' + e.t + '</span></div>' +
+      '</div>';
+    });
+    host.innerHTML = html;
+  }
+
+  /* ================= RENDER: cards ================= */
+  function renderCards() {
+    var host = document.getElementById("cards");
+    host.innerHTML = QUALS.map(function (q) {
+      var p = qProgress(q);
+      var head =
+        '<div class="qhead">' +
+          donut("var(--" + q.tint + ")", p.frac, 60) +
+          '<div class="meta">' +
+            '<div class="nm">' + q.name + '</div>' +
+            '<div class="rl">' + q.role + '</div>' +
+            '<div class="pct num" style="color:var(--' + q.tint + ')">' + p.done + '/' + p.denom + ' &middot; ' + Math.round(p.frac * 100) + '%</div>' +
+          '</div>' +
+        '</div>';
+
+      var dates = '<div class="dates">' + q.dates.map(function (d) {
+        return '<span class="chip">' + d.l + ' <b>' + d.v + '</b></span>';
+      }).join("") + '</div>';
+
+      var note = '<div class="qnote">' + q.note + '</div>';
+
+      var groups = q.groups.map(function (g) {
+        var need = g.choose || g.items.length;
+        var c = g.items.reduce(function (a, it) { return a + (on(it.id) ? 1 : 0); }, 0);
+        var cnt = g.choose ? (Math.min(c, need) + "/" + need + " (pick " + g.choose + ")") : (c + "/" + g.items.length);
+        var rows = g.items.map(function (it) {
+          return '<label class="chk">' +
+            '<input type="checkbox" data-id="' + it.id + '"' + (on(it.id) ? " checked" : "") + '>' +
+            '<span class="box">' + CHECK + '</span>' +
+            '<span class="lbl">' + it.t + '</span>' +
+          '</label>';
+        }).join("");
+        return '<div class="grp"><div class="gl">' + g.label + '<span class="cnt num">' + cnt + '</span></div>' + rows + '</div>';
+      }).join("");
+
+      var extras = q.extras.length ? '<div class="extras">' + q.extras.map(function (x) {
+        return '<label class="mchip"><input type="checkbox" data-id="' + x.id + '"' + (on(x.id) ? " checked" : "") + '><span class="t">' + x.t + '</span></label>';
+      }).join("") + '</div>' : "";
+
+      return '<article class="qcard" style="--c:var(--' + q.tint + ');--soft:var(--' + q.tint + '-soft)">' +
+        head + dates + note + groups + extras + '</article>';
+    }).join("");
+  }
+
+  /* ================= RENDER: actions ================= */
+  function renderActions() {
+    document.getElementById("actions").innerHTML = ACTIONS.map(function (a) {
+      var tint = a.tag === "ACCA" ? "acca" : a.tag === "CPA" ? "cpa" : "uae";
+      return '<label class="act" style="--c:var(--' + tint + ');--soft:var(--' + tint + '-soft)">' +
+        '<input type="checkbox" data-id="' + a.id + '"' + (on(a.id) ? " checked" : "") + '>' +
+        '<span class="box">' + CHECK + '</span>' +
+        '<span class="tag">' + a.tag + '</span>' +
+        '<span class="body"><span class="t">' + a.t + '</span><span class="d">' + a.d + '</span></span>' +
+        '<span class="due num">' + a.due + '</span>' +
+      '</label>';
+    }).join("");
+  }
+
+  /* ================= WIRING ================= */
+  function refreshLive() { renderTiles(); renderCards(); }
+
+  document.addEventListener("change", function (e) {
+    var t = e.target;
+    if (t && t.matches && t.matches('input[type="checkbox"][data-id]')) {
+      set(t.getAttribute("data-id"), t.checked);
+      // full re-render of cards keeps group counters + donuts in sync
+      refreshLive();
+    }
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    state = {}; save(); renderAll();
+  });
+
+  function renderAll() {
+    renderTiles(); renderNext(); renderTimeline(); renderCards(); renderActions();
+  }
+  renderAll();
+})();
+</script>
+
+</body>
+</html>
