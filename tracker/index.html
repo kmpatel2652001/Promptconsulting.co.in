@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CharterTrack — Study Progress Tracker for ACCA, CPA, CMA, CIMA, ACA &amp; CA Students</title>
+<meta name="description" content="Free study progress tracker for ACCA, CPA Australia, US CPA, CMA, CIMA, ACA, ICAI CA and UAE CA students. Track every paper, exemption and milestone on your way to qualified — no signup needed.">
+<meta property="og:title" content="CharterTrack — Study Progress Tracker for Accounting Qualifications">
+<meta property="og:description" content="Pick your qualification, tick off papers as you pass them, and watch your progress to the charter. ACCA, CPA Australia, US CPA, CMA, CIMA, ACA, ICAI CA, UAE CA.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://promptconsulting.co.in/tracker/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232a78d6'/%3E%3Cpath d='M25 55l16 16 34-38' stroke='white' stroke-width='12' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#6e6c66;
+  --hairline:#e1e0d9; --ring:rgba(11,11,11,.10); --track:#eeede8;
+  --good:#0b7a0b; --good-soft:#e7f3e7; --good-ink:#006300;
+  --accent:#256abf;
+  --c1:#2a78d6; --c2:#1baf7a; --c3:#eda100; --c4:#008300; --c5:#4a3aa7; --c6:#e34948; --c7:#e87ba4; --c8:#eb6834;
+  --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#fff; --ink-2:#c3c2b7; --ink-3:#898781;
+    --hairline:#2c2c2a; --ring:rgba(255,255,255,.10); --track:#262624;
+    --good:#0c6b0c; --good-soft:#12290f; --good-ink:#3fbf3f;
+    --accent:#3987e5;
+    --c1:#3987e5; --c2:#199e70; --c3:#c98500; --c4:#008300; --c5:#9085e9; --c6:#e66767; --c7:#d55181; --c8:#d95926;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--page);color:var(--ink);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--page) 88%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--hairline)}
+.top-row{display:flex;align-items:center;gap:10px;padding:12px 0;flex-wrap:wrap}
+.mark{width:28px;height:28px;border-radius:8px;background:var(--accent);display:grid;place-items:center;flex:none}
+.mark svg{width:16px;height:16px}
+.brand{font-weight:700;font-size:17px;letter-spacing:-.01em}
+.beta{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);border:1px solid currentColor;border-radius:20px;padding:1px 8px;margin-left:2px}
+.top-row .site-link{margin-left:auto;font-size:13px;color:var(--ink-2);text-decoration:none;white-space:nowrap}
+@media (max-width:480px){.beta{display:none}.top-row .site-link{font-size:12px}}
+.top-row .site-link:hover{color:var(--ink)}
+.hero{padding:44px 0 8px;text-align:left;max-width:720px}
+.hero h1{font-size:clamp(26px,4.5vw,38px);line-height:1.15;letter-spacing:-.02em;margin:0 0 12px;font-weight:700}
+.hero p{color:var(--ink-2);margin:0 0 4px;font-size:16px;max-width:56ch}
+.hero .hint{font-size:13px;color:var(--ink-3)}
+section{padding:22px 0}
+.sec-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);margin:0 0 12px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--ring);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.tile .k{font-size:12px;color:var(--ink-2);display:flex;align-items:center;gap:7px;font-weight:500}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}
+.tile .v{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.tile .v small{font-size:13px;font-weight:500;color:var(--ink-3);letter-spacing:0}
+.bar{height:6px;border-radius:4px;background:var(--track);margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .35s ease}
+/* qualification picker */
+.picker{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.pick{background:var(--surface);border:1px solid var(--ring);border-radius:14px;padding:14px 16px;text-align:left;cursor:pointer;font:inherit;color:inherit;box-shadow:var(--shadow);transition:transform .12s ease,border-color .12s ease}
+.pick:hover{transform:translateY(-2px);border-color:var(--ink-3)}
+.pick .nm{font-weight:600;font-size:15px;display:flex;align-items:center;gap:8px}
+.pick .fl{display:block;font-size:12.5px;color:var(--ink-2);margin-top:3px;line-height:1.4}
+.pick .ct{display:block;font-size:12px;color:var(--ink-3);margin-top:8px}
+.pick.added{opacity:.55;cursor:default}
+.pick.added:hover{transform:none;border-color:var(--ring)}
+.pick .ct b{color:var(--good-ink);font-weight:600}
+/* qual section */
+.qual{background:var(--surface);border:1px solid var(--ring);border-radius:16px;box-shadow:var(--shadow);margin-bottom:18px;overflow:hidden}
+.q-head{padding:16px 18px 14px;border-bottom:1px solid var(--hairline)}
+.q-title{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.q-title .swatch{width:12px;height:12px;border-radius:4px;flex:none}
+.q-title h2{font-size:18px;margin:0;font-weight:700;letter-spacing:-.01em;outline:none}
+.q-title .body-name{font-size:12.5px;color:var(--ink-3)}
+.q-title .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+.q-title .official{font-size:12.5px;text-decoration:none}
+.q-title .official:hover{text-decoration:underline}
+.q-remove{background:none;border:none;color:var(--ink-3);cursor:pointer;font-size:12.5px;font-family:inherit;padding:6px 8px;border-radius:8px}
+.q-remove:hover{color:var(--c6);background:var(--track)}
+.q-meta{display:flex;align-items:center;gap:14px;margin-top:10px;flex-wrap:wrap}
+.q-meta .pctxt{font-size:13px;color:var(--ink-2);white-space:nowrap}
+.q-meta .pctxt b{color:var(--ink);font-weight:600}
+.q-meta .bar{flex:1;min-width:140px;margin-top:0}
+.q-note{font-size:12.5px;color:var(--ink-3);margin-top:8px}
+.group{padding:6px 18px 14px}
+.g-head{display:flex;align-items:baseline;gap:10px;margin:12px 0 6px;flex-wrap:wrap}
+.g-head h3{font-size:13.5px;font-weight:600;margin:0}
+.rule{font-size:11.5px;font-weight:500;color:var(--ink-2);background:var(--track);border-radius:20px;padding:2px 10px}
+.g-done{font-size:12px;color:var(--ink-3);margin-left:auto}
+.paper{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--hairline)}
+.paper:first-of-type{border-top:none}
+.pcode{font-size:11px;font-weight:600;color:var(--ink-2);background:var(--track);border-radius:6px;padding:2px 7px;min-width:34px;text-align:center;flex:none}
+.pname{font-size:14px;flex:1;min-width:0}
+.pname .opt{font-size:11px;color:var(--ink-3);margin-left:6px}
+.paper.done .pname{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
+.stat{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.chip{font:inherit;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--hairline);background:transparent;color:var(--ink-2);cursor:pointer;line-height:1.2;min-height:28px}
+.chip:hover{border-color:var(--ink-3)}
+.chip:focus-visible,.xtgl:focus-visible,.btn:focus-visible,.pick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chip[aria-pressed="true"]{font-weight:600}
+.chip.todo[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink)}
+.chip.booked[aria-pressed="true"]{background:var(--accent);color:#fff;border-color:var(--accent)}
+.chip.passed[aria-pressed="true"]{background:var(--good);color:#fff;border-color:var(--good)}
+.chip.exempt[aria-pressed="true"]{background:var(--good-soft);color:var(--good-ink);border-color:var(--good-ink)}
+@media (prefers-color-scheme: dark){
+  .chip.booked[aria-pressed="true"]{background:#1c5cab;border-color:#1c5cab}
+}
+.extras .paper{align-items:flex-start}
+.xtgl{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--ink-3);background:transparent;cursor:pointer;flex:none;display:grid;place-items:center;padding:0}
+.xtgl svg{width:13px;height:13px;display:none}
+.xtgl[aria-pressed="true"]{background:var(--good);border-color:var(--good)}
+.xtgl[aria-pressed="true"] svg{display:block}
+/* toolbar / footer */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-size:13px;font-weight:500;padding:9px 16px;border-radius:10px;border:1px solid var(--hairline);background:var(--surface);color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (prefers-color-scheme: dark){.btn.primary{background:#1c5cab;border-color:#1c5cab}}
+.btn.danger:hover{border-color:var(--c6);color:var(--c6)}
+#shareRow{margin-top:10px}
+#shareRow input{width:100%;max-width:560px;font:inherit;font-size:12.5px;padding:8px 10px;border:1px solid var(--hairline);border-radius:8px;background:var(--surface);color:var(--ink)}
+.foot{border-top:1px solid var(--hairline);margin-top:26px;padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+.foot p{margin:0 0 8px;max-width:78ch}
+.foot a{color:inherit}
+.banner{background:var(--good-soft);border:1px solid var(--good-ink);border-radius:14px;padding:14px 16px;margin:18px 0;display:flex;gap:12px;align-items:center;flex-wrap:wrap;color:var(--good-ink)}
+.banner b{color:inherit}
+.banner .btn{box-shadow:none}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--page);font-size:13px;font-weight:500;padding:9px 18px;border-radius:22px;transition:transform .25s ease;z-index:50;pointer-events:none;max-width:88vw}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.hidden{display:none !important}
+@media (max-width:560px){
+  .paper{flex-wrap:wrap}
+  .pname{flex-basis:calc(100% - 100px)}
+  .stat{flex-basis:100%;justify-content:flex-start;padding-left:0;gap:8px}
+  .chip{padding:8px 14px;min-height:34px}
+  .xtgl{width:28px;height:28px}
+  .xtgl svg{width:15px;height:15px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-row">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M25 55l16 16 34-38" stroke="white" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="brand">CharterTrack</span><span class="beta">Beta</span>
+    <a class="site-link" href="../index.html" aria-label="Built by Prompt Consulting">Prompt Consulting &rarr;</a>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div id="sharedBanner" class="banner hidden" role="region" aria-label="Shared plan">
+    <div style="flex:1;min-width:220px"><b>You're viewing a shared plan.</b> Import it to make it yours and start tracking, or dismiss to keep your own data.</div>
+    <button class="btn primary" id="importShared">Import this plan</button>
+    <button class="btn" id="dismissShared">Dismiss</button>
+  </div>
+
+  <section class="hero" id="hero">
+    <h1>Every paper. One tracker.<br>All the way to qualified.</h1>
+    <p>Pick your accounting qualification, tick off each exam as you book and pass it, and watch your progress toward the charter — exemptions, ethics modules and experience milestones included.</p>
+    <p class="hint">Free while in beta &middot; no signup &middot; your progress is saved in this browser.</p>
+  </section>
+
+  <section id="dashboard" class="hidden">
+    <h2 class="sec-title">Your progress</h2>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section id="plans"></section>
+
+  <section id="pickerSec">
+    <h2 class="sec-title" id="pickerTitle" tabindex="-1">Choose your qualification</h2>
+    <div class="picker" id="picker"></div>
+  </section>
+
+  <section id="tools" class="hidden">
+    <h2 class="sec-title">Your data</h2>
+    <div class="toolbar">
+      <button class="btn primary" id="shareBtn">Copy share link</button>
+      <button class="btn" id="exportBtn">Export JSON</button>
+      <button class="btn" id="importBtn">Import JSON</button>
+      <input type="file" id="importFile" accept="application/json" class="hidden">
+      <button class="btn danger" id="resetBtn">Reset everything</button>
+    </div>
+    <div id="shareRow" class="hidden"><input id="shareUrl" readonly aria-label="Share link — copy manually"></div>
+  </section>
+
+  <footer class="foot">
+    <p><b>Check dates and syllabus with the awarding body before booking.</b> Exam structures change; each qualification card links to the official source. CharterTrack is an independent study tool and is not affiliated with or endorsed by ACCA, CPA Australia, AICPA, NASBA, IMA, CIMA, ICAEW, ICAI or EAAA.</p>
+    <p>Progress is stored only in your browser (and in links you choose to share) — nothing is sent to a server. Want accounts, sync across devices, or study-buddy features? <a href="../contact.html">Tell us what to build next</a>.</p>
+    <p>Built by <a href="../index.html">Prompt Consulting</a>, Dubai — audit, assurance &amp; management consulting.</p>
+  </footer>
+
+</div>
+
+<div id="toast" role="status"></div>
+
+<script>
+'use strict';
+/* ---------- qualification data (verified against official sources, July 2026) ---------- */
+const QUALS = [
+{id:'acca',short:'ACCA',full:'Association of Chartered Certified Accountants',body:'ACCA (UK)',color:'--c1',url:'https://www.accaglobal.com/gb/en/student/getting-started/acca-qualification-structure.html',sessions:'BT, MA, FA and LW are on-demand computer exams; the rest sit in March, June, September and December.',note:'Accredited accounting degrees can earn exemptions for up to 9 papers — mark those Exempt. Heads up: ACCA is redesigning the qualification from September 2027 (fewer Options exams, new levels), so late-2027 finishers should watch for transition rules.',
+ groups:[
+  {name:'Applied Knowledge',papers:[{c:'BT',n:'Business and Technology'},{c:'MA',n:'Management Accounting'},{c:'FA',n:'Financial Accounting'}]},
+  {name:'Applied Skills',papers:[{c:'LW',n:'Corporate and Business Law'},{c:'PM',n:'Performance Management'},{c:'TX',n:'Taxation'},{c:'FR',n:'Financial Reporting'},{c:'AA',n:'Audit and Assurance'},{c:'FM',n:'Financial Management'}]},
+  {name:'Strategic Professional — Essentials',papers:[{c:'SBL',n:'Strategic Business Leader'},{c:'SBR',n:'Strategic Business Reporting'}]},
+  {name:'Strategic Professional — Options',rule:'Choose 2 of 4',required:2,papers:[{c:'AFM',n:'Advanced Financial Management',opt:1},{c:'APM',n:'Advanced Performance Management',opt:1},{c:'ATX',n:'Advanced Taxation',opt:1},{c:'AAA',n:'Advanced Audit and Assurance',opt:1}]}],
+ extras:['Ethics and Professional Skills Module (EPSM)','Practical Experience Requirement — 36 months + 9 performance objectives']},
+{id:'cpaau',short:'CPA Australia',full:'CPA Program',body:'CPA Australia',color:'--c2',url:'https://www.cpaaustralia.com.au/your-cpa-program/subjects-and-course-guide',sessions:'Two semesters a year, with exam windows in April (S1) and October (S2).',note:'Choose electives carefully: depending on your pathway, one may need to be a taxation subject (Australia Taxation, Australia Taxation — Advanced, or your local variant) and/or Advanced Audit and Assurance. The Hong Kong, Malaysia, New Zealand and Fiji tax subjects run through partner universities and count as elective credits.',
+ groups:[
+  {name:'Compulsory subjects',papers:[{c:'E&G',n:'Ethics and Governance'},{c:'FR',n:'Financial Reporting'},{c:'SMA',n:'Strategic Management Accounting'},{c:'GSL',n:'Global Strategy and Leadership'}]},
+  {name:'Elective subjects',rule:'Choose 2 of 11',required:2,papers:[{c:'AAA',n:'Advanced Audit and Assurance',opt:1},{c:'CBI',n:'Contemporary Business Issues',opt:1},{c:'FRM',n:'Financial Risk Management',opt:1},{c:'DF',n:'Digital Finance',opt:1},{c:'AT',n:'Australia Taxation',opt:1},{c:'ATA',n:'Australia Taxation — Advanced',opt:1},{c:'SGT',n:'Singapore Taxation',opt:1},{c:'HKT',n:'Hong Kong Taxation',opt:1},{c:'MYT',n:'Malaysia Taxation',opt:1},{c:'NZT',n:'New Zealand Taxation',opt:1},{c:'FJT',n:'Fiji Taxation',opt:1}]}],
+ extras:['Your Experience — 36 months of relevant experience, sign-off by a CPA/FCPA or IFAC-body member','Entry: a degree recognised by CPA Australia (or foundation exams first)']},
+{id:'uaeca',short:'UAE CA',full:'UAE Fellowship Programme (UAECA)',body:'EAAA (UAE)',color:'--c3',url:'https://aaa4uae.ae/fellowship-program/',sessions:'Computer-based exams at British Council centres (Abu Dhabi, Dubai, Sharjah) in six windows a year — Jan, Mar, May, Jul, Sep, Nov; sit papers in any order.',note:'Members of AICPA, ICAEW, ACCA, CPA Canada, CAANZ or SOCPA are exempt from the IFRS and ISA exams and sit only Tax &amp; Regulation — confirm your exemption with EAAA first. All exams must be passed within two years of your first pass.',
+ groups:[
+  {name:'Fellowship exams (delivered by ACCA)',papers:[{c:'FRS',n:'Financial Reporting Standards (IFRS)'},{c:'IA',n:'International Auditing (ISA)'},{c:'TR',n:'UAE Tax and Regulation'}]}],
+ extras:['EAAA membership registration before enrolment (15 accounting credit hours if from a non-accounting degree)','Apply for Fellow member status after passing (annual fee applies)','30 CPD hours per year to maintain the Fellowship','For UAE auditor licensing: Ministry of Economy registration has separate experience requirements']},
+{id:'uscpa',short:'US CPA',full:'Uniform CPA Examination',body:'AICPA / NASBA',color:'--c4',url:'https://www.aicpa-cima.com/resources/toolkit/cpa-exam',sessions:'Core sections test year-round; Discipline sections only in the first month of each quarter (Jan, Apr, Jul, Oct).',note:'CPA Evolution model: three Cores plus one Discipline of your choice, all four passed within 30 months of your first pass (most states). Education and experience rules vary by state board — check yours.',
+ groups:[
+  {name:'Core',papers:[{c:'AUD',n:'Auditing and Attestation'},{c:'FAR',n:'Financial Accounting and Reporting'},{c:'REG',n:'Taxation and Regulation'}]},
+  {name:'Discipline',rule:'Choose 1 of 3',required:1,papers:[{c:'BAR',n:'Business Analysis and Reporting',opt:1},{c:'ISC',n:'Information Systems and Controls',opt:1},{c:'TCP',n:'Tax Compliance and Planning',opt:1}]}],
+ extras:['Education requirement — traditionally 150 credit hours; ~half of US states now also offer a bachelor’s + 2 years experience pathway','Experience requirement per your state board (typically 1–2 years, CPA-verified)','Ethics exam where your state requires it']},
+{id:'cma',short:'CMA (US)',full:'Certified Management Accountant',body:'IMA',color:'--c5',url:'https://www.imanet.org/ima-certifications/cma-certification',sessions:'Testing windows: Jan–Feb, May–Jun, Sep–Oct at Prometric centres; take the parts in any order.',note:'Both parts must be passed within 3 years of entering the program. From the Sep/Oct 2026 window the essay section becomes two case-based question sets in most regions.',
+ groups:[
+  {name:'CMA exam',papers:[{c:'P1',n:'Part 1: Financial Planning, Performance, and Analytics'},{c:'P2',n:'Part 2: Strategic Financial Management'}]}],
+ extras:['Bachelor’s degree from an accredited institution (verify within 7 years of passing)','2 continuous years of relevant professional experience (within 7 years of passing)','Active IMA membership','After certification: 30 CPE hours a year including 2 ethics hours']},
+{id:'cgma',short:'CIMA / CGMA',full:'CGMA Professional Qualification',body:'AICPA &amp; CIMA',color:'--c6',url:'https://www.aicpa-cima.com/resources/landing/cimas-cgma-professional-qualification',sessions:'Objective tests on demand year-round; case study exams in February, May, August and November.',note:'The 2026 syllabus upgrade changed exam content, not this structure. No accounting background? You enter via the Certificate in Business Accounting first. The alternative CGMA Finance Leadership Program route replaces the objective tests with online learning — only the three case studies are sat.',
+ groups:[
+  {name:'Operational level',papers:[{c:'E1',n:'E1: Managing Finance in a Digital World'},{c:'P1',n:'P1: Management Accounting'},{c:'F1',n:'F1: Financial Reporting'},{c:'OCS',n:'Operational Case Study'}]},
+  {name:'Management level',papers:[{c:'E2',n:'E2: Managing Performance'},{c:'P2',n:'P2: Advanced Management Accounting'},{c:'F2',n:'F2: Advanced Financial Reporting'},{c:'MCS',n:'Management Case Study'}]},
+  {name:'Strategic level',papers:[{c:'E3',n:'E3: Strategic Management'},{c:'P3',n:'P3: Risk Management'},{c:'F3',n:'F3: Financial Strategy'},{c:'SCS',n:'Strategic Case Study'}]}],
+ extras:['Practical Experience Requirement — 36 months of verified relevant experience, assessed before membership (ACMA, CGMA)']},
+{id:'aca',short:'ACA',full:'Associate Chartered Accountant (Next Generation ACA)',body:'ICAEW',color:'--c7',url:'https://www.icaew.com/start-your-career/how-to-become-a-chartered-accountant/discover-aca/exam-module',sessions:'Certificate Level on demand; Professional Level in March, June, September, December; Advanced Level in July and November.',note:'Next Generation syllabus: Certificate names changed from Sept 2025 and Professional from March 2026. The Advanced Level keeps its current three papers until July 2027, when it becomes two case studies — students mid-way get transitional credit, so check ICAEW’s mapping.',
+ groups:[
+  {name:'Certificate Level',papers:[{c:'AF',n:'Accounting Fundamentals'},{c:'ARF',n:'Assurance Risk Fundamentals'},{c:'BL',n:'Business Law'},{c:'TF',n:'Tax Fundamentals'},{c:'BIP',n:'Business Insight and Performance'},{c:'SE',n:'Sustainability and Ethics'}]},
+  {name:'Professional Level',papers:[{c:'ARR',n:'Assurance, Risk and Reporting'},{c:'CRDA',n:'Corporate Reporting, Data and Assurance'},{c:'CFS',n:'Corporate Financial Strategy'},{c:'BDS',n:'Business and Digital Strategy'},{c:'TCP',n:'Tax Compliance and Planning'},{c:'FCS',n:'Fundamental Case Study'}]},
+  {name:'Advanced Level (until July 2027)',papers:[{c:'CR',n:'Corporate Reporting'},{c:'SBM',n:'Strategic Business Management'},{c:'CS',n:'Case Study'}]}],
+ extras:['450 days of practical work experience under a training agreement','Ethics and professional scepticism programme','Professional development ladders']},
+{id:'caindia',short:'CA (India)',full:'Chartered Accountancy — New Scheme',body:'ICAI',color:'--c8',url:'https://www.icai.org/post/new-scheme-of-education-and-training',sessions:'Foundation and Intermediate: January, May and September. Final: May and November (twice a year from May 2026).',note:'Commerce graduates (55%+), other graduates (60%+) and CS/CMA Inter-passed students can skip Foundation via Direct Entry. All four Self-Paced Online Module sets need 50%+ before the Final exam.',
+ groups:[
+  {name:'Foundation',papers:[{c:'P1',n:'Accounting'},{c:'P2',n:'Business Laws'},{c:'P3',n:'Quantitative Aptitude'},{c:'P4',n:'Business Economics'}]},
+  {name:'Intermediate — Group I',papers:[{c:'P1',n:'Advanced Accounting'},{c:'P2',n:'Corporate and Other Laws'},{c:'P3',n:'Taxation (Income-tax and GST)'}]},
+  {name:'Intermediate — Group II',papers:[{c:'P4',n:'Cost and Management Accounting'},{c:'P5',n:'Auditing and Ethics'},{c:'P6',n:'Financial Management and Strategic Management'}]},
+  {name:'Self-Paced Modules — Set A &amp; B (mandatory)',papers:[{c:'A',n:'Corporate and Economic Laws'},{c:'B',n:'Strategic Cost and Performance Management'}]},
+  {name:'Self-Paced Modules — Set C',rule:'Choose 1 of 10',required:1,papers:[{c:'C1',n:'Risk Management',opt:1},{c:'C2',n:'Sustainable Development and Sustainability Reporting',opt:1},{c:'C3',n:'Public Finance and Government Accounting',opt:1},{c:'C4',n:'Insolvency and Bankruptcy Code',opt:1},{c:'C5',n:'International Taxation',opt:1},{c:'C6',n:'Arbitration and Conciliation Act',opt:1},{c:'C7',n:'Forensic Accounting',opt:1},{c:'C8',n:'Valuation',opt:1},{c:'C9',n:'Financial Services and Capital Markets',opt:1},{c:'C10',n:'Forex and Treasury Management',opt:1}]},
+  {name:'Self-Paced Modules — Set D',rule:'Choose 1 of 4',required:1,papers:[{c:'D1',n:'Constitution of India and Art of Advocacy',opt:1},{c:'D2',n:'Psychology and Philosophy',opt:1},{c:'D3',n:'Entrepreneurship and Start-up Ecosystem',opt:1},{c:'D4',n:'Digital Ecosystem and Controls',opt:1}]},
+  {name:'Final — Group I',papers:[{c:'P1',n:'Financial Reporting'},{c:'P2',n:'Advanced Financial Management'},{c:'P3',n:'Advanced Auditing, Assurance and Professional Ethics'}]},
+  {name:'Final — Group II',papers:[{c:'P4',n:'Direct Tax Laws and International Taxation'},{c:'P5',n:'Indirect Tax Laws'},{c:'P6',n:'Integrated Business Solutions (case study)'}]}],
+ extras:['ICITSS (IT + soft skills course) before starting articleship','2-year articleship after passing both Intermediate groups and ICITSS','Advanced ICITSS after articleship, before the Final exam']}
+];
+
+/* ---------- state ---------- */
+const LS='chartertrack-v1';
+const STATUSES=['todo','booked','passed','exempt'];
+let shared=null; // sanitized shared plan, when viewing a share link
+let warnedStorage=false;
+let pendingFocus=null; // focus restoration across re-renders
+
+function sanitize(d){
+  d=(d&&typeof d==='object')?d:{};
+  const quals=[...new Set((Array.isArray(d.quals)?d.quals:[]).filter(id=>QUALS.some(q=>q.id===id)))];
+  const status={},extras={};
+  const so=(d.status&&typeof d.status==='object'&&!Array.isArray(d.status))?d.status:{};
+  for(const k of Object.keys(so)){
+    const m=/^([a-z]+):(.+)@(\d+)$/.exec(k);if(!m)continue;
+    const q=QUALS.find(x=>x.id===m[1]);if(!q)continue;
+    const g=q.groups[+m[3]];if(!g||!g.papers.some(p=>p.c===m[2]))continue;
+    const v=so[k];if(v==='booked'||v==='passed'||v==='exempt')status[k]=v;
+  }
+  const eo=(d.extras&&typeof d.extras==='object'&&!Array.isArray(d.extras))?d.extras:{};
+  for(const k of Object.keys(eo)){
+    const m=/^([a-z]+):x(\d+)$/.exec(k);if(!m)continue;
+    const q=QUALS.find(x=>x.id===m[1]);if(!q||+m[2]>=q.extras.length)continue;
+    if(eo[k]===true)extras[k]=true;
+  }
+  return {quals,status,extras};
+}
+function loadState(){try{return sanitize(JSON.parse(localStorage.getItem(LS)))}catch(e){return sanitize(null)}}
+let state=loadState();
+function saveState(){
+  if(shared)return;
+  try{localStorage.setItem(LS,JSON.stringify(state))}
+  catch(e){if(!warnedStorage){warnedStorage=true;toast("This browser is blocking storage — progress won't survive a reload")}}
+}
+function cur(){return shared||state}
+function st(qid,key){return cur().status[qid+':'+key]||'todo'}
+
+/* ---------- progress ---------- */
+function progress(q){
+  let req=0,done=0,booked=0;
+  q.groups.forEach((g,gi)=>{
+    const r=g.required||g.papers.length;req+=r;
+    let d=0;g.papers.forEach(p=>{const s=st(q.id,p.c+'@'+gi);if(s==='passed'||s==='exempt')d++;else if(s==='booked')booked++});
+    done+=Math.min(d,r);
+  });
+  const xdone=q.extras.filter((_,i)=>cur().extras[q.id+':x'+i]).length;
+  return {req,done,booked,pct:req?Math.round(done/req*100):0,xdone,xtotal:q.extras.length};
+}
+function overall(){
+  let req=0,done=0;
+  cur().quals.forEach(id=>{const q=QUALS.find(x=>x.id===id);if(!q)return;const p=progress(q);req+=p.req;done+=p.done});
+  return {req,done,pct:req?Math.round(done/req*100):0};
+}
+
+/* ---------- rendering ---------- */
+const $=s=>document.querySelector(s);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function cap(s){return s[0].toUpperCase()+s.slice(1)}
+
+function render(){
+  const sel=cur().quals;
+  $('#hero').classList.toggle('hidden',sel.length>0);
+  $('#dashboard').classList.toggle('hidden',sel.length===0);
+  $('#tools').classList.toggle('hidden',sel.length===0||!!shared);
+  $('#pickerTitle').textContent=sel.length?'Add another qualification':'Choose your qualification';
+  $('#pickerSec').classList.toggle('hidden',!!shared);
+  renderTiles(sel);renderPlans(sel);renderPicker(sel);
+  saveState();
+  if(pendingFocus){const el=document.querySelector(pendingFocus);if(el)el.focus();pendingFocus=null}
+}
+
+function renderTiles(sel){
+  const o=overall();
+  let h='';
+  if(sel.length>1){
+    h+=`<div class="tile"><div class="k">Overall</div><div class="v">${o.pct}%<small> &middot; ${o.done}/${o.req} papers</small></div><div class="bar"><i style="width:${o.pct}%;background:var(--ink)"></i></div></div>`;
+  }
+  sel.forEach(id=>{
+    const q=QUALS.find(x=>x.id===id);if(!q)return;const p=progress(q);
+    h+=`<div class="tile"><div class="k"><span class="dot" style="background:var(${q.color})"></span>${q.short}</div><div class="v">${p.pct}%<small> &middot; ${p.done}/${p.req}</small></div><div class="bar"><i style="width:${p.pct}%;background:var(${q.color})"></i></div></div>`;
+  });
+  $('#tiles').innerHTML=h;
+}
+
+function chipRow(qid,key,pname,disabled){
+  const s=cur().status[qid+':'+key]||'todo';
+  return `<span class="stat" role="group" aria-label="Status for ${esc(pname)}">`+STATUSES.map(x=>
+    `<button class="chip ${x}" aria-pressed="${s===x}" aria-label="${cap(x)} — ${esc(pname)}" ${disabled?'disabled':''} data-q="${qid}" data-k="${esc(key)}" data-s="${x}">${cap(x)}</button>`).join('')+`</span>`;
+}
+
+function renderPlans(sel){
+  let h='';
+  sel.forEach(id=>{
+    const q=QUALS.find(x=>x.id===id);if(!q)return;const p=progress(q);
+    h+=`<div class="qual" id="qual-${q.id}">
+      <div class="q-head">
+        <div class="q-title">
+          <span class="swatch" style="background:var(${q.color})"></span>
+          <h2 tabindex="-1" id="qh-${q.id}">${q.short}</h2>
+          <span class="body-name">${q.full} &middot; ${q.body}</span>
+          <span class="right">
+            <a class="official" href="${esc(q.url)}" target="_blank" rel="noopener">Official site &nearr;</a>
+            ${shared?'':`<button class="q-remove" data-remove="${q.id}">Remove</button>`}
+          </span>
+        </div>
+        <div class="q-meta">
+          <span class="pctxt"><b>${p.pct}%</b> &middot; ${p.done} of ${p.req} papers${p.booked?` &middot; ${p.booked} booked`:''}</span>
+          <div class="bar"><i style="width:${p.pct}%;background:var(${q.color})"></i></div>
+        </div>
+        <div class="q-note">${q.sessions} ${q.note}</div>
+      </div>`;
+    q.groups.forEach((g,gi)=>{
+      const r=g.required||g.papers.length;
+      const d=Math.min(g.papers.filter(x=>['passed','exempt'].includes(st(q.id,x.c+'@'+gi))).length,r);
+      h+=`<div class="group"><div class="g-head"><h3>${g.name}</h3>${g.rule?`<span class="rule">${esc(g.rule)}</span>`:''}<span class="g-done">${d}/${r} done</span></div>`;
+      g.papers.forEach(pp=>{
+        const key=pp.c+'@'+gi;const s=st(q.id,key);
+        h+=`<div class="paper ${(s==='passed'||s==='exempt')?'done':''}"><span class="pcode">${esc(pp.c)}</span><span class="pname">${esc(pp.n)}${pp.opt?'<span class="opt">optional</span>':''}</span>${chipRow(q.id,key,pp.n,!!shared)}</div>`;
+      });
+      h+=`</div>`;
+    });
+    if(q.extras.length){
+      h+=`<div class="group extras"><div class="g-head"><h3>Beyond the exams</h3><span class="g-done">${p.xdone}/${p.xtotal} done</span></div>`;
+      q.extras.forEach((x,i)=>{
+        const on=!!cur().extras[q.id+':x'+i];
+        h+=`<div class="paper"><button class="xtgl" aria-pressed="${on}" ${shared?'disabled':''} data-q="${q.id}" data-x="${i}" aria-label="Mark done: ${esc(x)}"><svg viewBox="0 0 100 100" aria-hidden="true"><path d="M20 55l18 18 42-46" stroke="white" stroke-width="16" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><span class="pname">${x}</span></div>`;
+      });
+      h+=`</div>`;
+    }
+    h+=`</div>`;
+  });
+  $('#plans').innerHTML=h;
+}
+
+function renderPicker(sel){
+  $('#picker').innerHTML=QUALS.map(q=>{
+    const total=q.groups.reduce((a,g)=>a+(g.required||g.papers.length),0);
+    const added=sel.includes(q.id);
+    return `<button class="pick ${added?'added':''}" data-add="${q.id}" ${added?'disabled':''}>
+      <span class="nm"><span class="dot" style="background:var(${q.color})"></span>${q.short}</span>
+      <span class="fl">${q.full} &middot; ${q.body}</span>
+      <span class="ct">${added?'<b>&check; Added</b>':total+' papers to qualify'}</span></button>`;
+  }).join('');
+}
+
+/* ---------- events (delegation) ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button');if(!t||shared)return;
+  if(t.dataset.add){
+    if(!state.quals.includes(t.dataset.add)){
+      state.quals.push(t.dataset.add);
+      pendingFocus='#qh-'+t.dataset.add;
+      render();
+      const el=document.getElementById('qual-'+t.dataset.add);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+    }
+    return;
+  }
+  if(t.dataset.remove){
+    const q=QUALS.find(x=>x.id===t.dataset.remove);
+    if(confirm('Remove '+q.short+' and its progress?')){
+      state.quals=state.quals.filter(x=>x!==t.dataset.remove);
+      Object.keys(state.status).forEach(k=>{if(k.startsWith(t.dataset.remove+':'))delete state.status[k]});
+      Object.keys(state.extras).forEach(k=>{if(k.startsWith(t.dataset.remove+':'))delete state.extras[k]});
+      pendingFocus='#pickerTitle';
+      render();
+    }
+    return;
+  }
+  if(t.dataset.s){
+    const k=t.dataset.q+':'+t.dataset.k;
+    if(t.dataset.s==='todo')delete state.status[k];else state.status[k]=t.dataset.s;
+    pendingFocus=`.chip[data-q="${t.dataset.q}"][data-k="${t.dataset.k}"][data-s="${t.dataset.s}"]`;
+    render();
+    return;
+  }
+  if(t.dataset.x!==undefined&&t.dataset.q){
+    const k=t.dataset.q+':x'+t.dataset.x;
+    state.extras[k]=!state.extras[k];if(!state.extras[k])delete state.extras[k];
+    pendingFocus=`.xtgl[data-q="${t.dataset.q}"][data-x="${t.dataset.x}"]`;
+    render();
+    return;
+  }
+});
+
+/* ---------- share / export / import / reset ---------- */
+function b64e(o){return btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function b64d(s){s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';return JSON.parse(decodeURIComponent(escape(atob(s))))}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2600)}
+
+$('#shareBtn').addEventListener('click',()=>{
+  const url=location.origin+location.pathname+'#p='+b64e({q:state.quals,s:state.status,e:state.extras});
+  const fallback=()=>{const row=$('#shareRow');row.classList.remove('hidden');const inp=$('#shareUrl');inp.value=url;inp.focus();inp.select();toast('Copy blocked — the link is shown below')};
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(()=>toast('Share link copied to clipboard')).catch(fallback)}else{fallback()}
+});
+$('#exportBtn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify({app:'chartertrack',v:1,quals:state.quals,status:state.status,extras:state.extras},null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chartertrack-plan.json';a.click();URL.revokeObjectURL(a.href);
+});
+$('#importBtn').addEventListener('click',()=>$('#importFile').click());
+$('#importFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  f.text().then(txt=>{
+    const d=JSON.parse(txt);
+    if(!Array.isArray(d.quals))throw 0;
+    const hasData=state.quals.length||Object.keys(state.status).length;
+    if(hasData&&!confirm('Importing will replace your current plan. Continue?'))return;
+    state=sanitize(d);render();toast('Plan imported');
+  }).catch(()=>toast('That file is not a CharterTrack export'));
+  e.target.value='';
+});
+$('#resetBtn').addEventListener('click',()=>{
+  if(confirm('Delete all progress stored in this browser?')){
+    state=sanitize(null);
+    try{localStorage.removeItem(LS)}catch(e){}
+    render();toast('All progress cleared');
+  }
+});
+
+/* ---------- shared-link handling ---------- */
+$('#importShared').addEventListener('click',()=>{
+  if(!shared)return;
+  state=shared;shared=null;
+  history.replaceState(null,'',location.pathname);
+  $('#sharedBanner').classList.add('hidden');
+  render();toast("Plan imported — it's yours now");
+});
+$('#dismissShared').addEventListener('click',()=>{
+  shared=null;
+  history.replaceState(null,'',location.pathname);
+  $('#sharedBanner').classList.add('hidden');
+  render();
+});
+window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#p='))location.reload()});
+
+(function init(){
+  if(location.hash.startsWith('#p=')){
+    try{
+      const d=b64d(location.hash.slice(3));
+      const s=sanitize({quals:d.q,status:d.s,extras:d.e});
+      if(s.quals.length){shared=s;$('#sharedBanner').classList.remove('hidden')}
+      else{history.replaceState(null,'',location.pathname)}
+    }catch(e){
+      toast('That share link is damaged or truncated — ask for a fresh one');
+      history.replaceState(null,'',location.pathname);
+    }
+  }
+  render();
+})();
+</script>
+</body>
+</html>
