@@ -1,0 +1,1137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IFRS 16 Lease Engine — Prompt Consulting</title>
+<meta name="description" content="Free IFRS 16 lease calculator: upload a lease contract or enter terms manually and get the ROU asset, lease liability, full amortisation schedules, journal vouchers and an audit note. Supports co-leases and subleases.">
+<style>
+  :root{
+    --paper:#FAFAF6; --ink:#1B2622; --muted:#5A6B64; --line:#DCE2DC; --card:#FFFFFF;
+    --green:#15694E; --green-soft:#E3EFE9; --blue:#2D5D8C; --blue-soft:#E4EDF5;
+    --amber:#A96F1A; --amber-soft:#F6EEDD; --red:#A8402F;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+    --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#111917; --ink:#E6ECE8; --muted:#93A59C; --line:#2A3833; --card:#18221F;
+      --green:#53C79A; --green-soft:#1c332a; --blue:#7FB2E0; --blue-soft:#1b2b3d;
+      --amber:#E0AA5E; --amber-soft:#3a2c14; --red:#E08A7A; }
+  }
+  *{box-sizing:border-box}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:15.5px; line-height:1.55; margin:0; padding:0 16px 90px;}
+  main{max-width:1060px; margin:0 auto}
+  a{color:var(--blue)}
+  header.top{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; padding:26px 0 18px; border-bottom:3px solid var(--ink); margin-bottom:26px}
+  .brand{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); text-decoration:none}
+  h1{font-size:clamp(24px,4vw,34px); margin:6px 0 4px; letter-spacing:-.015em}
+  .lede{color:var(--muted); margin:0; max-width:66ch}
+  h2{font-size:19px; margin:34px 0 4px}
+  h3{font-size:15.5px; margin:20px 0 8px}
+  .sub{color:var(--muted); font-size:13.5px; margin:0 0 14px; max-width:72ch}
+  code{font-family:var(--mono); font-size:.87em; background:var(--green-soft); padding:1px 5px; border-radius:3px}
+
+  /* stepper */
+  .steps{display:flex; gap:8px; margin:20px 0 8px; flex-wrap:wrap}
+  .step{font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; padding:6px 12px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--card)}
+  .step.on{border-color:var(--green); color:var(--green); background:var(--green-soft)}
+
+  section.panel{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; margin:16px 0}
+  .hidden{display:none !important}
+
+  /* upload */
+  .drop{border:2px dashed var(--line); border-radius:10px; padding:28px 18px; text-align:center; color:var(--muted); cursor:pointer; transition:border-color .15s}
+  .drop.hover,.drop:focus-visible{border-color:var(--green); outline:none}
+  .drop b{color:var(--ink)}
+  .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px; align-items:center}
+  button{font-family:var(--sans); font-size:14px; padding:9px 18px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer}
+  button:hover{border-color:var(--green)}
+  button:focus-visible{outline:2px solid var(--green); outline-offset:2px}
+  button.primary{background:var(--green); border-color:var(--green); color:#fff; font-weight:600}
+  @media (prefers-color-scheme: dark){ button.primary{color:#0c1512} }
+  button.ghost{background:transparent}
+  button:disabled{opacity:.5; cursor:default}
+  .status{font-size:13.5px; margin-top:12px; color:var(--muted)}
+  .status.err{color:var(--red)}
+  .status.ok{color:var(--green)}
+
+  /* form */
+  fieldset{border:1px solid var(--line); border-radius:10px; padding:14px 16px 16px; margin:0 0 16px; min-width:0}
+  legend{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green); padding:0 6px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px 16px}
+  .grid .wide{grid-column:1/-1}
+  label.f{display:flex; flex-direction:column; gap:4px; font-size:12.5px; color:var(--muted); min-width:0}
+  label.f span b{color:var(--ink)}
+  input[type=text],input[type=number],input[type=date],select,textarea{
+    font-family:var(--sans); font-size:14px; padding:8px 10px; border:1px solid var(--line);
+    border-radius:7px; background:var(--paper); color:var(--ink); width:100%;
+  }
+  input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--green); outline-offset:1px}
+  input.uncertain{border-color:var(--amber); background:var(--amber-soft)}
+  .check{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--ink); padding-top:18px}
+  .hint{font-size:12px; color:var(--muted)}
+  .flag{border-left:3px solid var(--amber); background:var(--amber-soft); padding:10px 14px; border-radius:0 8px 8px 0; font-size:13.5px; margin:0 0 16px}
+
+  /* arrangement */
+  .arr{display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px}
+  .arr label{border:1px solid var(--line); border-radius:8px; padding:9px 14px; cursor:pointer; font-size:14px; display:flex; gap:8px; align-items:center; background:var(--paper)}
+  .arr input{accent-color:var(--green)}
+  .arr label:has(input:checked){border-color:var(--green); background:var(--green-soft)}
+  .comp-row{display:grid; grid-template-columns:1fr 130px 40px; gap:10px; margin-bottom:8px; align-items:center}
+  .comp-row button{padding:6px 10px}
+
+  /* results */
+  .pills{display:flex; gap:8px; flex-wrap:wrap; margin:6px 0 16px}
+  .pill-btn{font-family:var(--mono); font-size:12px; padding:6px 14px; border-radius:999px; border:1px solid var(--line); background:var(--card); color:var(--muted); cursor:pointer}
+  .pill-btn.on{border-color:var(--green); color:var(--green); background:var(--green-soft)}
+  .tabs{display:flex; gap:2px; border-bottom:2px solid var(--line); margin:4px 0 18px; overflow-x:auto}
+  .tab{font-size:13.5px; padding:9px 14px; border:none; background:none; color:var(--muted); border-bottom:2px solid transparent; margin-bottom:-2px; white-space:nowrap; border-radius:0}
+  .tab.on{color:var(--green); border-bottom-color:var(--green); font-weight:600}
+  .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:6px 0 18px}
+  .tile{background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px}
+  .tile .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:6px}
+  .tile .v{font-family:var(--mono); font-size:19px; font-variant-numeric:tabular-nums; letter-spacing:-.01em}
+  .tile.g .v{color:var(--green)} .tile.a .v{color:var(--amber)} .tile.b .v{color:var(--blue)}
+
+  .tbl-wrap{overflow-x:auto; margin:10px 0 8px; border:1px solid var(--line); border-radius:8px}
+  table{border-collapse:collapse; width:100%; font-size:13px; background:var(--card)}
+  th{font-family:var(--mono); font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; text-align:left; color:var(--muted); padding:8px 11px; border-bottom:2px solid var(--line); position:sticky; top:0; background:var(--card)}
+  th.num,td.num{text-align:right}
+  td{padding:7px 11px; border-bottom:1px solid var(--line); vertical-align:top}
+  td.num{font-family:var(--mono); font-variant-numeric:tabular-nums; white-space:nowrap}
+  tr:last-child td{border-bottom:none}
+  tr.tot td{border-top:2px solid var(--line); font-weight:600}
+  .jv-h td{background:var(--green-soft); font-family:var(--mono); font-size:12px; color:var(--green)}
+  .rules{margin:8px 0 0; padding-left:20px; font-size:13.5px}
+  .rules li{margin:5px 0}
+
+  .note{background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:24px 28px; max-width:78ch}
+  .note h2{font-size:17px; margin:20px 0 8px} .note h2:first-child{margin-top:0}
+  .note ul{padding-left:20px} .note p{margin:8px 0}
+
+  footer{margin-top:48px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted); max-width:80ch}
+  @media print{
+    body{padding:0; background:#fff; color:#111}
+    header.top,.steps,#panel-contract,#panel-inputs,.tabs,.pills,.btnrow,footer,.no-print{display:none !important}
+    section.panel{border:none; padding:0}
+    .note{border:none; padding:0; max-width:none}
+  }
+</style>
+</head>
+<body>
+<main>
+<header class="top">
+  <div>
+    <a class="brand" href="/">← Prompt Consulting</a>
+    <h1>IFRS 16 Lease Engine</h1>
+    <p class="lede">Upload a lease contract or enter the terms manually — get the right-of-use asset, lease liability, full schedules, journal vouchers and an audit note. Supports standalone premises, co-leases and subleases.</p>
+  </div>
+</header>
+
+<div class="steps" role="list">
+  <span class="step on" id="st1" role="listitem">1 · Contract</span>
+  <span class="step" id="st2" role="listitem">2 · Review inputs</span>
+  <span class="step" id="st3" role="listitem">3 · Workings</span>
+</div>
+
+<!-- ============ STEP 1: CONTRACT ============ -->
+<section class="panel" id="panel-contract">
+  <h2 style="margin-top:0">Start with the contract</h2>
+  <p class="sub">AI extraction reads the PDF and pre-fills every field with a clause reference — you review and confirm before anything is calculated. Nothing is computed by the AI itself.</p>
+  <div class="drop" id="drop" tabindex="0" role="button" aria-label="Upload lease contract PDF">
+    <b>Drop the lease contract PDF here</b> or click to choose a file<br>
+    <span class="hint">PDF up to 3.5 MB for AI extraction · your file is processed transiently and not stored</span>
+    <input type="file" id="file" accept="application/pdf" style="display:none">
+  </div>
+  <div class="btnrow">
+    <button class="primary" id="btn-extract" disabled>Extract with AI</button>
+    <button id="btn-manual">Enter terms manually</button>
+    <button class="ghost" id="btn-demo">Load a demo lease</button>
+  </div>
+  <p class="status" id="extract-status" role="status"></p>
+</section>
+
+<!-- ============ STEP 2: REVIEW ============ -->
+<section class="panel hidden" id="panel-inputs">
+  <h2 style="margin-top:0">Review &amp; confirm the inputs</h2>
+  <p class="sub">These are the figures the calculation will use. Fields highlighted in amber were uncertain in the AI extraction — verify them against the contract. Lease payments must be entered <b>excluding VAT</b>, or tick the VAT-inclusive box and the engine strips it deterministically.</p>
+  <div class="flag hidden" id="uncertain-flag"></div>
+  <p class="sub hidden" id="source-notes" style="font-family:var(--mono); font-size:12px"></p>
+
+  <form id="form" novalidate>
+  <fieldset><legend>Parties &amp; premises</legend>
+    <div class="grid">
+      <label class="f"><span>Lessor</span><input type="text" id="lessor" placeholder="Landlord name"></label>
+      <label class="f"><span>Lessee</span><input type="text" id="lessee" placeholder="Tenant name"></label>
+      <label class="f wide"><span>Premises</span><input type="text" id="premises" placeholder="Unit / building / plot description"></label>
+      <label class="f"><span>Currency</span><input type="text" id="currency" value="AED" maxlength="5"></label>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Term &amp; discounting</legend>
+    <div class="grid">
+      <label class="f"><span><b>Commencement date</b></span><input type="date" id="commencement" required></label>
+      <label class="f"><span><b>Lease term (months)</b></span><input type="number" id="termMonths" min="1" step="1" placeholder="60" required></label>
+      <label class="f"><span><b>Discount rate — IBR (% p.a.)</b></span><input type="number" id="ibr" min="0" step="0.01" placeholder="6.0" required>
+        <span class="hint">Rate implicit in the lease if determinable, else your incremental borrowing rate. Always a human judgement.</span></label>
+      <label class="f"><span>Payment frequency</span>
+        <select id="frequency"><option value="monthly">Monthly</option><option value="quarterly">Quarterly</option><option value="annual">Annual</option></select></label>
+      <label class="f"><span>Payment timing</span>
+        <select id="timing"><option value="advance">In advance</option><option value="arrears">In arrears</option></select></label>
+      <label class="f"><span>Recognition exemption</span>
+        <select id="exemption"><option value="none">None — full IFRS 16</option><option value="short">Short-term lease (≤ 12 months)</option><option value="lowvalue">Low-value asset</option></select></label>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Payments</legend>
+    <div class="grid">
+      <label class="f"><span><b>Base rent per period</b></span><input type="number" id="baseRent" min="0" step="0.01" required></label>
+      <label class="f"><span>Fixed service charges per period</span><input type="number" id="fixedSC" min="0" step="0.01" value="0">
+        <span class="hint">Capitalised with the rent (non-lease components not separated)</span></label>
+      <label class="f"><span>Variable charges per period (est.)</span><input type="number" id="varCharge" min="0" step="0.01" value="0">
+        <span class="hint">Utilities / usage-based — expensed to P&amp;L, never capitalised</span></label>
+      <label class="f"><span>Rent-free periods (initial)</span><input type="number" id="rentFree" min="0" step="1" value="0"></label>
+      <label class="f"><span>Fixed escalation (% p.a.)</span><input type="number" id="escalation" min="0" step="0.01" value="0"></label>
+      <label class="check"><input type="checkbox" id="indexLinked"> Escalation is CPI / index-linked</label>
+      <label class="f"><span>VAT rate (%)</span><input type="number" id="vat" min="0" step="0.01" value="5"></label>
+      <label class="check"><input type="checkbox" id="inclVat"> Amounts above include VAT</label>
+      <label class="f wide"><span>Variable charges description</span><input type="text" id="varDesc" placeholder="e.g. chilled water by consumption, utilities"></label>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Other capitalisation items</legend>
+    <div class="grid">
+      <label class="f"><span>Initial direct costs</span><input type="number" id="idc" min="0" step="0.01" value="0">
+        <span class="hint">Broker, Ejari / registration, legal</span></label>
+      <label class="f"><span>Lease incentives received</span><input type="number" id="incentives" min="0" step="0.01" value="0"></label>
+      <label class="f"><span>Restoration cost (est., at end)</span><input type="number" id="restoration" min="0" step="0.01" value="0"></label>
+      <label class="f"><span>Security deposit (refundable)</span><input type="number" id="deposit" min="0" step="0.01" value="0"></label>
+      <label class="check"><input type="checkbox" id="discountDeposit" checked> Discount deposit (IFRS 9)</label>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Options (judgement inputs)</legend>
+    <div class="grid">
+      <label class="f wide"><span>Extension / termination / purchase options considered</span>
+        <textarea id="options" rows="2" placeholder="e.g. 1×3y extension at market rent — assessed NOT reasonably certain, excluded from term"></textarea>
+        <span class="hint">Include option periods in the lease term above only when exercise is reasonably certain. Record the rationale here — it feeds the audit note.</span></label>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Arrangement</legend>
+    <div class="arr" role="radiogroup" aria-label="Arrangement type">
+      <label><input type="radio" name="arrangement" value="standalone" checked> Standalone — no sharing</label>
+      <label><input type="radio" name="arrangement" value="co_lease"> Co-lease — shared premises</label>
+      <label><input type="radio" name="arrangement" value="sub_lease"> Sublease — we sublet part/all</label>
+    </div>
+
+    <div id="co-config" class="hidden">
+      <p class="sub">Each co-lessee's share is accounted for as its own lease. You get a working per component plus a consolidated working with a reconciliation.</p>
+      <div id="comp-rows"></div>
+      <div class="btnrow" style="margin-top:4px"><button type="button" id="add-comp">+ Add co-lessee</button><span class="hint" id="share-sum"></span></div>
+    </div>
+
+    <div id="sub-config" class="hidden">
+      <p class="sub">Head lease stays as lessee accounting. The sublease is classified by reference to the right-of-use asset: substantially all of the remaining term → finance sublease.</p>
+      <div class="grid">
+        <label class="f"><span>Sublease starts (months after commencement)</span><input type="number" id="subStart" min="0" step="1" value="0"></label>
+        <label class="f"><span>Sublease term (months)</span><input type="number" id="subTerm" min="1" step="1"></label>
+        <label class="f"><span>Sublease rent per period (excl. VAT)</span><input type="number" id="subRent" min="0" step="0.01"></label>
+        <label class="f"><span>% of premises sublet</span><input type="number" id="subShare" min="1" max="100" step="0.01" value="100"></label>
+        <label class="f"><span>Classification</span>
+          <select id="subClass"><option value="auto">Auto (suggested by term test)</option><option value="finance">Finance sublease</option><option value="operating">Operating sublease</option></select>
+          <span class="hint" id="subClassHint"></span></label>
+        <label class="f"><span>Subtenant</span><input type="text" id="subTenant" placeholder="Subtenant name"></label>
+      </div>
+    </div>
+  </fieldset>
+
+  <div class="btnrow">
+    <button type="submit" class="primary" id="btn-compute">Compute the working</button>
+    <button type="button" id="btn-back1">← Back to contract</button>
+  </div>
+  <p class="status err" id="form-err" role="alert"></p>
+  </form>
+</section>
+
+<!-- ============ STEP 3: WORKINGS ============ -->
+<section class="panel hidden" id="panel-results">
+  <h2 style="margin-top:0" id="res-title">Workings</h2>
+  <div class="pills hidden" id="view-pills" role="tablist" aria-label="Component"></div>
+  <div class="tabs" role="tablist" aria-label="Working views">
+    <button class="tab on" data-tab="summary" role="tab">Summary</button>
+    <button class="tab" data-tab="liab" role="tab">Lease liability</button>
+    <button class="tab" data-tab="rou" role="tab">ROU asset</button>
+    <button class="tab" data-tab="jv" role="tab">Journal vouchers</button>
+    <button class="tab" data-tab="disc" role="tab">Disclosures</button>
+    <button class="tab" data-tab="note" role="tab">Audit note</button>
+  </div>
+  <div id="tab-summary"></div>
+  <div id="tab-liab" class="hidden"></div>
+  <div id="tab-rou" class="hidden"></div>
+  <div id="tab-jv" class="hidden"></div>
+  <div id="tab-disc" class="hidden"></div>
+  <div id="tab-note" class="hidden"></div>
+  <div class="btnrow no-print" style="margin-top:20px">
+    <button type="button" id="btn-edit">← Edit inputs</button>
+    <button type="button" id="btn-restart">Start a new lease</button>
+  </div>
+</section>
+
+<footer>
+  <b>Prompt Consulting · IFRS 16 Lease Engine (beta).</b> All calculations run deterministically in your browser; the AI reads contracts and drafts narrative only, and every extracted figure requires your confirmation before use. This tool supports — and does not replace — professional judgement. Lease payments are measured excluding VAT throughout. Questions or a complex lease? <a href="/contact.html">Talk to us</a>.
+</footer>
+</main>
+
+<script>
+"use strict";
+/* ============================================================
+   IFRS 16 CALCULATION ENGINE — deterministic, no AI involvement
+   ============================================================ */
+const r2 = v => Math.round((v + Number.EPSILON) * 100) / 100;
+const clamp0 = v => Math.abs(v) < 0.005 ? 0 : v;
+const PPY = { monthly: 12, quarterly: 4, annual: 1 };
+const PMONTHS = { monthly: 1, quarterly: 3, annual: 12 };
+
+function addMonths(iso, m){
+  const d = new Date(iso + "T00:00:00");
+  const day = d.getDate();
+  d.setMonth(d.getMonth() + m);
+  if (d.getDate() < day) d.setDate(0); // month-end clamp
+  return d.toISOString().slice(0,10);
+}
+
+/* Build the per-period cash flow rows from confirmed inputs. */
+function buildPayments(inp){
+  const pm = PMONTHS[inp.frequency];
+  const n = Math.round(inp.termMonths / pm);
+  const deVat = inp.inclVat ? 1 / (1 + inp.vat/100) : 1;
+  const rows = [];
+  for (let i = 0; i < n; i++){
+    const monthOff = i * pm;
+    const yearIdx = Math.floor(monthOff / 12);
+    const esc = Math.pow(1 + (inp.indexLinked ? 0 : inp.escalation)/100, yearIdx);
+    const rentFree = i < inp.rentFree;
+    const rent = rentFree ? 0 : r2(inp.baseRent * deVat * esc);
+    const fsc  = r2(inp.fixedSC * deVat * esc);        // service charges payable even in rent-free periods
+    const varc = r2(inp.varCharge * deVat * esc);
+    rows.push({ i, monthOff, date: addMonths(inp.commencement, monthOff),
+                dateEnd: addMonths(inp.commencement, monthOff + pm),
+                rent, fsc, pay: r2(rent + fsc), varc });
+  }
+  return rows;
+}
+
+function periodRate(inp){
+  const pm = PMONTHS[inp.frequency];
+  return Math.pow(1 + inp.ibr/100, pm/12) - 1;
+}
+
+/* Core single-lease computation. Returns the full working. */
+function computeLease(inp){
+  const pays = buildPayments(inp);
+  const n = pays.length;
+  const r = periodRate(inp);
+  const rules = [];
+  rules.push("Lease payments measured excluding VAT" + (inp.inclVat ? " (entered VAT-inclusive; stripped at " + inp.vat + "%)" : "") + "; input VAT recognised as recoverable on payment.");
+  rules.push("Fixed service charges capitalised with lease payments — practical expedient applied, non-lease components not separated (IFRS 16.15).");
+  if (inp.varCharge > 0) rules.push("Variable charges (" + (inp.varDesc || "utilities / usage-based") + ") expensed to profit or loss as incurred (IFRS 16.38(b)).");
+  if (inp.rentFree > 0) rules.push(inp.rentFree + " rent-free period(s) reflected in the payment schedule — the liability and straight-line depreciation spread the benefit automatically.");
+  if (!inp.indexLinked && inp.escalation > 0) rules.push("Fixed escalation of " + inp.escalation + "% p.a. treated as in-substance fixed and included in the measured payments.");
+  if (inp.indexLinked) rules.push("CPI/index-linked escalation measured at the commencement index; future resets remeasure the liability (not modelled in this working).");
+
+  /* Exemption path — straight-line expense, no ROU/liability */
+  if (inp.exemption !== "none"){
+    const label = inp.exemption === "short" ? "short-term lease (term ≤ 12 months)" : "low-value asset";
+    rules.push("Recognition exemption elected — " + label + " (IFRS 16.5): payments expensed on a straight-line basis; no right-of-use asset or lease liability recognised.");
+    const totalPay = r2(pays.reduce((s,p)=>s+p.pay,0));
+    const perPeriod = r2(totalPay / n);
+    const jvs = [];
+    pays.forEach(p => {
+      const vatAmt = r2(p.pay * inp.vat/100);
+      const adj = r2(p.pay - perPeriod); // paid more than expensed → prepayment (Dr); less → accrual (Cr)
+      jvs.push({ id:"JV-"+String(p.i+1).padStart(3,"0"), date:p.date, narration:"Lease expense (exempt lease) — period "+(p.i+1),
+        lines:[ {a:"Rent expense (P&L, straight-line)", dr:perPeriod, cr:0},
+                {a:"Prepaid rent / rent accrual", dr:adj>0?adj:0, cr:adj<0?r2(-adj):0},
+                {a:"Input VAT recoverable", dr:vatAmt, cr:0},
+                {a:"Bank", dr:0, cr:r2(p.pay+vatAmt)} ].filter(l=>l.dr>0||l.cr>0) });
+    });
+    return { inp, exempt:true, exemptLabel:label, pays, n, totalPay, perPeriod, rules, jvs,
+             totals:{ payments: totalPay, variable: r2(pays.reduce((s,p)=>s+p.varc,0)) } };
+  }
+
+  /* PV of payments; payment at commencement (advance) is a prepayment, not liability */
+  let pv = 0;
+  pays.forEach(p => {
+    const t = inp.timing === "advance" ? p.i : p.i + 1;
+    if (inp.timing === "advance" && p.i === 0) return; // prepaid, excluded from liability
+    pv += p.pay / Math.pow(1 + r, t);
+  });
+  const liability0 = r2(pv);
+  const prepaid = inp.timing === "advance" ? pays[0].pay : 0;
+
+  const provPV = inp.restoration > 0 ? r2(inp.restoration / Math.pow(1 + r, n)) : 0;
+  if (provPV) rules.push("Restoration obligation recognised as an IAS 37 provision at present value and added to the ROU asset; unwinding charged as finance cost.");
+  const depPV = (inp.deposit > 0 && inp.discountDeposit) ? r2(inp.deposit / Math.pow(1 + r, n)) : inp.deposit;
+  const depDiff = r2(inp.deposit - depPV);
+  if (depDiff > 0) rules.push("Non-interest-bearing security deposit discounted under IFRS 9; the day-one difference is in-substance prepaid rent added to the ROU asset, with interest income accreted over the term.");
+  if (inp.idc > 0) rules.push("Initial direct costs added to the ROU asset (IFRS 16.24(c)).");
+  if (inp.incentives > 0) rules.push("Lease incentives received deducted from the ROU asset (IFRS 16.24(b)).");
+
+  const rou = r2(liability0 + prepaid + inp.idc + provPV + depDiff - inp.incentives);
+
+  /* Liability schedule */
+  const liab = [];
+  let bal = liability0, totalInterest = 0;
+  pays.forEach(p => {
+    if (inp.timing === "advance"){
+      if (p.i === 0){ liab.push({i:0, date:p.date, opening:liability0, payment:0, interest:0, closing:liability0, note:"commencement — first payment prepaid"}); return; }
+      // Day-one payment is a prepayment (excluded from the liability), so each
+      // remaining payment at the start of period i settles one full period of
+      // interest accrued since the previous payment: interest first, then pay.
+      const interest = r2(bal * r);
+      const closing = r2(bal + interest - p.pay);
+      liab.push({i:p.i, date:p.date, opening:r2(bal), payment:p.pay, interest, closing:clamp0(closing)});
+      totalInterest = r2(totalInterest + interest);
+      bal = closing;
+    } else {
+      const interest = r2(bal * r);
+      const closing = r2(bal + interest - p.pay);
+      liab.push({i:p.i+1, date:p.dateEnd, opening:r2(bal), payment:p.pay, interest, closing:clamp0(closing)});
+      totalInterest = r2(totalInterest + interest);
+      bal = closing;
+    }
+  });
+  /* absorb residual rounding into last row */
+  const last = liab[liab.length-1];
+  if (last && Math.abs(last.closing) > 0 && Math.abs(last.closing) < 1){
+    last.interest = r2(last.interest - last.closing); totalInterest = r2(totalInterest - last.closing); last.closing = 0;
+  }
+
+  /* ROU depreciation schedule (straight-line per period) */
+  const depPer = r2(rou / n);
+  const rouSch = [];
+  let carrying = rou, totalDep = 0;
+  for (let i = 0; i < n; i++){
+    const dep = i === n-1 ? r2(carrying) : depPer; // last period absorbs rounding
+    const closing = clamp0(r2(carrying - dep));
+    rouSch.push({i:i+1, date:pays[i].date, opening:r2(carrying), dep, closing});
+    totalDep = r2(totalDep + dep); carrying = closing;
+  }
+
+  /* Provision unwind + deposit accretion */
+  const provSch = [], depSch = [];
+  if (provPV){ let pb = provPV; for (let i=0;i<n;i++){ const u = i===n-1 ? r2(inp.restoration-pb) : r2(pb*r); provSch.push({i:i+1, opening:r2(pb), unwind:u, closing:r2(pb+u)}); pb = r2(pb+u);} }
+  if (depDiff > 0){ let db = depPV; for (let i=0;i<n;i++){ const a = i===n-1 ? r2(inp.deposit-db) : r2(db*r); depSch.push({i:i+1, opening:r2(db), accretion:a, closing:r2(db+a)}); db = r2(db+a);} }
+  const totalUnwind = r2(provSch.reduce((s,x)=>s+x.unwind,0));
+  const totalAccretion = r2(depSch.reduce((s,x)=>s+x.accretion,0));
+
+  /* Maturity analysis — undiscounted payments outstanding at commencement */
+  const mat = { y1:0, y1to5:0, y5:0 };
+  pays.forEach(p => {
+    if (inp.timing === "advance" && p.i === 0) return;
+    const mo = inp.timing === "advance" ? p.monthOff : p.monthOff + PMONTHS[inp.frequency];
+    if (mo <= 12) mat.y1 = r2(mat.y1 + p.pay);
+    else if (mo <= 60) mat.y1to5 = r2(mat.y1to5 + p.pay);
+    else mat.y5 = r2(mat.y5 + p.pay);
+  });
+  mat.total = r2(mat.y1 + mat.y1to5 + mat.y5);
+
+  /* Journal vouchers */
+  const vatOn = amt => r2(amt * inp.vat/100);
+  const jvs = [];
+  const j1 = { id:"JV-001", date:inp.commencement, narration:"Initial recognition — " + (inp.premises||"lease"), lines:[] };
+  j1.lines.push({a:"Right-of-use asset", dr:rou, cr:0});
+  if (depDiff > 0) j1.lines.push({a:"Security deposit (at present value)", dr:depPV, cr:0});
+  else if (inp.deposit > 0) j1.lines.push({a:"Security deposit", dr:inp.deposit, cr:0});
+  const cashOut = r2(inp.idc + prepaid + inp.deposit - inp.incentives);
+  const vatPre = vatOn(prepaid);
+  if (vatPre > 0) j1.lines.push({a:"Input VAT recoverable", dr:vatPre, cr:0});
+  j1.lines.push({a:"Lease liability", dr:0, cr:liability0});
+  if (provPV) j1.lines.push({a:"Provision for restoration", dr:0, cr:provPV});
+  if (cashOut + vatPre !== 0) j1.lines.push({a:"Bank", dr:cashOut+vatPre<0?r2(-(cashOut+vatPre)):0, cr:cashOut+vatPre>0?r2(cashOut+vatPre):0});
+  jvs.push(j1);
+
+  liab.forEach((row, idx) => {
+    if (inp.timing === "advance" && row.i === 0) return;
+    const pnum = row.i;
+    const p = inp.timing === "advance" ? pays[row.i] : pays[row.i-1];
+    const grp = [];
+    if (row.payment > 0){
+      const v = vatOn(row.payment);
+      grp.push({ id:"JV-"+pnum+"-PAY", date:row.date, narration:"Lease payment — period "+pnum,
+        lines:[{a:"Lease liability", dr:row.payment, cr:0},{a:"Input VAT recoverable", dr:v, cr:0},{a:"Bank", dr:0, cr:r2(row.payment+v)}]});
+    }
+    if (row.interest > 0) grp.push({ id:"JV-"+pnum+"-INT", date:row.date, narration:"Interest on lease liability — period "+pnum,
+      lines:[{a:"Finance cost — lease interest", dr:row.interest, cr:0},{a:"Lease liability", dr:0, cr:row.interest}]});
+    const dRow = rouSch[pnum-1];
+    if (dRow) grp.push({ id:"JV-"+pnum+"-DEP", date:dRow.date, narration:"Depreciation of ROU asset — period "+pnum,
+      lines:[{a:"Depreciation — ROU asset", dr:dRow.dep, cr:0},{a:"Accumulated depreciation — ROU", dr:0, cr:dRow.dep}]});
+    if (p && p.varc > 0){ const v = vatOn(p.varc);
+      grp.push({ id:"JV-"+pnum+"-VAR", date:row.date, narration:"Variable service charges — period "+pnum,
+        lines:[{a:"Service charges expense (P&L)", dr:p.varc, cr:0},{a:"Input VAT recoverable", dr:v, cr:0},{a:"Bank", dr:0, cr:r2(p.varc+v)}]});
+    }
+    const pr = provSch[pnum-1];
+    if (pr && pr.unwind > 0) grp.push({ id:"JV-"+pnum+"-PRV", date:row.date, narration:"Unwinding of restoration provision — period "+pnum,
+      lines:[{a:"Finance cost — provision unwind", dr:pr.unwind, cr:0},{a:"Provision for restoration", dr:0, cr:pr.unwind}]});
+    const da = depSch[pnum-1];
+    if (da && da.accretion > 0) grp.push({ id:"JV-"+pnum+"-DEPO", date:row.date, narration:"Accretion of security deposit — period "+pnum,
+      lines:[{a:"Security deposit", dr:da.accretion, cr:0},{a:"Interest income", dr:0, cr:da.accretion}]});
+    jvs.push(...grp);
+  });
+
+  const totalVar = r2(pays.reduce((s,p)=>s+p.varc,0));
+  return { inp, exempt:false, pays, n, r, liability0, prepaid, provPV, depPV, depDiff, rou,
+           liab, rouSch, provSch, depSch, mat, jvs, rules,
+           totals:{ interest: totalInterest, depreciation: totalDep, variable: totalVar,
+                    unwind: totalUnwind, accretion: totalAccretion,
+                    payments: r2(pays.reduce((s,p)=>s+p.pay,0)) } };
+}
+
+/* Co-lease: one working per component (scaled inputs) + consolidated. */
+function computeCoLease(inp){
+  const consolidated = computeLease(inp);
+  const comps = inp.components.map(c => {
+    const f = c.share/100;
+    const ci = Object.assign({}, inp, {
+      baseRent: r2(inp.baseRent*f), fixedSC: r2(inp.fixedSC*f), varCharge: r2(inp.varCharge*f),
+      idc: r2(inp.idc*f), incentives: r2(inp.incentives*f), restoration: r2(inp.restoration*f),
+      deposit: r2(inp.deposit*f), lessee: c.name });
+    const w = computeLease(ci); w.compName = c.name; w.sharePct = c.share; return w;
+  });
+  return { mode:"co_lease", consolidated, comps };
+}
+
+/* Sublease: head-lease working + sublease working + combined view. */
+function computeSublease(inp){
+  const head = computeLease(inp);
+  const pm = PMONTHS[inp.frequency];
+  const r = periodRate(inp);
+  const m = Math.round(inp.subTerm / pm);
+  const remMonths = inp.termMonths - inp.subStart;
+  const ratio = remMonths > 0 ? inp.subTerm / remMonths : 0;
+  const suggested = ratio >= 0.9 ? "finance" : "operating";
+  const cls = inp.subClass === "auto" ? suggested : inp.subClass;
+  const subStartDate = addMonths(inp.commencement, inp.subStart);
+
+  /* sublease receipts (flat — sub rent entered per period, excl VAT) */
+  const receipts = [];
+  for (let i=0;i<m;i++) receipts.push({ i, date: addMonths(subStartDate, i*pm), amt: r2(inp.subRent) });
+  const totalReceipts = r2(receipts.reduce((s,x)=>s+x.amt,0));
+
+  const sub = { cls, suggested, ratio: r2(ratio*100), remMonths, subStartDate, m, receipts, totalReceipts,
+                share: inp.subShare, tenant: inp.subTenant };
+
+  if (cls === "finance"){
+    let nis = 0;
+    receipts.forEach(x => { nis += x.amt / Math.pow(1+r, x.i + (inp.timing==="advance"?0:1)); });
+    sub.nis = r2(nis);
+    const startPeriod = Math.round(inp.subStart / pm);
+    const carryingAtStart = head.exempt ? 0 : (startPeriod === 0 ? head.rou : (head.rouSch[startPeriod-1] ? head.rouSch[startPeriod-1].closing : 0));
+    sub.rouDerecognised = r2(carryingAtStart * inp.subShare/100);
+    sub.gain = r2(sub.nis - sub.rouDerecognised);
+    /* NIS run-off schedule */
+    sub.nisSch = [];
+    let nb = sub.nis, ti = 0;
+    receipts.forEach(x => {
+      if (inp.timing === "advance"){
+        const after = r2(nb - x.amt); const int = r2(after * r);
+        sub.nisSch.push({i:x.i+1, date:x.date, opening:r2(nb), receipt:x.amt, interest:int, closing:clamp0(r2(after+int))});
+        ti = r2(ti+int); nb = r2(after+int);
+      } else {
+        const int = r2(nb * r);
+        sub.nisSch.push({i:x.i+1, date:addMonths(x.date, pm), opening:r2(nb), receipt:x.amt, interest:int, closing:clamp0(r2(nb+int-x.amt))});
+        ti = r2(ti+int); nb = r2(nb+int-x.amt);
+      }
+    });
+    const lastN = sub.nisSch[sub.nisSch.length-1];
+    if (lastN && Math.abs(lastN.closing) > 0 && Math.abs(lastN.closing) < 1){ lastN.interest = r2(lastN.interest-lastN.closing); ti = r2(ti-lastN.closing); lastN.closing = 0; }
+    sub.totalInterestIncome = ti;
+    sub.jvs = [
+      { id:"SJV-001", date:subStartDate, narration:"Finance sublease — derecognition & net investment ("+(sub.tenant||"subtenant")+")",
+        lines:[ {a:"Net investment in sublease", dr:sub.nis, cr:0},
+                {a:"Right-of-use asset (derecognition)", dr:0, cr:sub.rouDerecognised},
+                sub.gain >= 0 ? {a:"Gain on sublease (P&L)", dr:0, cr:sub.gain} : {a:"Loss on sublease (P&L)", dr:r2(-sub.gain), cr:0} ] }
+    ];
+    sub.recurJv = "Each period: Dr Bank (receipt + output VAT) / Cr Net investment in sublease, Cr Output VAT; interest income accrues: Dr Net investment / Cr Interest income. Head-lease ROU depreciation continues on the retained portion only.";
+  } else {
+    sub.incomePerPeriod = r2(totalReceipts / m);
+    sub.jvs = [
+      { id:"SJV-001", date:subStartDate, narration:"Operating sublease — period 1 income ("+(sub.tenant||"subtenant")+")",
+        lines:[ {a:"Bank / receivable", dr:r2(inp.subRent*(1+inp.vat/100)), cr:0},
+                {a:"Sublease income (P&L, straight-line)", dr:0, cr:sub.incomePerPeriod},
+                {a:"Output VAT payable", dr:0, cr:r2(inp.subRent*inp.vat/100)},
+                {a:"Accrued / deferred sublease income", dr: sub.incomePerPeriod>inp.subRent? r2(sub.incomePerPeriod-inp.subRent):0, cr: inp.subRent>sub.incomePerPeriod? r2(inp.subRent-sub.incomePerPeriod):0} ].filter(l=>l.dr>0||l.cr>0) }
+    ];
+    sub.recurJv = "Repeated each sublease period. The head lease is unaffected: ROU asset and lease liability continue in full.";
+  }
+  return { mode:"sub_lease", head, sub };
+}
+
+/* ============================================================
+   FORMATTING, RENDERING & UI
+   ============================================================ */
+const $ = id => document.getElementById(id);
+const NF = new Intl.NumberFormat("en-US",{minimumFractionDigits:2, maximumFractionDigits:2});
+const fmt = v => NF.format(r2(v));
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+let S = { pdfB64:null, fileName:null, extraction:null, results:null, view:null, tab:"summary" };
+
+function setStep(k){ ["st1","st2","st3"].forEach((id,i)=> $(id).classList.toggle("on", i+1===k)); }
+function show(panel){
+  ["panel-contract","panel-inputs","panel-results"].forEach(p => $(p).classList.toggle("hidden", p!==panel));
+  setStep(panel==="panel-contract"?1:panel==="panel-inputs"?2:3);
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+/* ---------- Step 1: upload & extraction ---------- */
+const drop = $("drop"), fileInput = $("file");
+drop.addEventListener("click", ()=> fileInput.click());
+drop.addEventListener("keydown", e => { if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fileInput.click(); } });
+["dragover","dragenter"].forEach(ev => drop.addEventListener(ev, e=>{ e.preventDefault(); drop.classList.add("hover"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e=>{ e.preventDefault(); drop.classList.remove("hover"); }));
+drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) handleFile(f); });
+fileInput.addEventListener("change", ()=> { if (fileInput.files[0]) handleFile(fileInput.files[0]); });
+
+function handleFile(f){
+  const st = $("extract-status");
+  if (f.type !== "application/pdf"){ st.textContent = "Please choose a PDF."; st.className="status err"; return; }
+  if (f.size > 3.5*1024*1024){ st.textContent = "That PDF is over 3.5 MB — too large for AI extraction here. Enter the terms manually instead."; st.className="status err"; return; }
+  const rd = new FileReader();
+  rd.onload = () => {
+    S.pdfB64 = String(rd.result).split(",")[1]; S.fileName = f.name;
+    $("btn-extract").disabled = false;
+    st.textContent = "Ready: " + f.name + " (" + (f.size/1024/1024).toFixed(2) + " MB). Click “Extract with AI”.";
+    st.className = "status ok";
+  };
+  rd.readAsDataURL(f);
+}
+
+$("btn-extract").addEventListener("click", async () => {
+  const st = $("extract-status"), btn = $("btn-extract");
+  btn.disabled = true; st.className = "status";
+  st.textContent = "Reading the contract… this can take up to a minute for long documents.";
+  try{
+    const resp = await fetch("/api/ifrs16-extract", { method:"POST", headers:{"content-type":"application/json"},
+      body: JSON.stringify({ pdf_base64: S.pdfB64 }) });
+    const j = await resp.json().catch(()=> ({}));
+    if (!resp.ok) throw new Error(j.detail || j.error || ("HTTP " + resp.status));
+    S.extraction = j.extraction;
+    fillFormFromExtraction(j.extraction);
+    st.textContent = ""; show("panel-inputs");
+  } catch(e){
+    st.className = "status err";
+    st.textContent = "AI extraction unavailable (" + e.message + "). You can still enter the terms manually.";
+  } finally { btn.disabled = false; }
+});
+
+$("btn-manual").addEventListener("click", ()=> show("panel-inputs"));
+$("btn-back1").addEventListener("click", ()=> show("panel-contract"));
+
+$("btn-demo").addEventListener("click", ()=>{
+  fillFormFromExtraction({
+    lessor:"Emirates Business Park LLC", lessee:"The Accountant LLC", premises:"Office 1204, Tower B, Business Bay, Dubai",
+    currency:"AED", commencement_date:"2026-01-01", term_months:60, payment_frequency:"monthly", payment_timing:"advance",
+    base_rent_per_period:20000, rents_quoted_incl_vat:false, vat_rate_pct:5, rent_free_periods:2,
+    escalation_pct_annual:5, escalation_is_index_linked:false, fixed_service_charge_per_period:2000,
+    variable_charges_description:"Chilled water and utilities by consumption", variable_charge_estimate_per_period:3200,
+    initial_direct_costs:36250, lease_incentives:0, restoration_cost_estimate:25000, security_deposit:40000,
+    extension_options:"1 × 3-year extension at market rent — assessed not reasonably certain, excluded from the lease term.",
+    termination_options:"", purchase_option:"", rate_implicit_pct:0, arrangement_type:"standalone",
+    co_lessees:[], sublease_terms:"", uncertain_fields:[], source_notes:"Demo lease — illustrative figures."
+  });
+  $("ibr").value = 6;
+  show("panel-inputs");
+});
+
+const FIELD_MAP = {
+  lessor:"lessor", lessee:"lessee", premises:"premises", currency:"currency",
+  commencement_date:"commencement", term_months:"termMonths",
+  base_rent_per_period:"baseRent", vat_rate_pct:"vat", rent_free_periods:"rentFree",
+  escalation_pct_annual:"escalation", fixed_service_charge_per_period:"fixedSC",
+  variable_charge_estimate_per_period:"varCharge", variable_charges_description:"varDesc",
+  initial_direct_costs:"idc", lease_incentives:"incentives",
+  restoration_cost_estimate:"restoration", security_deposit:"deposit"
+};
+
+function fillFormFromExtraction(x){
+  document.querySelectorAll("input.uncertain").forEach(el => el.classList.remove("uncertain"));
+  Object.entries(FIELD_MAP).forEach(([k,id]) => { if (x[k] !== undefined && x[k] !== null) $(id).value = x[k]; });
+  $("frequency").value = x.payment_frequency || "monthly";
+  $("timing").value = x.payment_timing || "advance";
+  $("inclVat").checked = !!x.rents_quoted_incl_vat;
+  $("indexLinked").checked = !!x.escalation_is_index_linked;
+  if (x.rate_implicit_pct > 0) $("ibr").value = x.rate_implicit_pct;
+  const opts = [x.extension_options, x.termination_options, x.purchase_option].filter(Boolean).join(" · ");
+  if (opts) $("options").value = opts;
+  const arr = x.arrangement_type || "standalone";
+  document.querySelector('input[name=arrangement][value="'+arr+'"]').checked = true;
+  onArrangement();
+  if (arr === "co_lease" && Array.isArray(x.co_lessees) && x.co_lessees.length){
+    $("comp-rows").innerHTML = ""; x.co_lessees.forEach(c => addCompRow(c.name, c.share_pct)); updateShareSum();
+  }
+  const unc = Array.isArray(x.uncertain_fields) ? x.uncertain_fields : [];
+  const flag = $("uncertain-flag");
+  if (unc.length){
+    unc.forEach(k => { const id = FIELD_MAP[k]; if (id) $(id).classList.add("uncertain"); });
+    flag.textContent = "The AI could not confirm these fields from the contract — verify them before computing: " + unc.join(", ");
+    flag.classList.remove("hidden");
+  } else flag.classList.add("hidden");
+  const sn = $("source-notes");
+  if (x.source_notes){ sn.textContent = "Extraction references: " + x.source_notes; sn.classList.remove("hidden"); }
+  else sn.classList.add("hidden");
+}
+
+/* ---------- Step 2: form behaviour ---------- */
+function onArrangement(){
+  const v = document.querySelector("input[name=arrangement]:checked").value;
+  $("co-config").classList.toggle("hidden", v!=="co_lease");
+  $("sub-config").classList.toggle("hidden", v!=="sub_lease");
+  if (v==="co_lease" && !$("comp-rows").children.length){ addCompRow("Component A",50); addCompRow("Component B",50); updateShareSum(); }
+}
+document.querySelectorAll("input[name=arrangement]").forEach(el => el.addEventListener("change", onArrangement));
+
+function addCompRow(name, share){
+  const row = document.createElement("div"); row.className = "comp-row";
+  row.innerHTML = '<input type="text" class="c-name" placeholder="Co-lessee name" value="'+esc(name||"")+'">' +
+    '<input type="number" class="c-share" min="0.01" max="100" step="0.01" placeholder="Share %" value="'+(share||"")+'">' +
+    '<button type="button" aria-label="Remove co-lessee">×</button>';
+  row.querySelector("button").addEventListener("click", ()=>{ row.remove(); updateShareSum(); });
+  row.querySelector(".c-share").addEventListener("input", updateShareSum);
+  $("comp-rows").appendChild(row);
+}
+$("add-comp").addEventListener("click", ()=>{ addCompRow("",""); updateShareSum(); });
+function updateShareSum(){
+  const sum = [...document.querySelectorAll(".c-share")].reduce((s,el)=> s + (parseFloat(el.value)||0), 0);
+  $("share-sum").textContent = "Shares total: " + r2(sum) + "% (must equal 100%)";
+}
+["subStart","subTerm","termMonths"].forEach(id => $(id).addEventListener("input", subClassSuggest));
+function subClassSuggest(){
+  const term = parseFloat($("termMonths").value)||0, st = parseFloat($("subStart").value)||0, sub = parseFloat($("subTerm").value)||0;
+  const rem = term - st;
+  if (rem>0 && sub>0){
+    const ratio = sub/rem;
+    $("subClassHint").textContent = "Sublease covers " + r2(ratio*100) + "% of the remaining " + rem + "-month head term → suggested: " + (ratio>=0.9?"FINANCE":"OPERATING") + " sublease.";
+  } else $("subClassHint").textContent = "";
+}
+
+function readInputs(){
+  const num = id => parseFloat($(id).value) || 0;
+  const inp = {
+    lessor:$("lessor").value.trim(), lessee:$("lessee").value.trim(), premises:$("premises").value.trim(),
+    currency:($("currency").value.trim()||"AED").toUpperCase(),
+    commencement:$("commencement").value, termMonths:Math.round(num("termMonths")), ibr:num("ibr"),
+    frequency:$("frequency").value, timing:$("timing").value, exemption:$("exemption").value,
+    baseRent:num("baseRent"), fixedSC:num("fixedSC"), varCharge:num("varCharge"), varDesc:$("varDesc").value.trim(),
+    rentFree:Math.round(num("rentFree")), escalation:num("escalation"), indexLinked:$("indexLinked").checked,
+    vat:num("vat"), inclVat:$("inclVat").checked,
+    idc:num("idc"), incentives:num("incentives"), restoration:num("restoration"),
+    deposit:num("deposit"), discountDeposit:$("discountDeposit").checked,
+    options:$("options").value.trim(),
+    arrangement:document.querySelector("input[name=arrangement]:checked").value
+  };
+  if (inp.arrangement === "co_lease"){
+    inp.components = [...document.querySelectorAll(".comp-row")].map(r => ({
+      name: r.querySelector(".c-name").value.trim() || "Component", share: parseFloat(r.querySelector(".c-share").value)||0 }));
+  }
+  if (inp.arrangement === "sub_lease"){
+    inp.subStart = Math.round(num("subStart")); inp.subTerm = Math.round(num("subTerm"));
+    inp.subRent = num("subRent"); inp.subShare = num("subShare")||100;
+    inp.subClass = $("subClass").value; inp.subTenant = $("subTenant").value.trim();
+  }
+  return inp;
+}
+
+function validate(inp){
+  if (!inp.commencement) return "Commencement date is required.";
+  if (inp.termMonths < 1) return "Lease term must be at least 1 month.";
+  if (inp.termMonths % PMONTHS[inp.frequency] !== 0) return "Lease term must be a whole number of " + inp.frequency + " periods.";
+  if (inp.exemption === "none" && inp.ibr <= 0) return "A discount rate (IBR) is required for full IFRS 16 measurement.";
+  if (inp.baseRent <= 0 && inp.fixedSC <= 0) return "Enter the base rent per period.";
+  if (inp.exemption === "short" && inp.termMonths > 12) return "The short-term exemption only applies to terms of 12 months or less.";
+  if (inp.arrangement === "co_lease"){
+    if (!inp.components || inp.components.length < 2) return "Add at least two co-lessees.";
+    const sum = r2(inp.components.reduce((s,c)=>s+c.share,0));
+    if (Math.abs(sum-100) > 0.01) return "Co-lessee shares must total 100% (currently " + sum + "%).";
+  }
+  if (inp.arrangement === "sub_lease"){
+    if (inp.exemption !== "none") return "Sublease workings need the full IFRS 16 model on the head lease (no exemption).";
+    if (inp.subTerm < 1) return "Enter the sublease term.";
+    if (inp.subStart + inp.subTerm > inp.termMonths) return "The sublease cannot run past the end of the head lease.";
+    if (inp.subTerm % PMONTHS[inp.frequency] !== 0) return "Sublease term must be a whole number of " + inp.frequency + " periods.";
+    if (inp.subRent <= 0) return "Enter the sublease rent per period.";
+  }
+  return null;
+}
+
+$("form").addEventListener("submit", e => {
+  e.preventDefault();
+  const inp = readInputs();
+  const err = validate(inp);
+  const errEl = $("form-err");
+  if (err){ errEl.textContent = err; return; }
+  errEl.textContent = "";
+  if (inp.arrangement === "co_lease") S.results = computeCoLease(inp);
+  else if (inp.arrangement === "sub_lease") S.results = computeSublease(inp);
+  else S.results = { mode:"standalone", single: computeLease(inp) };
+  S.view = null; S.tab = "summary";
+  renderResults();
+  show("panel-results");
+});
+
+$("btn-edit").addEventListener("click", ()=> show("panel-inputs"));
+$("btn-restart").addEventListener("click", ()=> { location.reload(); });
+
+/* ---------- Step 3: rendering ---------- */
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", ()=>{
+  S.tab = t.dataset.tab;
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x===t));
+  ["summary","liab","rou","jv","disc","note"].forEach(k => $("tab-"+k).classList.toggle("hidden", k!==S.tab));
+}));
+
+function currentWorking(){
+  const R = S.results;
+  if (R.mode === "standalone") return { w: R.single, label: null };
+  if (R.mode === "co_lease"){
+    if (S.view === null || S.view === "consolidated") return { w: R.consolidated, label: "Consolidated" };
+    const c = R.comps.find(x => x.compName === S.view);
+    return { w: c || R.consolidated, label: c ? c.compName + " (" + c.sharePct + "%)" : "Consolidated" };
+  }
+  return { w: R.head, label: S.view === "sub" ? "Sublease" : "Head lease" };
+}
+
+function renderResults(){
+  const R = S.results;
+  const pills = $("view-pills");
+  pills.innerHTML = ""; pills.classList.add("hidden");
+  if (R.mode === "co_lease"){
+    pills.classList.remove("hidden");
+    const mk = (key,txt) => { const b=document.createElement("button"); b.className="pill-btn"; b.textContent=txt; b.dataset.key=key;
+      b.addEventListener("click", ()=>{ S.view=key; renderResults(); }); return b; };
+    pills.appendChild(mk("consolidated","Consolidated"));
+    R.comps.forEach(c => pills.appendChild(mk(c.compName, c.compName + " · " + c.sharePct + "%")));
+    if (S.view===null) S.view="consolidated";
+    [...pills.children].forEach(b => b.classList.toggle("on", b.dataset.key===S.view));
+  }
+  if (R.mode === "sub_lease"){
+    pills.classList.remove("hidden");
+    const mk = (key,txt) => { const b=document.createElement("button"); b.className="pill-btn"; b.textContent=txt; b.dataset.key=key;
+      b.addEventListener("click", ()=>{ S.view=key; renderResults(); }); return b; };
+    pills.appendChild(mk("head","Head lease")); pills.appendChild(mk("sub","Sublease")); pills.appendChild(mk("combined","Combined"));
+    if (S.view===null) S.view="head";
+    [...pills.children].forEach(b => b.classList.toggle("on", b.dataset.key===S.view));
+  }
+  const { w } = currentWorking();
+  $("res-title").textContent = "Workings — " + (w.inp.premises || w.inp.lessee || "lease") +
+    (R.mode==="co_lease" ? " · " + (S.view==="consolidated"?"consolidated":S.view) : R.mode==="sub_lease" ? " · " + S.view : "");
+  renderSummary(); renderLiab(); renderRou(); renderJv(); renderDisc(); renderNote();
+  document.querySelectorAll(".tab").forEach(x => x.classList.toggle("on", x.dataset.tab===S.tab));
+  ["summary","liab","rou","jv","disc","note"].forEach(k => $("tab-"+k).classList.toggle("hidden", k!==S.tab));
+}
+
+function tiles(list){
+  return '<div class="tiles">' + list.map(t =>
+    '<div class="tile '+(t.c||"")+'"><span class="k">'+esc(t.k)+'</span><span class="v">'+t.v+'</span></div>').join("") + "</div>";
+}
+
+function renderSummary(){
+  const R = S.results, el = $("tab-summary");
+  const cur = w => w.inp.currency;
+  if (R.mode === "sub_lease" && S.view === "sub"){ el.innerHTML = subSummaryHtml(R); return; }
+  if (R.mode === "sub_lease" && S.view === "combined"){ el.innerHTML = combinedHtml(R); return; }
+  const { w } = currentWorking();
+  if (w.exempt){
+    el.innerHTML = tiles([
+      {k:"Exemption", v:esc(w.exemptLabel), c:"a"},
+      {k:"Total payments ("+cur(w)+")", v:fmt(w.totalPay)},
+      {k:"Straight-line expense / period", v:fmt(w.perPeriod), c:"a"},
+      {k:"Periods", v:w.n}
+    ]) + rulesHtml(w);
+    return;
+  }
+  let html = tiles([
+    {k:"Initial lease liability ("+cur(w)+")", v:fmt(w.liability0), c:"g"},
+    {k:"Right-of-use asset ("+cur(w)+")", v:fmt(w.rou), c:"g"},
+    {k:"Total interest over term", v:fmt(w.totals.interest), c:"b"},
+    {k:"Total depreciation", v:fmt(w.totals.depreciation), c:"b"},
+    {k:"Variable charges (P&L, est.)", v:fmt(w.totals.variable), c:"a"},
+    {k:"Discount rate (IBR)", v:w.inp.ibr.toFixed(2)+"% p.a."}
+  ]);
+  if (R.mode === "co_lease" && S.view === "consolidated"){
+    const sumL = r2(R.comps.reduce((s,c)=>s+(c.liability0||0),0));
+    const sumR = r2(R.comps.reduce((s,c)=>s+(c.rou||0),0));
+    html += '<h3>Component reconciliation</h3><div class="tbl-wrap"><table><tr><th>Working</th><th class="num">Lease liability</th><th class="num">ROU asset</th></tr>' +
+      R.comps.map(c=>'<tr><td>'+esc(c.compName)+' ('+c.sharePct+'%)</td><td class="num">'+fmt(c.liability0)+'</td><td class="num">'+fmt(c.rou)+'</td></tr>').join("") +
+      '<tr><td><b>Sum of components</b></td><td class="num"><b>'+fmt(sumL)+'</b></td><td class="num"><b>'+fmt(sumR)+'</b></td></tr>' +
+      '<tr><td>Consolidated working</td><td class="num">'+fmt(R.consolidated.liability0)+'</td><td class="num">'+fmt(R.consolidated.rou)+'</td></tr>' +
+      '<tr><td>Rounding difference</td><td class="num">'+fmt(r2(R.consolidated.liability0-sumL))+'</td><td class="num">'+fmt(r2(R.consolidated.rou-sumR))+'</td></tr></table></div>';
+  }
+  html += rulesHtml(w);
+  el.innerHTML = html;
+}
+function rulesHtml(w){
+  return "<h3>Treatments applied</h3><ul class='rules'>" + w.rules.map(x=>"<li>"+esc(x)+"</li>").join("") + "</ul>" +
+    (w.inp.options ? "<h3>Options assessment (as recorded)</h3><p class='sub'>"+esc(w.inp.options)+"</p>" : "");
+}
+function subSummaryHtml(R){
+  const s = R.sub, cur = R.head.inp.currency;
+  let t = [
+    {k:"Classification", v:s.cls.toUpperCase(), c:"g"},
+    {k:"Term test", v:s.ratio+"% of remaining term"},
+    {k:"Total receipts ("+cur+")", v:fmt(s.totalReceipts), c:"b"}
+  ];
+  if (s.cls==="finance"){
+    t.push({k:"Net investment in sublease", v:fmt(s.nis), c:"g"},
+           {k:"ROU derecognised ("+s.share+"% of carrying)", v:fmt(s.rouDerecognised)},
+           {k:(s.gain>=0?"Day-one gain":"Day-one loss"), v:fmt(Math.abs(s.gain)), c:s.gain>=0?"g":"a"},
+           {k:"Interest income over sub-term", v:fmt(s.totalInterestIncome), c:"b"});
+  } else {
+    t.push({k:"Straight-line income / period", v:fmt(s.incomePerPeriod), c:"g"});
+  }
+  return tiles(t) +
+    "<p class='sub'>Suggested classification from the term test: <b>" + s.suggested.toUpperCase() + "</b> (sublease of " + s.ratio +
+    "% of the remaining head-lease term" + (s.cls!==s.suggested ? " — overridden by your judgement to " + s.cls.toUpperCase() : "") + "). " +
+    (s.cls==="finance" ? "The sublet portion of the ROU asset is derecognised and replaced by a net investment in the sublease; head-lease depreciation continues on the retained portion." :
+     "The ROU asset and head-lease liability continue in full; sublease income is recognised straight-line.") + "</p>" +
+    (s.cls==="finance" ? nisTable(R) : "");
+}
+function nisTable(R){
+  const s = R.sub;
+  return "<h3>Net investment in sublease — run-off</h3><div class='tbl-wrap'><table><tr><th>#</th><th>Date</th><th class='num'>Opening</th><th class='num'>Receipt</th><th class='num'>Interest income</th><th class='num'>Closing</th></tr>" +
+    s.nisSch.map(x=>"<tr><td class='num'>"+x.i+"</td><td>"+x.date+"</td><td class='num'>"+fmt(x.opening)+"</td><td class='num'>"+fmt(x.receipt)+"</td><td class='num'>"+fmt(x.interest)+"</td><td class='num'>"+fmt(x.closing)+"</td></tr>").join("") +
+    "</table></div>" + csvBtn("nis");
+}
+function combinedHtml(R){
+  const h = R.head, s = R.sub, cur = h.inp.currency;
+  return tiles([
+    {k:"Head lease liability ("+cur+")", v:fmt(h.liability0), c:"g"},
+    {k:"Head ROU asset", v:fmt(h.rou), c:"g"},
+    {k:s.cls==="finance"?"Net investment in sublease":"Sublease income / period", v:fmt(s.cls==="finance"?s.nis:s.incomePerPeriod), c:"b"},
+    s.cls==="finance" ? {k:(s.gain>=0?"Day-one gain":"Day-one loss"), v:fmt(Math.abs(s.gain)), c:s.gain>=0?"g":"a"} :
+                        {k:"Total sublease receipts", v:fmt(s.totalReceipts), c:"b"},
+    {k:"Head interest over term", v:fmt(h.totals.interest), c:"a"},
+    {k:"Head depreciation over term", v:fmt(h.totals.depreciation), c:"a"}
+  ]) +
+  "<p class='sub'>Net position: as intermediate lessor you carry the head-lease liability of " + cur + " " + fmt(h.liability0) +
+  (s.cls==="finance" ? ", a retained ROU portion, and a net investment in the sublease of " + cur + " " + fmt(s.nis) + "."
+                     : " and the full ROU asset, offset in P&L by straight-line sublease income of " + cur + " " + fmt(s.incomePerPeriod) + " per period.") + "</p>";
+}
+
+function renderLiab(){
+  const el = $("tab-liab"), R = S.results;
+  if (R.mode==="sub_lease" && S.view==="sub"){ el.innerHTML = "<p class='sub'>See the Summary tab for the net-investment run-off (finance) — the head-lease liability is on the Head lease view.</p>" + (R.sub.cls==="finance"?nisTable(R):""); return; }
+  const { w } = currentWorking();
+  if (w.exempt){ el.innerHTML = "<p class='sub'>No lease liability — recognition exemption applied.</p>"; return; }
+  el.innerHTML = "<p class='sub'>Effective-interest amortisation at " + (r2(w.r*10000)/100) + "% per period (" + w.inp.ibr + "% p.a.). Payments " + w.inp.timing + ".</p>" +
+    "<div class='tbl-wrap'><table><tr><th>#</th><th>Date</th><th class='num'>Opening</th><th class='num'>Payment</th><th class='num'>Interest</th><th class='num'>Closing</th></tr>" +
+    w.liab.map(x=>"<tr><td class='num'>"+x.i+"</td><td>"+x.date+(x.note?" <span class='hint'>("+x.note+")</span>":"")+"</td><td class='num'>"+fmt(x.opening)+"</td><td class='num'>"+fmt(x.payment)+"</td><td class='num'>"+fmt(x.interest)+"</td><td class='num'>"+fmt(x.closing)+"</td></tr>").join("") +
+    "<tr class='tot'><td colspan='3'>Total</td><td class='num'>"+fmt(w.liab.reduce((s,x)=>s+x.payment,0))+"</td><td class='num'>"+fmt(w.totals.interest)+"</td><td class='num'></td></tr></table></div>" +
+    csvBtn("liab");
+}
+
+function renderRou(){
+  const el = $("tab-rou"), R = S.results;
+  if (R.mode==="sub_lease" && S.view==="sub"){ el.innerHTML = "<p class='sub'>" + (R.sub.cls==="finance" ? "On a finance sublease the sublet portion of the ROU asset is derecognised at sublease commencement (see Journal vouchers); depreciation continues on the retained portion." : "On an operating sublease the head-lease ROU asset continues unchanged — see the Head lease view.") + "</p>"; return; }
+  const { w } = currentWorking();
+  if (w.exempt){ el.innerHTML = "<p class='sub'>No ROU asset — recognition exemption applied.</p>"; return; }
+  let html = "<p class='sub'>Cost " + fmt(w.rou) + " = liability " + fmt(w.liability0) +
+    (w.prepaid?" + prepaid rent "+fmt(w.prepaid):"") + (w.inp.idc?" + IDC "+fmt(w.inp.idc):"") +
+    (w.provPV?" + restoration PV "+fmt(w.provPV):"") + (w.depDiff>0?" + deposit discount "+fmt(w.depDiff):"") +
+    (w.inp.incentives?" − incentives "+fmt(w.inp.incentives):"") + ". Straight-line over " + w.n + " periods.</p>" +
+    "<div class='tbl-wrap'><table><tr><th>#</th><th>Date</th><th class='num'>Opening</th><th class='num'>Depreciation</th><th class='num'>Closing</th></tr>" +
+    w.rouSch.map(x=>"<tr><td class='num'>"+x.i+"</td><td>"+x.date+"</td><td class='num'>"+fmt(x.opening)+"</td><td class='num'>"+fmt(x.dep)+"</td><td class='num'>"+fmt(x.closing)+"</td></tr>").join("") +
+    "<tr class='tot'><td colspan='3'>Total</td><td class='num'>"+fmt(w.totals.depreciation)+"</td><td class='num'></td></tr></table></div>" + csvBtn("rou");
+  if (w.provSch.length) html += "<h3>Restoration provision — unwinding</h3><div class='tbl-wrap'><table><tr><th>#</th><th class='num'>Opening</th><th class='num'>Unwind (finance cost)</th><th class='num'>Closing</th></tr>" +
+      w.provSch.map(x=>"<tr><td class='num'>"+x.i+"</td><td class='num'>"+fmt(x.opening)+"</td><td class='num'>"+fmt(x.unwind)+"</td><td class='num'>"+fmt(x.closing)+"</td></tr>").join("")+"</table></div>";
+  if (w.depSch.length) html += "<h3>Security deposit — accretion</h3><div class='tbl-wrap'><table><tr><th>#</th><th class='num'>Opening</th><th class='num'>Interest income</th><th class='num'>Closing</th></tr>" +
+      w.depSch.map(x=>"<tr><td class='num'>"+x.i+"</td><td class='num'>"+fmt(x.opening)+"</td><td class='num'>"+fmt(x.accretion)+"</td><td class='num'>"+fmt(x.closing)+"</td></tr>").join("")+"</table></div>";
+  el.innerHTML = html;
+}
+
+function jvTable(jvs, cap){
+  let rows = "";
+  jvs.forEach(j => {
+    rows += "<tr class='jv-h'><td colspan='3'>" + esc(j.id) + " · " + j.date + " — " + esc(j.narration) + "</td></tr>";
+    j.lines.forEach(l => { rows += "<tr><td style='padding-left:22px'>" + esc(l.a) + "</td><td class='num'>" + (l.dr?fmt(l.dr):"") + "</td><td class='num'>" + (l.cr?fmt(l.cr):"") + "</td></tr>"; });
+  });
+  return "<div class='tbl-wrap'><table><tr><th>" + esc(cap) + "</th><th class='num'>Dr</th><th class='num'>Cr</th></tr>" + rows + "</table></div>";
+}
+
+function renderJv(){
+  const el = $("tab-jv"), R = S.results;
+  if (R.mode==="sub_lease" && S.view==="sub"){
+    el.innerHTML = "<p class='sub'>Sublease entries at sublease commencement (" + R.sub.subStartDate + "):</p>" +
+      jvTable(R.sub.jvs, "Sublease journals") + "<p class='sub'>" + esc(R.sub.recurJv) + "</p>";
+    return;
+  }
+  if (R.mode==="sub_lease" && S.view==="combined"){
+    el.innerHTML = "<p class='sub'>Head-lease JVs are on the Head lease view; sublease JVs on the Sublease view. The full pack (both) is in the CSV.</p>" + csvBtn("jv");
+    return;
+  }
+  const { w } = currentWorking();
+  const first = w.jvs.slice(0, w.exempt ? 2 : 8);
+  el.innerHTML = "<p class='sub'>Initial recognition plus the first period is shown; the CSV export contains every voucher for the full term, formatted for import (Xero / Zoho / Tally / QuickBooks column layout: date, reference, account, debit, credit, narration).</p>" +
+    jvTable(first, "Account") + csvBtn("jv") +
+    "<p class='hint' style='margin-top:8px'>" + w.jvs.length + " vouchers in the full pack.</p>";
+}
+
+function renderDisc(){
+  const el = $("tab-disc"), R = S.results;
+  const { w } = currentWorking();
+  if (R.mode==="sub_lease" && S.view!=="head"){ el.innerHTML = "<p class='sub'>Disclosure figures are produced on the head-lease view; sublease income/interest income appear in its P&L note below when combined.</p>"; return; }
+  if (w.exempt){
+    el.innerHTML = "<h3>Expenses recognised (IFRS 16.53)</h3><div class='tbl-wrap'><table>" +
+      "<tr><td>Expense relating to " + esc(w.exemptLabel) + "s</td><td class='num'>" + fmt(w.totalPay) + "</td></tr>" +
+      (w.totals.variable?"<tr><td>Variable lease payments expensed</td><td class='num'>"+fmt(w.totals.variable)+"</td></tr>":"") +
+      "</table></div>";
+    return;
+  }
+  el.innerHTML =
+    "<h3>Maturity analysis — undiscounted lease payments (IFRS 16.58)</h3>" +
+    "<div class='tbl-wrap'><table><tr><th>Bucket</th><th class='num'>" + esc(w.inp.currency) + "</th></tr>" +
+    "<tr><td>Not later than 1 year</td><td class='num'>" + fmt(w.mat.y1) + "</td></tr>" +
+    "<tr><td>Later than 1 year, not later than 5</td><td class='num'>" + fmt(w.mat.y1to5) + "</td></tr>" +
+    "<tr><td>Later than 5 years</td><td class='num'>" + fmt(w.mat.y5) + "</td></tr>" +
+    "<tr class='tot'><td>Total undiscounted</td><td class='num'>" + fmt(w.mat.total) + "</td></tr>" +
+    "<tr><td>Effect of discounting</td><td class='num'>(" + fmt(r2(w.mat.total - w.liability0)) + ")</td></tr>" +
+    "<tr class='tot'><td>Lease liability at commencement</td><td class='num'>" + fmt(w.liability0) + "</td></tr></table></div>" +
+    "<h3>Amounts recognised in profit or loss (over the term)</h3>" +
+    "<div class='tbl-wrap'><table>" +
+    "<tr><td>Depreciation of right-of-use asset</td><td class='num'>" + fmt(w.totals.depreciation) + "</td></tr>" +
+    "<tr><td>Interest on lease liability</td><td class='num'>" + fmt(w.totals.interest) + "</td></tr>" +
+    (w.totals.unwind?"<tr><td>Unwinding of restoration provision</td><td class='num'>"+fmt(w.totals.unwind)+"</td></tr>":"") +
+    (w.totals.variable?"<tr><td>Variable lease payments (estimated)</td><td class='num'>"+fmt(w.totals.variable)+"</td></tr>":"") +
+    (w.totals.accretion?"<tr><td>Interest income — deposit accretion</td><td class='num'>("+fmt(w.totals.accretion)+")</td></tr>":"") +
+    "</table></div>";
+}
+
+/* ---------- Audit note ---------- */
+function templateNote(){
+  const R = S.results;
+  const { w } = currentWorking();
+  const cur = w.inp.currency;
+  const L = [];
+  L.push("## Executive summary");
+  if (w.exempt){
+    L.push("The lease of " + (w.inp.premises||"the premises") + " between " + (w.inp.lessor||"the lessor") + " and " + (w.inp.lessee||"the lessee") +
+      " has been accounted for under the IFRS 16.5 recognition exemption as a " + w.exemptLabel +
+      ". Total payments of " + cur + " " + fmt(w.totalPay) + " are expensed on a straight-line basis of " + cur + " " + fmt(w.perPeriod) + " per period; no right-of-use asset or lease liability is recognised.");
+  } else {
+    L.push("The lease of " + (w.inp.premises||"the premises") + " between " + (w.inp.lessor||"the lessor") + " and " + (w.inp.lessee||"the lessee") +
+      " commencing " + w.inp.commencement + " for " + w.inp.termMonths + " months is recognised on-balance-sheet under IFRS 16. At commencement the lease liability is " +
+      cur + " " + fmt(w.liability0) + " and the right-of-use asset " + cur + " " + fmt(w.rou) +
+      ", discounted at an incremental borrowing rate of " + w.inp.ibr + "% per annum.");
+    L.push("## Basis of measurement");
+    w.rules.forEach(r => L.push("- " + r));
+    L.push("## Key judgements");
+    L.push("- Discount rate: incremental borrowing rate of " + w.inp.ibr + "% p.a. applied, as the rate implicit in the lease is not readily determinable.");
+    if (w.inp.options) L.push("- Options: " + w.inp.options);
+    L.push("- Depreciation: straight-line over the lease term (" + w.n + " " + w.inp.frequency + " periods).");
+    L.push("## Financial impact");
+    L.push("- Total interest expense over the term: " + cur + " " + fmt(w.totals.interest));
+    L.push("- Total depreciation over the term: " + cur + " " + fmt(w.totals.depreciation));
+    if (w.totals.variable) L.push("- Variable charges expensed as incurred (estimate): " + cur + " " + fmt(w.totals.variable));
+    L.push("- Undiscounted commitment: " + cur + " " + fmt(w.mat.total) + " (≤1y " + fmt(w.mat.y1) + "; 1–5y " + fmt(w.mat.y1to5) + "; >5y " + fmt(w.mat.y5) + ")");
+  }
+  if (R.mode === "co_lease"){
+    L.push("## Shared premises — co-lease");
+    L.push("Each co-lessee accounts for its contractual share as a separate lease: " +
+      R.comps.map(c=>c.compName+" "+c.sharePct+"%").join(", ") + ". Component workings and a consolidated working with reconciliation are attached.");
+  }
+  if (R.mode === "sub_lease"){
+    const s = R.sub;
+    L.push("## Sublease");
+    L.push("The sublease to " + (s.tenant||"the subtenant") + " covering " + s.share + "% of the premises for " + (s.m*PMONTHS[R.head.inp.frequency]) +
+      " months (" + s.ratio + "% of the remaining head-lease term) is classified as a **" + s.cls + " sublease** by reference to the right-of-use asset arising from the head lease.");
+    if (s.cls==="finance") L.push("At sublease commencement the sublet portion of the ROU asset (" + cur + " " + fmt(s.rouDerecognised) + ") is derecognised and a net investment in the sublease of " + cur + " " + fmt(s.nis) + " is recognised, giving a day-one " + (s.gain>=0?"gain":"loss") + " of " + cur + " " + fmt(Math.abs(s.gain)) + ".");
+    else L.push("The head-lease ROU asset and liability continue to be recognised in full; sublease income of " + cur + " " + fmt(s.incomePerPeriod) + " per period is recognised on a straight-line basis.");
+  }
+  L.push("## Journal entries overview");
+  L.push("Initial recognition, periodic interest, depreciation, payments (with recoverable input VAT), and variable charges are journalised per the attached voucher pack. Lease payments are measured excluding VAT throughout.");
+  return L.join("\n\n");
+}
+
+function mdToHtml(md){
+  return md.split(/\n{2,}/).map(b => {
+    b = b.trim();
+    if (b.startsWith("## ")) return "<h2>" + esc(b.slice(3)) + "</h2>";
+    if (/^- /m.test(b)) return "<ul>" + b.split(/\n/).map(l=>"<li>"+inlineMd(l.replace(/^- /,""))+"</li>").join("") + "</ul>";
+    return "<p>" + inlineMd(b) + "</p>";
+  }).join("");
+}
+function inlineMd(s){ return esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>"); }
+
+function renderNote(){
+  const el = $("tab-note");
+  const noteMd = S.aiNote || templateNote();
+  el.innerHTML =
+    '<div class="btnrow no-print" style="margin:0 0 14px">' +
+    '<button type="button" id="btn-ai-note" class="primary">Generate AI-drafted note</button>' +
+    '<button type="button" id="btn-print">Print / save as PDF</button>' +
+    (S.aiNote ? '<button type="button" id="btn-note-reset">Back to standard note</button>' : "") +
+    '</div><p class="status" id="note-status"></p>' +
+    '<div class="note">' + mdToHtml(noteMd) + "</div>";
+  $("btn-print").addEventListener("click", ()=> window.print());
+  const rst = $("btn-note-reset"); if (rst) rst.addEventListener("click", ()=>{ S.aiNote=null; renderNote(); });
+  $("btn-ai-note").addEventListener("click", async () => {
+    const st = $("note-status"), b = $("btn-ai-note");
+    b.disabled = true; st.className="status"; st.textContent = "Drafting…";
+    try{
+      const { w } = currentWorking();
+      const payload = { computed: {
+        mode:S.results.mode, inputs:w.inp, exempt:w.exempt,
+        liability0:w.liability0, rou:w.rou, prepaid:w.prepaid, provisionPV:w.provPV,
+        totals:w.totals, maturity:w.mat, rules:w.rules, periods:w.n,
+        sublease: S.results.mode==="sub_lease" ? {
+          cls:S.results.sub.cls, ratioPct:S.results.sub.ratio, nis:S.results.sub.nis,
+          rouDerecognised:S.results.sub.rouDerecognised, gain:S.results.sub.gain,
+          incomePerPeriod:S.results.sub.incomePerPeriod, totalReceipts:S.results.sub.totalReceipts } : undefined,
+        coLease: S.results.mode==="co_lease" ? S.results.comps.map(c=>({name:c.compName, sharePct:c.sharePct, liability:c.liability0, rou:c.rou})) : undefined
+      }};
+      const resp = await fetch("/api/ifrs16-narrate", { method:"POST", headers:{"content-type":"application/json"}, body: JSON.stringify(payload) });
+      const j = await resp.json().catch(()=> ({}));
+      if (!resp.ok) throw new Error(j.detail || j.error || ("HTTP "+resp.status));
+      S.aiNote = j.note;
+      renderNote();
+    } catch(e){
+      st.className="status err";
+      st.textContent = "AI note unavailable (" + e.message + ") — the standard note below is fully usable.";
+      b.disabled = false;
+    }
+  });
+}
+
+/* ---------- CSV exports ---------- */
+function csvBtn(kind){
+  return '<div class="btnrow no-print"><button type="button" onclick="exportCsv(\''+kind+'\')">Download CSV</button></div>';
+}
+function csvEsc(v){ v = String(v ?? ""); return /[",\n]/.test(v) ? '"'+v.replace(/"/g,'""')+'"' : v; }
+function download(name, rows){
+  const csv = rows.map(r=>r.map(csvEsc).join(",")).join("\r\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob(["﻿"+csv], {type:"text/csv;charset=utf-8"}));
+  a.download = name; a.click(); URL.revokeObjectURL(a.href);
+}
+window.exportCsv = function(kind){
+  const R = S.results; const { w, label } = currentWorking();
+  const tag = (w.inp.lessee||"lease").replace(/[^\w]+/g,"-").toLowerCase() + (label?("-"+label.replace(/[^\w]+/g,"-").toLowerCase()):"");
+  if (kind==="liab"){
+    download("ifrs16-liability-"+tag+".csv", [["Period","Date","Opening","Payment","Interest","Closing"],
+      ...w.liab.map(x=>[x.i,x.date,x.opening,x.payment,x.interest,x.closing])]);
+  } else if (kind==="rou"){
+    download("ifrs16-rou-"+tag+".csv", [["Period","Date","Opening","Depreciation","Closing"],
+      ...w.rouSch.map(x=>[x.i,x.date,x.opening,x.dep,x.closing])]);
+  } else if (kind==="nis"){
+    download("ifrs16-sublease-nis-"+tag+".csv", [["Period","Date","Opening","Receipt","InterestIncome","Closing"],
+      ...S.results.sub.nisSch.map(x=>[x.i,x.date,x.opening,x.receipt,x.interest,x.closing])]);
+  } else if (kind==="jv"){
+    const rows = [["Date","Reference","Account","Debit","Credit","Narration"]];
+    const push = jvs => jvs.forEach(j => j.lines.forEach(l => rows.push([j.date, j.id, l.a, l.dr||"", l.cr||"", j.narration])));
+    if (R.mode==="sub_lease"){ push(R.head.jvs); push(R.sub.jvs); }
+    else push(w.jvs);
+    download("ifrs16-journals-"+tag+".csv", rows);
+  }
+};
+</script>
+</body>
+</html>
