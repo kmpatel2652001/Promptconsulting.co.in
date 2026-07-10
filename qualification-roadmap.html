@@ -430,8 +430,9 @@
       Verify official dates before paying:
       <a href="https://www.accaglobal.com/gb/en/student/exam-entry-and-administration/exam-timetables.html" target="_blank" rel="noopener">ACCA exam timetables</a> &middot;
       <a href="https://www.cpaaustralia.com.au/your-cpa-program/important-dates-and-fees" target="_blank" rel="noopener">CPA Australia important dates</a> &middot;
-      <a href="https://aaa4uae.ae/site/en/individual-memberships" target="_blank" rel="noopener">EAAA (UAECA) membership</a>.
+      <a href="https://aaa4uae.ae/fellowship-program/" target="_blank" rel="noopener">EAAA UAE Fellowship (UAECA)</a>.
       <br>The CPA S2/26 enrolment <em>closing</em> date isn&rsquo;t officially posted yet &mdash; confirm it before the semester starts on 27&nbsp;Jul.
+      <br>UAECA track corrected 10&nbsp;Jul&nbsp;2026 after source verification &mdash; it&rsquo;s a three-exam EAAA Fellowship, not an application-only route. For paper-by-paper tracking of any qualification, try <a href="https://promptconsulting.co.in/tracker/">CharterTrack</a>.
     </div>
   </footer>
 </div>
@@ -512,7 +513,7 @@
     {
       id: "cpa", name: "CPA Australia", tint: "cpa",
       role: "6 subjects &middot; experience &middot; Semester 2/26",
-      note: "Global Strategy & Leadership is the capstone &mdash; it must be your last subject. Enrol for S2/26 before the semester opens 27 Jul.",
+      note: "Global Strategy & Leadership is the capstone &mdash; it must be your last subject. Enrol for S2/26 before the semester opens 27 Jul. Elective list corrected Jul 2026: Financial Planning Fundamentals is retired, and the HK / Malaysia / NZ / Fiji tax subjects run via partner universities as elective credits.",
       dates: [
         { l: "Semester", v: "starts 27 Jul" },
         { l: "Exams", v: "5&ndash;20 Oct" },
@@ -526,12 +527,13 @@
           { id: "cpa-gsl", t: "Global Strategy & Leadership <small>(capstone &mdash; last)</small>" }
         ]},
         { label: "Electives", choose: 2, items: [
-          { id: "cpa-atx", t: "Advanced Taxation" },
           { id: "cpa-aaa", t: "Advanced Audit & Assurance" },
-          { id: "cpa-frm", t: "Financial Risk Management" },
           { id: "cpa-cbi", t: "Contemporary Business Issues" },
+          { id: "cpa-frm", t: "Financial Risk Management" },
           { id: "cpa-dfin", t: "Digital Finance" },
-          { id: "cpa-fpf", t: "Financial Planning Fundamentals" }
+          { id: "cpa-atx", t: "Australia Taxation" },
+          { id: "cpa-ata", t: "Australia Taxation &mdash; Advanced" },
+          { id: "cpa-sgt", t: "Singapore Taxation" }
         ]}
       ],
       extras: [
@@ -541,23 +543,24 @@
     },
     {
       id: "uae", name: "UAE CA (UAECA)", tint: "uae",
-      role: "EAAA membership route &middot; no separate exam",
-      note: "UAECA isn&rsquo;t an exam track &mdash; it&rsquo;s an EAAA fellowship you apply for once you hold a recognised charter (ACCA counts) plus experience. Your ACCA work above is what unlocks it.",
+      role: "EAAA Fellowship &middot; 3 exams (1 if ACCA-exempt)",
+      note: "Corrected Jul 2026 against EAAA sources: UAECA is the EAAA <strong>Fellowship</strong> &mdash; three computer-based exams delivered by ACCA at British Council centres, in any order, all passed within 2 years of your first pass. ACCA <em>members</em> are exempt from IFRS and ISA and sit only Tax &amp; Regulation &mdash; so you can sit all three now, or finish ACCA first and sit one. Confirm exemption eligibility with EAAA before booking.",
       dates: [
-        { l: "Basis", v: "ACCA / CA / CPA" },
-        { l: "Experience", v: "5&ndash;7 yrs" },
-        { l: "Route", v: "application" }
+        { l: "Windows", v: "Jan Mar May Jul Sep Nov" },
+        { l: "2026 left", v: "Sep &middot; Nov" },
+        { l: "complete within", v: "2 yrs" }
       ],
       groups: [
-        { label: "Eligibility milestones", items: [
-          { id: "uae-qual", t: "Hold a recognised charter (ACCA / CA / CPA)" },
-          { id: "uae-exp", t: "5&ndash;7 years relevant experience" },
-          { id: "uae-mem", t: "Active EAAA-UAE membership" },
-          { id: "uae-doss", t: "Dossier submitted <small>(transcripts, CV, references)</small>" },
-          { id: "uae-rev", t: "Fellowship review / interview cleared" }
+        { label: "Fellowship exams (via ACCA)", items: [
+          { id: "uae-frs", t: "FRS &mdash; Financial Reporting Standards (IFRS)" },
+          { id: "uae-ia", t: "IA &mdash; International Auditing (ISA)" },
+          { id: "uae-tr", t: "TR &mdash; UAE Tax &amp; Regulation" }
         ]}
       ],
-      extras: []
+      extras: [
+        { id: "uae-mem", t: "EAAA membership registered" },
+        { id: "uae-fellow", t: "Fellow status application (after passing)" }
+      ]
     }
   ];
 
@@ -566,9 +569,11 @@
     { d: "2026-07-27", who: "cpa", kind: "point", t: "S2/26 semester begins" },
     { d: "2026-08-03", who: "acca", kind: "deadline", t: "September late entry deadline" },
     { d: "2026-08-21", end: "2026-09-01", who: "cpa", kind: "range", t: "Mid-semester test window" },
+    { d: "2026-09-01", end: "2026-09-30", who: "uae", kind: "range", t: "UAECA Sep window (dates TBC)" },
     { d: "2026-09-07", end: "2026-09-11", who: "acca", kind: "range", t: "September exams" },
     { d: "2026-10-05", end: "2026-10-20", who: "cpa", kind: "range", t: "S2/26 exams" },
     { d: "2026-10-19", who: "acca", kind: "result", t: "September results" },
+    { d: "2026-11-01", end: "2026-11-30", who: "uae", kind: "range", t: "UAECA Nov window (dates TBC)" },
     { d: "2026-11-02", who: "acca", kind: "deadline", t: "December entry deadline (standard fee)" },
     { d: "2026-11-27", who: "cpa", kind: "result", t: "S2/26 results" },
     { d: "2026-12-01", end: "2026-12-05", who: "acca", kind: "range", t: "December exams" }
@@ -579,8 +584,8 @@
     { id: "act-acca-entry", tag: "ACCA", due: "By 27 Jul", t: "Book September exam entries at the standard fee", d: "The standard-fee window closes 27 Jul; after that you pay the late fee up to 3 Aug." },
     { id: "act-cpa-enrol", tag: "CPA", due: "Before 27 Jul", t: "Enrol in your S2/26 subject", d: "Confirm the closing date, then enrol — keep Global Strategy & Leadership for last." },
     { id: "act-cpa-sched", tag: "CPA", due: "After enrol", t: "Schedule the CPA exam slot (5–20 Oct)", d: "Slots at your test centre fill up — book as soon as enrolment lets you." },
-    { id: "act-per", tag: "UAECA", due: "Ongoing", t: "Log experience toward the 5–7 year requirement", d: "Keep your PER / experience record current — it feeds both ACCA membership and the UAECA fellowship." },
-    { id: "act-eaaa", tag: "UAECA", due: "This month", t: "Confirm your EAAA-UAE membership status", d: "Check whether you’re already an EAAA member and what the UAECA application needs." }
+    { id: "act-per", tag: "ACCA", due: "Ongoing", t: "Keep logging PER experience (36 months)", d: "Needed for ACCA membership — which is also what unlocks the UAECA exemption (sit only Tax & Regulation)." },
+    { id: "act-eaaa", tag: "UAECA", due: "This month", t: "Register with EAAA and pick your Fellowship route", d: "Either sit all three Fellowship exams starting with the Sep window, or wait for ACCA membership and sit only Tax & Regulation — confirm exemption eligibility with EAAA." }
   ];
 
   /* ================= PROGRESS ================= */
