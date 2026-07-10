@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>CharterTrack — Study Progress Tracker for ACCA, CPA, CMA, CIMA, ACA &amp; CA Students</title>
-<meta name="description" content="Free study progress tracker for ACCA, CPA Australia, US CPA, CMA, CIMA, ACA, ICAI CA and UAE CA students. Track every paper, exemption and milestone on your way to qualified — no signup needed.">
+<meta name="description" content="Free study progress tracker for ACCA, CPA Australia, US CPA, CMA, CIMA, ACA, ICAI CA and UAE CA students. Create a free account and track every paper, exemption and milestone on your way to qualified.">
 <meta property="og:title" content="CharterTrack — Study Progress Tracker for Accounting Qualifications">
 <meta property="og:description" content="Pick your qualification, tick off papers as you pass them, and watch your progress to the charter. ACCA, CPA Australia, US CPA, CMA, CIMA, ACA, ICAI CA, UAE CA.">
 <meta property="og:type" content="website">
@@ -138,6 +138,10 @@ section{padding:22px 0}
 #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--page);font-size:13px;font-weight:500;padding:9px 18px;border-radius:22px;transition:transform .25s ease;z-index:50;pointer-events:none;max-width:88vw}
 #toast.show{transform:translateX(-50%) translateY(0)}
 .hidden{display:none !important}
+/* signed-out gate: content stays hidden until the session check passes */
+body[data-gate] .wrap{display:none}
+#gateMsg{display:none;text-align:center;padding:90px 20px;color:var(--ink-3);font-size:14px}
+body[data-gate] #gateMsg{display:block}
 @media (max-width:560px){
   .paper{flex-wrap:wrap}
   .pname{flex-basis:calc(100% - 100px)}
@@ -148,7 +152,7 @@ section{padding:22px 0}
 }
 </style>
 </head>
-<body>
+<body data-gate>
 
 <header class="top">
   <div class="wrap top-row">
@@ -161,6 +165,8 @@ section{padding:22px 0}
   </div>
 </header>
 
+<div id="gateMsg">Checking your sign-in&hellip;</div>
+
 <div class="wrap">
 
   <div id="sharedBanner" class="banner hidden" role="region" aria-label="Shared plan">
@@ -172,7 +178,7 @@ section{padding:22px 0}
   <section class="hero" id="hero">
     <h1>Every paper. One tracker.<br>All the way to qualified.</h1>
     <p>Pick your accounting qualification, tick off each exam as you book and pass it, and watch your progress toward the charter — exemptions, ethics modules and experience milestones included.</p>
-    <p class="hint">Free while in beta &middot; works without an account &middot; <a href="login.html">sign in</a> to sync your progress across devices.</p>
+    <p class="hint">Free while in beta &middot; your progress is saved to your account and syncs across devices.</p>
   </section>
 
   <section id="dashboard" class="hidden">
@@ -201,7 +207,7 @@ section{padding:22px 0}
 
   <footer class="foot">
     <p><b>Check dates and syllabus with the awarding body before booking.</b> Exam structures change; each qualification card links to the official source. CharterTrack is an independent study tool and is not affiliated with or endorsed by ACCA, CPA Australia, AICPA, NASBA, IMA, CIMA, ICAEW, ICAI or EAAA.</p>
-    <p>Without an account, progress is stored only in your browser (and in links you choose to share). <a href="login.html">Create a free account</a> to sync your plan across devices — only your plan and email are stored, nothing else. Want study-buddy features next? <a href="../contact.html">Tell us what to build</a>.</p>
+    <p>Your plan is saved to your free account and syncs across devices — only your plan, name and email are stored, nothing else. Want study-buddy features next? <a href="../contact.html">Tell us what to build</a>.</p>
     <p>Built by <a href="../index.html">Prompt Consulting</a>, Dubai — audit, assurance &amp; management consulting.</p>
   </footer>
 
@@ -514,7 +520,7 @@ function renderAcct(){
       `<button class="site-link" id="signoutBtn">Sign out</button>`+site;
     $('#signoutBtn').addEventListener('click',async()=>{
       try{await api('/api/auth',{method:'POST',body:JSON.stringify({action:'logout'})})}catch(e){}
-      user=null;renderAcct();toast('Signed out — your progress stays in this browser');
+      location.replace('login.html');
     });
   }else{
     el.innerHTML='<a class="site-link" href="login.html">Sign in</a>'+site;
@@ -551,8 +557,14 @@ async function syncDown(){
 }
 (async function initAuth(){
   try{const j=await api('/api/auth?action=me');user=j.user||null}catch(e){user=null}
+  if(!user){
+    // signed-in users only — keep any share link (#p=...) through the login round-trip
+    location.replace('login.html'+location.hash);
+    return;
+  }
+  document.body.removeAttribute('data-gate');
   renderAcct();
-  if(user&&!shared)await syncDown();
+  if(!shared)await syncDown();
 })();
 
 (function init(){

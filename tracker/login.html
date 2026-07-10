@@ -100,7 +100,7 @@ footer a{color:inherit}
 </main>
 
 <footer>
-  <div class="wrap">CharterTrack by <a href="../index.html">Prompt Consulting</a> &middot; your progress also works without an account, saved in this browser.</div>
+  <div class="wrap">CharterTrack by <a href="../index.html">Prompt Consulting</a> &middot; sign in to open your tracker &mdash; accounts are free while in beta.</div>
 </footer>
 
 <script>
@@ -129,7 +129,7 @@ function showErr(m){const e=$('#err');e.textContent=m;e.classList.toggle('show',
 function dest(user){
   const next=new URLSearchParams(location.search).get('next');
   if(next==='admin'&&user.role==='admin')return 'admin.html';
-  return './';
+  return './'+location.hash; // keep any shared plan link (#p=...) through login
 }
 
 $('#form').addEventListener('submit',async e=>{
