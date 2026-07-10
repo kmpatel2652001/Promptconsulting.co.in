@@ -111,7 +111,6 @@ footer.site{text-align:center;color:var(--muted);font-size:12.5px;padding:24px 1
 <header class="site">
   <div class="wrap">
     <div>
-      <div class="brand">Prompt Consulting</div>
       <h1>UAE Tax &amp; Regulation — Practice Exam</h1>
       <p>Track your progress · practice your weak spots</p>
     </div>
@@ -432,7 +431,7 @@ function renderQ(){
   byId("qTopic").textContent=q.topic;byId("qType").textContent=q.type==="multi"?"Select all that apply":"Select one";
   byId("qText").textContent=q.q;
   var nc=q.options.filter(function(o){return o.c;}).length;
-  byId("qHint").textContent=q.type==="multi"?("Tip: "+nc+" answers are correct."):"";
+  byId("qHint").textContent="";
   var host=byId("opts");host.innerHTML="";
   q.options.forEach(function(o,idx){
     var el=document.createElement("div");el.className="opt"+(q.type==="multi"?" multi":"");el.dataset.idx=idx;
