@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in — CharterTrack</title>
+<meta name="description" content="Sign in or create a free CharterTrack account to sync your study progress across devices.">
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232a78d6'/%3E%3Cpath d='M25 55l16 16 34-38' stroke='white' stroke-width='12' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#6e6c66;
+  --hairline:#e1e0d9; --ring:rgba(11,11,11,.10); --track:#eeede8;
+  --accent:#256abf; --danger:#c23a39; --danger-soft:#fbeaea;
+  --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#fff; --ink-2:#c3c2b7; --ink-3:#898781;
+    --hairline:#2c2c2a; --ring:rgba(255,255,255,.10); --track:#262624;
+    --accent:#3987e5; --danger:#e66767; --danger-soft:#2e1414;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--page);color:var(--ink);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;min-height:100vh;display:flex;flex-direction:column}
+a{color:var(--accent)}
+header.top{border-bottom:1px solid var(--hairline)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px;width:100%}
+.top-row{display:flex;align-items:center;gap:10px;padding:12px 0}
+.mark{width:28px;height:28px;border-radius:8px;background:var(--accent);display:grid;place-items:center;flex:none}
+.mark svg{width:16px;height:16px}
+.brand{font-weight:700;font-size:17px;letter-spacing:-.01em;color:inherit;text-decoration:none}
+.top-row .site-link{margin-left:auto;font-size:13px;color:var(--ink-2);text-decoration:none}
+.top-row .site-link:hover{color:var(--ink)}
+main{flex:1;display:grid;place-items:center;padding:40px 20px}
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:16px;box-shadow:var(--shadow);width:100%;max-width:400px;padding:28px 26px 26px}
+.card h1{font-size:22px;margin:0 0 4px;letter-spacing:-.01em}
+.card .sub{font-size:13.5px;color:var(--ink-2);margin:0 0 18px}
+.tabs{display:flex;background:var(--track);border-radius:10px;padding:3px;margin-bottom:18px}
+.tabs button{flex:1;font:inherit;font-size:13px;font-weight:500;padding:8px 0;border:none;border-radius:8px;background:transparent;color:var(--ink-2);cursor:pointer}
+.tabs button[aria-selected="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:var(--shadow)}
+label{display:block;font-size:12.5px;font-weight:500;color:var(--ink-2);margin:12px 0 5px}
+input{width:100%;font:inherit;font-size:14px;padding:10px 12px;border:1px solid var(--hairline);border-radius:10px;background:var(--page);color:var(--ink)}
+input:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+.btn{width:100%;font:inherit;font-size:14px;font-weight:600;padding:11px 0;border-radius:10px;border:1px solid var(--accent);background:var(--accent);color:#fff;cursor:pointer;margin-top:18px}
+.btn:hover{filter:brightness(1.06)}
+.btn[disabled]{opacity:.6;cursor:wait}
+@media (prefers-color-scheme: dark){.btn{background:#1c5cab;border-color:#1c5cab}}
+#err{display:none;font-size:13px;color:var(--danger);background:var(--danger-soft);border:1px solid var(--danger);border-radius:10px;padding:9px 12px;margin-top:14px}
+#err.show{display:block}
+.hint{font-size:12.5px;color:var(--ink-3);margin-top:16px;text-align:center}
+.hidden{display:none}
+footer{padding:18px 0 30px;font-size:12.5px;color:var(--ink-3);text-align:center}
+footer a{color:inherit}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap top-row">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M25 55l16 16 34-38" stroke="white" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <a class="brand" href="./">CharterTrack</a>
+    <a class="site-link" href="./">&larr; Back to tracker</a>
+  </div>
+</header>
+
+<main>
+  <form class="card" id="form" novalidate>
+    <h1 id="title">Welcome back</h1>
+    <p class="sub" id="subtitle">Sign in to sync your study progress across devices.</p>
+
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" id="tabIn" aria-selected="true">Sign in</button>
+      <button type="button" role="tab" id="tabUp" aria-selected="false">Create account</button>
+    </div>
+
+    <div id="nameRow" class="hidden">
+      <label for="name">Your name</label>
+      <input id="name" name="name" autocomplete="name" maxlength="80" placeholder="e.g. Kirtan Patel">
+    </div>
+
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@example.com">
+
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters">
+
+    <div id="err" role="alert"></div>
+
+    <button class="btn" id="submitBtn" type="submit">Sign in</button>
+
+    <p class="hint" id="modeHint">No account yet? Switch to <b>Create account</b> above — it's free.</p>
+  </form>
+</main>
+
+<footer>
+  <div class="wrap">CharterTrack by <a href="../index.html">Prompt Consulting</a> &middot; your progress also works without an account, saved in this browser.</div>
+</footer>
+
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+let mode='login';
+
+function setMode(m){
+  mode=m;
+  const up=m==='signup';
+  $('#tabIn').setAttribute('aria-selected',String(!up));
+  $('#tabUp').setAttribute('aria-selected',String(up));
+  $('#nameRow').classList.toggle('hidden',!up);
+  $('#title').textContent=up?'Create your account':'Welcome back';
+  $('#subtitle').textContent=up?'Free account — track and sync your papers on any device.':'Sign in to sync your study progress across devices.';
+  $('#submitBtn').textContent=up?'Create account':'Sign in';
+  $('#password').setAttribute('autocomplete',up?'new-password':'current-password');
+  $('#modeHint').innerHTML=up?'Already registered? Switch to <b>Sign in</b> above.':"No account yet? Switch to <b>Create account</b> above — it's free.";
+  showErr('');
+}
+$('#tabIn').addEventListener('click',()=>setMode('login'));
+$('#tabUp').addEventListener('click',()=>setMode('signup'));
+
+function showErr(m){const e=$('#err');e.textContent=m;e.classList.toggle('show',!!m)}
+
+function dest(user){
+  const next=new URLSearchParams(location.search).get('next');
+  if(next==='admin'&&user.role==='admin')return 'admin.html';
+  return './';
+}
+
+$('#form').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const email=$('#email').value.trim(), password=$('#password').value;
+  if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))return showErr('Enter a valid email address.');
+  if(password.length<8)return showErr('Password must be at least 8 characters.');
+  const btn=$('#submitBtn');btn.disabled=true;btn.textContent=mode==='signup'?'Creating account…':'Signing in…';
+  try{
+    const r=await fetch('/api/auth',{
+      method:'POST',credentials:'same-origin',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({action:mode,email,password,name:$('#name').value.trim()})
+    });
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok){showErr(j.error||'Something went wrong — please try again.');return}
+    location.href=dest(j.user||{});
+  }catch(err){
+    showErr('Could not reach the server — check your connection and try again.');
+  }finally{
+    btn.disabled=false;setMode(mode);
+  }
+});
+
+// Already signed in? Go straight through.
+fetch('/api/auth?action=me',{credentials:'same-origin'}).then(r=>r.json()).then(j=>{
+  if(j&&j.user)location.href=dest(j.user);
+}).catch(()=>{});
+</script>
+</body>
+</html>

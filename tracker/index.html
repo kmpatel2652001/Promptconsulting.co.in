@@ -45,9 +45,12 @@ header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--
 .mark svg{width:16px;height:16px}
 .brand{font-weight:700;font-size:17px;letter-spacing:-.01em}
 .beta{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);border:1px solid currentColor;border-radius:20px;padding:1px 8px;margin-left:2px}
-.top-row .site-link{margin-left:auto;font-size:13px;color:var(--ink-2);text-decoration:none;white-space:nowrap}
-@media (max-width:480px){.beta{display:none}.top-row .site-link{font-size:12px}}
+.top-row .acct{margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top-row .site-link{font-size:13px;color:var(--ink-2);text-decoration:none;white-space:nowrap;background:none;border:none;font-family:inherit;padding:0}
+button.site-link{cursor:pointer}
+@media (max-width:480px){.beta{display:none}.top-row .site-link{font-size:12px}.top-row .acct{gap:10px}}
 .top-row .site-link:hover{color:var(--ink)}
+.top-row .acct .who{cursor:default;color:var(--ink);font-weight:500}
 .hero{padding:44px 0 8px;text-align:left;max-width:720px}
 .hero h1{font-size:clamp(26px,4.5vw,38px);line-height:1.15;letter-spacing:-.02em;margin:0 0 12px;font-weight:700}
 .hero p{color:var(--ink-2);margin:0 0 4px;font-size:16px;max-width:56ch}
@@ -151,7 +154,10 @@ section{padding:22px 0}
   <div class="wrap top-row">
     <span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M25 55l16 16 34-38" stroke="white" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
     <span class="brand">CharterTrack</span><span class="beta">Beta</span>
-    <a class="site-link" href="../index.html" aria-label="Built by Prompt Consulting">Prompt Consulting &rarr;</a>
+    <span class="acct" id="acct">
+      <a class="site-link" href="login.html">Sign in</a>
+      <a class="site-link" href="../index.html" aria-label="Built by Prompt Consulting">Prompt Consulting &rarr;</a>
+    </span>
   </div>
 </header>
 
@@ -166,7 +172,7 @@ section{padding:22px 0}
   <section class="hero" id="hero">
     <h1>Every paper. One tracker.<br>All the way to qualified.</h1>
     <p>Pick your accounting qualification, tick off each exam as you book and pass it, and watch your progress toward the charter — exemptions, ethics modules and experience milestones included.</p>
-    <p class="hint">Free while in beta &middot; no signup &middot; your progress is saved in this browser.</p>
+    <p class="hint">Free while in beta &middot; works without an account &middot; <a href="login.html">sign in</a> to sync your progress across devices.</p>
   </section>
 
   <section id="dashboard" class="hidden">
@@ -195,7 +201,7 @@ section{padding:22px 0}
 
   <footer class="foot">
     <p><b>Check dates and syllabus with the awarding body before booking.</b> Exam structures change; each qualification card links to the official source. CharterTrack is an independent study tool and is not affiliated with or endorsed by ACCA, CPA Australia, AICPA, NASBA, IMA, CIMA, ICAEW, ICAI or EAAA.</p>
-    <p>Progress is stored only in your browser (and in links you choose to share) — nothing is sent to a server. Want accounts, sync across devices, or study-buddy features? <a href="../contact.html">Tell us what to build next</a>.</p>
+    <p>Without an account, progress is stored only in your browser (and in links you choose to share). <a href="login.html">Create a free account</a> to sync your plan across devices — only your plan and email are stored, nothing else. Want study-buddy features next? <a href="../contact.html">Tell us what to build</a>.</p>
     <p>Built by <a href="../index.html">Prompt Consulting</a>, Dubai — audit, assurance &amp; management consulting.</p>
   </footer>
 
@@ -289,6 +295,7 @@ function saveState(){
   if(shared)return;
   try{localStorage.setItem(LS,JSON.stringify(state))}
   catch(e){if(!warnedStorage){warnedStorage=true;toast("This browser is blocking storage — progress won't survive a reload")}}
+  pushProgress();
 }
 function cur(){return shared||state}
 function st(qid,key){return cur().status[qid+':'+key]||'todo'}
@@ -489,6 +496,64 @@ $('#dismissShared').addEventListener('click',()=>{
   render();
 });
 window.addEventListener('hashchange',()=>{if(location.hash.startsWith('#p='))location.reload()});
+
+/* ---------- account & cross-device sync ---------- */
+let user=null,syncTimer=null,lastPushed='';
+async function api(path,opts){
+  const r=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...opts});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+  return j;
+}
+function renderAcct(){
+  const el=$('#acct');if(!el)return;
+  const site='<a class="site-link" href="../index.html" aria-label="Built by Prompt Consulting">Prompt Consulting &rarr;</a>';
+  if(user){
+    el.innerHTML=(user.role==='admin'?'<a class="site-link" href="admin.html">Admin</a>':'')+
+      `<span class="site-link who" title="${esc(user.email)}">${esc(user.name||user.email)}</span>`+
+      `<button class="site-link" id="signoutBtn">Sign out</button>`+site;
+    $('#signoutBtn').addEventListener('click',async()=>{
+      try{await api('/api/auth',{method:'POST',body:JSON.stringify({action:'logout'})})}catch(e){}
+      user=null;renderAcct();toast('Signed out — your progress stays in this browser');
+    });
+  }else{
+    el.innerHTML='<a class="site-link" href="login.html">Sign in</a>'+site;
+  }
+}
+function pushProgress(){
+  if(!user||shared)return;
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(async()=>{
+    const body=JSON.stringify({state});
+    if(body===lastPushed)return;
+    lastPushed=body;
+    try{await api('/api/progress',{method:'POST',body})}catch(e){lastPushed=''}
+  },900);
+}
+async function syncDown(){
+  try{
+    const j=await api('/api/progress');
+    const server=j&&j.state?sanitize(j.state):null;
+    const localHasData=state.quals.length||Object.keys(state.status).length;
+    if(server&&server.quals.length){
+      // merge server + local (local edits win on conflicts), then push the result back
+      state=sanitize({
+        quals:[...server.quals,...state.quals],
+        status:{...server.status,...state.status},
+        extras:{...server.extras,...state.extras}
+      });
+      render();
+      if(localHasData)toast('Synced with your account');
+    }else if(localHasData){
+      pushProgress();
+    }
+  }catch(e){}
+}
+(async function initAuth(){
+  try{const j=await api('/api/auth?action=me');user=j.user||null}catch(e){user=null}
+  renderAcct();
+  if(user&&!shared)await syncDown();
+})();
 
 (function init(){
   if(location.hash.startsWith('#p=')){
