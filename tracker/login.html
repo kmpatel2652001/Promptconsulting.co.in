@@ -135,6 +135,8 @@ function showErr(m){const e=$('#err');e.textContent=m;e.classList.toggle('show',
 function dest(user){
   const next=new URLSearchParams(location.search).get('next');
   if(next==='admin'&&user.role==='admin')return 'admin.html';
+  // deep link back to a subject tracker, e.g. ?next=subject:acca:AFM
+  if(next&&/^subject:[a-z]+:[A-Za-z0-9&]+$/.test(next))return 'subject.html?k='+encodeURIComponent(next.slice(8));
   return './'+location.hash; // keep any shared plan link (#p=...) through login
 }
 

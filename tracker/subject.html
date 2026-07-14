@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Subject Tracker — CharterTrack</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%232a78d6'/%3E%3Cpath d='M25 55l16 16 34-38' stroke='white' stroke-width='12' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:light;
+  --page:#f9f9f7; --surface:#fcfcfb; --ink:#0b0b0b; --ink-2:#52514e; --ink-3:#6e6c66;
+  --hairline:#e1e0d9; --ring:rgba(11,11,11,.10); --track:#eeede8;
+  --good:#0b7a0b; --good-soft:#e7f3e7; --good-ink:#006300;
+  --warn:#b97800; --warn-soft:#fbf1dc; --warn-ink:#8a5a00;
+  --accent:#256abf;
+  --c1:#2a78d6; --c2:#1baf7a; --c3:#eda100; --c4:#008300; --c5:#4a3aa7; --c6:#e34948;
+  --shadow:0 1px 2px rgba(11,11,11,.04), 0 8px 24px -12px rgba(11,11,11,.12);
+}
+@media (prefers-color-scheme: dark){
+  :root{
+    color-scheme:dark;
+    --page:#0d0d0d; --surface:#1a1a19; --ink:#fff; --ink-2:#c3c2b7; --ink-3:#898781;
+    --hairline:#2c2c2a; --ring:rgba(255,255,255,.10); --track:#262624;
+    --good:#0c6b0c; --good-soft:#12290f; --good-ink:#3fbf3f;
+    --warn:#a97407; --warn-soft:#2b2210; --warn-ink:#e0a33a;
+    --accent:#3987e5;
+    --c1:#3987e5; --c2:#199e70; --c3:#c98500; --c4:#008300; --c5:#9085e9; --c6:#e66767;
+    --shadow:none;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:'Poppins',system-ui,-apple-system,'Segoe UI',sans-serif;background:var(--page);color:var(--ink);font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:var(--accent)}
+.wrap{max-width:1060px;margin:0 auto;padding:0 20px}
+header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb, var(--page) 88%, transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--hairline)}
+.top-row{display:flex;align-items:center;gap:10px;padding:12px 0;flex-wrap:wrap}
+.mark{width:28px;height:28px;border-radius:8px;background:var(--accent);display:grid;place-items:center;flex:none}
+.mark svg{width:16px;height:16px}
+.brand{font-weight:700;font-size:17px;letter-spacing:-.01em}
+.brand a{color:inherit;text-decoration:none}
+.top-row .acct{margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top-row .site-link{font-size:13px;color:var(--ink-2);text-decoration:none;white-space:nowrap;background:none;border:none;font-family:inherit;padding:0}
+button.site-link{cursor:pointer}
+.top-row .site-link:hover{color:var(--ink)}
+.top-row .acct .who{cursor:default;color:var(--ink);font-weight:500}
+.crumb{font-size:13px;color:var(--ink-3);margin:20px 0 0}
+.crumb a{text-decoration:none}
+.crumb a:hover{text-decoration:underline}
+.hero{padding:10px 0 6px;max-width:860px}
+.hero h1{font-size:clamp(23px,4vw,32px);line-height:1.18;letter-spacing:-.02em;margin:0 0 8px;font-weight:700}
+.hero h1 .code{color:var(--accent)}
+.hero p{color:var(--ink-2);margin:0;font-size:14.5px}
+section{padding:20px 0 4px}
+.sec-title{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--ink-3);margin:0 0 12px}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--ring);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.tile .k{font-size:12px;color:var(--ink-2);font-weight:500}
+.tile .v{font-size:26px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.tile .v small{font-size:13px;font-weight:500;color:var(--ink-3);letter-spacing:0}
+.bar{height:6px;border-radius:4px;background:var(--track);margin-top:10px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px;background:var(--accent);transition:width .35s ease}
+/* cards */
+.card{background:var(--surface);border:1px solid var(--ring);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:18px}
+.card-pad{padding:14px 18px}
+/* topic performance table */
+.tblwrap{overflow-x:auto}
+table.perf{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px}
+table.perf th{font-size:11.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-3);font-weight:600;text-align:left;padding:12px 14px 8px;border-bottom:1px solid var(--hairline);white-space:nowrap}
+table.perf td{padding:10px 14px;border-bottom:1px solid var(--hairline);vertical-align:middle}
+table.perf tr:last-child td{border-bottom:none}
+table.perf .tname{font-weight:600;white-space:nowrap}
+table.perf .tname a{color:inherit;text-decoration:none}
+table.perf .tname a:hover{color:var(--accent)}
+table.perf .num{white-space:nowrap;color:var(--ink-2)}
+table.perf .num b{color:var(--ink)}
+table.perf .bar{min-width:90px;margin-top:0}
+table.perf .stars{color:var(--warn);letter-spacing:1px;white-space:nowrap}
+table.perf .stars span{color:var(--track)}
+table.perf .focus{font-size:12.5px;color:var(--ink-3);min-width:220px}
+/* exam facts */
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:0 22px;padding:6px 18px 12px}
+.fact{display:flex;gap:10px;padding:7px 0;border-bottom:1px solid var(--hairline);font-size:13px}
+.fact .fk{color:var(--ink-3);flex:none;width:118px}
+.fact .fv{color:var(--ink);font-weight:500}
+/* filters */
+.filters{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:0 0 14px}
+.fchip{font:inherit;font-size:12.5px;font-weight:500;padding:7px 14px;border-radius:20px;border:1px solid var(--hairline);background:var(--surface);color:var(--ink-2);cursor:pointer;line-height:1.2}
+.fchip:hover{border-color:var(--ink-3)}
+.fchip[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink);font-weight:600}
+.filters select{font:inherit;font-size:12.5px;padding:7px 10px;border-radius:10px;border:1px solid var(--hairline);background:var(--surface);color:var(--ink)}
+.filters .count{font-size:12.5px;color:var(--ink-3);margin-left:auto}
+/* question groups */
+.tgroup{padding:4px 18px 12px}
+.tg-head{display:flex;align-items:baseline;gap:10px;margin:12px 0 4px;flex-wrap:wrap}
+.tg-head h3{font-size:14px;font-weight:600;margin:0}
+.tg-done{font-size:12px;color:var(--ink-3);margin-left:auto;white-space:nowrap}
+.q{border-top:1px solid var(--hairline);padding:9px 0}
+.q:first-of-type{border-top:none}
+.q-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.qno{font-size:11px;font-weight:600;color:var(--ink-2);background:var(--track);border-radius:6px;padding:2px 7px;min-width:38px;text-align:center;flex:none}
+.qmain{flex:1;min-width:180px}
+.qco{font-size:14px;font-weight:500}
+.q.done .qco{color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1px}
+.qsec{font-size:10px;font-weight:600;border:1px solid var(--hairline);border-radius:5px;padding:1px 6px;margin-left:7px;color:var(--ink-2);vertical-align:2px}
+.qsec.a{color:var(--c5);border-color:currentColor}
+.qsec.b{color:var(--c2);border-color:currentColor}
+.qmeta{font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.qtag{font-size:11.5px;color:var(--good-ink);margin-top:1px}
+.stat{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
+.chip{font:inherit;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--hairline);background:transparent;color:var(--ink-2);cursor:pointer;line-height:1.2;min-height:28px}
+.chip:hover{border-color:var(--ink-3)}
+.chip:focus-visible,.fchip:focus-visible,.btn:focus-visible,.nbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chip[aria-pressed="true"]{font-weight:600}
+.chip.todo[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink)}
+.chip.prog[aria-pressed="true"]{background:var(--warn);color:#fff;border-color:var(--warn)}
+.chip.done[aria-pressed="true"]{background:var(--good);color:#fff;border-color:var(--good)}
+.nbtn{font:inherit;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--hairline);background:transparent;color:var(--ink-2);cursor:pointer;line-height:1.2;min-height:28px;white-space:nowrap}
+.nbtn:hover{border-color:var(--ink-3)}
+.nbtn.has{color:var(--accent);border-color:var(--accent)}
+.nbtn[aria-expanded="true"]{background:var(--track);color:var(--ink)}
+/* notes panel */
+.notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;background:var(--track);border-radius:12px;padding:12px;margin-top:10px}
+.nf label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin:0 0 4px}
+.nf textarea{width:100%;min-height:74px;font:inherit;font-size:13px;line-height:1.5;padding:8px 10px;border:1px solid var(--hairline);border-radius:9px;background:var(--surface);color:var(--ink);resize:vertical}
+.nf textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
+.nf.wide{grid-column:1/-1}
+/* formulas */
+.formulas{padding:6px 18px 12px}
+.fx{display:flex;gap:14px;padding:8px 0;border-bottom:1px solid var(--hairline);font-size:13.5px;flex-wrap:wrap}
+.fx:last-child{border-bottom:none}
+.fx .fxn{flex:none;width:150px;font-weight:600}
+.fx .fxf{color:var(--ink-2);font-family:ui-monospace,'Cascadia Code',Consolas,monospace;font-size:12.5px}
+/* toolbar / misc */
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.btn{font:inherit;font-size:13px;font-weight:500;padding:9px 16px;border-radius:10px;border:1px solid var(--hairline);background:var(--surface);color:var(--ink);cursor:pointer;box-shadow:var(--shadow)}
+.btn:hover{border-color:var(--ink-3)}
+.foot{border-top:1px solid var(--hairline);margin-top:26px;padding:22px 0 40px;font-size:12.5px;color:var(--ink-3)}
+.foot p{margin:0 0 8px;max-width:78ch}
+.foot a{color:inherit}
+#toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(80px);background:var(--ink);color:var(--page);font-size:13px;font-weight:500;padding:9px 18px;border-radius:22px;transition:transform .25s ease;z-index:50;pointer-events:none;max-width:88vw}
+#toast.show{transform:translateX(-50%) translateY(0)}
+.hidden{display:none !important}
+body[data-gate] .wrap{display:none}
+#gateMsg{display:none;text-align:center;padding:90px 20px;color:var(--ink-3);font-size:14px}
+body[data-gate] #gateMsg{display:block}
+@media (max-width:640px){
+  .q-row{align-items:flex-start}
+  .stat{flex-basis:100%;justify-content:flex-start;gap:8px}
+  .chip,.nbtn{padding:8px 14px;min-height:34px}
+  .fact .fk{width:104px}
+}
+</style>
+</head>
+<body data-gate>
+
+<header class="top">
+  <div class="wrap top-row">
+    <span class="mark" aria-hidden="true"><svg viewBox="0 0 100 100"><path d="M25 55l16 16 34-38" stroke="white" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    <span class="brand"><a href="./">CharterTrack</a></span>
+    <span class="acct" id="acct">
+      <a class="site-link" href="./">&larr; My tracker</a>
+    </span>
+  </div>
+</header>
+
+<div id="gateMsg">Checking your sign-in&hellip;</div>
+
+<div class="wrap">
+
+  <nav class="crumb" aria-label="Breadcrumb"><a href="./">My tracker</a> &rsaquo; <span id="crumbQual"></span> &rsaquo; <b id="crumbCode"></b></nav>
+
+  <section class="hero">
+    <h1><span class="code" id="hCode"></span> — <span id="hName"></span></h1>
+    <p id="hSub"></p>
+  </section>
+
+  <section aria-label="Progress summary">
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">Topic performance</h2>
+    <div class="card"><div class="tblwrap"><table class="perf" id="perfTbl"></table></div></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">Question bank</h2>
+    <div class="filters" id="filters">
+      <button class="fchip" data-f="all" aria-pressed="true">All</button>
+      <button class="fchip" data-f="todo" aria-pressed="false">Not started</button>
+      <button class="fchip" data-f="prog" aria-pressed="false">In progress</button>
+      <button class="fchip" data-f="done" aria-pressed="false">Done</button>
+      <select id="topicSel" aria-label="Filter by topic"><option value="-1">All topics</option></select>
+      <span class="count" id="fCount"></span>
+    </div>
+    <div class="card" id="qbank"></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">Key exam facts</h2>
+    <div class="card"><div class="facts" id="facts"></div></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">Key formulas — quick reference</h2>
+    <div class="card"><div class="formulas" id="formulas"></div></div>
+  </section>
+
+  <section>
+    <h2 class="sec-title">Subject data</h2>
+    <div class="toolbar">
+      <button class="btn" id="exportBtn">Export subject JSON</button>
+      <button class="btn" id="importBtn">Import subject JSON</button>
+      <input type="file" id="importFile" accept="application/json" class="hidden">
+    </div>
+  </section>
+
+  <footer class="foot">
+    <p>Question numbers and page references follow the <span id="footKit"></span>. Statuses and notes are saved to your CharterTrack account and sync across devices.</p>
+    <p>Built by <a href="../index.html">Prompt Consulting</a>, Dubai — audit, assurance &amp; management consulting.</p>
+  </footer>
+
+</div>
+
+<div id="toast" role="status"></div>
+
+<script>
+'use strict';
+/* ---------- subject registry (add more subjects here as needed) ---------- */
+const SUBJECTS={
+'acca:AFM':{
+  qual:'ACCA',code:'AFM',name:'Advanced Financial Management',
+  kit:'Kaplan Exam Kit 2024/25',sub:'Kaplan Exam Kit 2024/25 · 67 practice questions',
+  topics:[
+    {name:'Advanced Investment Appraisal',w:5,wl:'Highest',focus:'WACC, APV, NPV, Foreign Investment, Real Options — always in the exam'},
+    {name:'Acquisitions & Mergers',w:5,wl:'Highest',focus:'Business valuation + strategic aspects — always in the exam'},
+    {name:'Corporate Reconstruction',w:3,wl:'Medium',focus:'Corporate failure ratios + reconstruction schemes'},
+    {name:'Treasury & Risk Management',w:4,wl:'High',focus:'FX & IR hedging calculations — regularly tested, high mark allocation'},
+    {name:'Role of Senior FM',w:3,wl:'Medium',focus:'Multinational finance, Islamic finance, ESG — Section B supporting topic'}
+  ],
+  facts:[
+    ['Pass mark','50% (50/100 marks)'],
+    ['Section A','1 question × 50 marks (90 min)'],
+    ['Section B','2 questions × 25 marks each (45 min each)'],
+    ['Total time','3 hours 15 minutes'],
+    ['Format','Computer-Based Exam (CBE)'],
+    ['Professional marks','10 marks per Section A question'],
+    ['Strategy','Allocate exactly 1.8 min per mark'],
+    ['Priority','Attempt ALL questions — never leave blank']
+  ],
+  formulas:[
+    ['WACC','Ke × (E/V)  +  Kd×(1−T) × (D/V)'],
+    ['CAPM','Ke = Rf + β × (Rm − Rf)'],
+    ['Ungear beta','βa = βe × [ E / (E + D(1−T)) ]'],
+    ['Regear beta','βe = βa × [ 1 + D(1−T)/E ]'],
+    ['APV','Base-case NPV + PV of financing side-effects'],
+    ['Black-Scholes','Pa×N(d1) − Pe×e^(−rT)×N(d2)'],
+    ['d1','[ ln(Pa/Pe) + (r + σ²/2)T ] / (σ√T)'],
+    ['d2','d1 − σ√T'],
+    ['Gordon growth','P₀ = D₁ / (Ke − g)'],
+    ['Free cash flow','EBIT(1−T) + Dep − ΔWC − Capex'],
+    ['Synergy gain','PV(A+B) − PV(A) − PV(B)'],
+    ['Altman Z-score','1.2X₁ + 1.4X₂ + 3.3X₃ + 0.6X₄ + 1.0X₅  (Z<1.8 = distress)']
+  ],
+  questions:[
+{"n":1,"co":"Chmura Co","sec":"A","t":0,"qp":1,"ap":125,"ex":"Dec 13"},
+{"n":2,"co":"Talam Co","sec":"A","t":0,"qp":3,"ap":132,"ex":"Mar/Jun 19"},
+{"n":3,"co":"Zhichi Co","sec":"A","t":0,"qp":5,"ap":139,"ex":"Sep/Dec 21"},
+{"n":4,"co":"Prysor Co","sec":"A","t":0,"qp":8,"ap":145,"ex":"Mar/Jun 22"},
+{"n":5,"co":"Para Fuels Co","sec":"A","t":0,"qp":10,"ap":153,"ex":"Sep 22"},
+{"n":6,"co":"McKeever Co","sec":"A","t":0,"qp":13,"ap":160,"ex":""},
+{"n":7,"co":"Pursuit Co","sec":"A","t":1,"qp":16,"ap":166,"ex":"Jun 11"},
+{"n":8,"co":"Nente Co","sec":"A","t":1,"qp":18,"ap":171,"ex":"Jun 12"},
+{"n":9,"co":"Chikepe Co","sec":"A","t":1,"qp":20,"ap":177,"ex":"Mar/Jun 18"},
+{"n":10,"co":"Opao Co","sec":"A","t":1,"qp":22,"ap":183,"ex":"Dec 18"},
+{"n":11,"co":"Westparley Co","sec":"A","t":1,"qp":25,"ap":190,"ex":"Mar 20"},
+{"n":12,"co":"Joshua Co","sec":"A","t":1,"qp":27,"ap":196,"ex":"Mar/Jun 23"},
+{"n":13,"co":"Morada Co","sec":"A","t":2,"qp":30,"ap":203,"ex":"Sep/Dec 16"},
+{"n":14,"co":"Chrysos Co","sec":"A","t":2,"qp":32,"ap":209,"ex":"Mar/Jun 17"},
+{"n":15,"co":"Conejo Co","sec":"A","t":2,"qp":35,"ap":216,"ex":"Sep/Dec 17"},
+{"n":16,"co":"Chakula Co","sec":"A","t":2,"qp":37,"ap":223,"ex":"Mar/Jun 21"},
+{"n":17,"co":"Washi Co","sec":"A","t":3,"qp":40,"ap":231,"ex":"Sep 18"},
+{"n":18,"co":"Okan Co","sec":"A","t":3,"qp":43,"ap":239,"ex":"Sep/Dec 19"},
+{"n":19,"co":"Fondir Co","sec":"A","t":3,"qp":46,"ap":247,"ex":"Dec 22"},
+{"n":20,"co":"Lamri Co","sec":"B","t":4,"qp":49,"ap":257,"ex":"Dec 10"},
+{"n":21,"co":"Limni Co","sec":"B","t":4,"qp":50,"ap":260,"ex":"Jun 13"},
+{"n":22,"co":"Chawan Co","sec":"B","t":4,"qp":52,"ap":263,"ex":"Jun 15"},
+{"n":23,"co":"Chithurst Co","sec":"B","t":4,"qp":54,"ap":267,"ex":"Sep/Dec 16"},
+{"n":24,"co":"Arthuro Co","sec":"B","t":4,"qp":55,"ap":271,"ex":"Mar/Jun 18"},
+{"n":25,"co":"Tillinton Co","sec":"B","t":4,"qp":56,"ap":275,"ex":"Sep 18"},
+{"n":26,"co":"Cadnam Co","sec":"B","t":4,"qp":58,"ap":280,"ex":"Sep/Dec 19"},
+{"n":27,"co":"Southmed Co","sec":"B","t":4,"qp":60,"ap":284,"ex":"Sep/Dec 23"},
+{"n":28,"co":"Fubuki Co","sec":"B","t":0,"qp":64,"ap":288,"ex":"Dec 10"},
+{"n":29,"co":"MMC","sec":"B","t":0,"qp":65,"ap":293,"ex":"Jun 11"},
+{"n":30,"co":"Coeden Co","sec":"B","t":0,"qp":66,"ap":296,"ex":"Dec 12"},
+{"n":31,"co":"Riviere Co","sec":"B","t":0,"qp":67,"ap":299,"ex":"Dec 14"},
+{"n":32,"co":"Furlion Co","sec":"B","t":0,"qp":68,"ap":302,"ex":"Mar/Jun 16"},
+{"n":33,"co":"Fernhurst Co","sec":"B","t":0,"qp":69,"ap":305,"ex":"Sep/Dec 16"},
+{"n":34,"co":"Tippletine Co","sec":"B","t":0,"qp":70,"ap":309,"ex":"Mar/Jun 18"},
+{"n":35,"co":"Amberle Co","sec":"B","t":0,"qp":72,"ap":314,"ex":"Dec 18"},
+{"n":36,"co":"Hathaway Co","sec":"B","t":0,"qp":73,"ap":318,"ex":"Mar 20"},
+{"n":37,"co":"Robson Co","sec":"B","t":0,"qp":75,"ap":322,"ex":"Mar/Jun 21"},
+{"n":38,"co":"Tonpantau Co","sec":"B","t":0,"qp":77,"ap":326,"ex":"Dec 22"},
+{"n":39,"co":"Blackbosca Co","sec":"B","t":0,"qp":78,"ap":329,"ex":"Mar/Jun 23"},
+{"n":40,"co":"Moonstar Co","sec":"B","t":0,"qp":81,"ap":333,"ex":"Sep/Dec 15"},
+{"n":41,"co":"Toltuck Co","sec":"B","t":0,"qp":82,"ap":336,"ex":"Mar/Jun 17"},
+{"n":42,"co":"Kodiak Company","sec":"B","t":1,"qp":84,"ap":341,"ex":"Dec 09"},
+{"n":43,"co":"Sigra Co","sec":"B","t":1,"qp":85,"ap":344,"ex":"Dec 12"},
+{"n":44,"co":"Selorne Co","sec":"B","t":1,"qp":87,"ap":347,"ex":"Sep 18"},
+{"n":45,"co":"Kerrin Co","sec":"B","t":1,"qp":88,"ap":350,"ex":"Sep/Dec 19"},
+{"n":46,"co":"Felinhen Co","sec":"B","t":1,"qp":90,"ap":355,"ex":"Sep 22"},
+{"n":47,"co":"Propleis Co & Adictcan","sec":"B","t":1,"qp":92,"ap":359,"ex":"Dec 22"},
+{"n":48,"co":"Oxwick Co","sec":"B","t":1,"qp":94,"ap":362,"ex":"Mar/Jun 23"},
+{"n":49,"co":"Ennea Co","sec":"B","t":2,"qp":95,"ap":365,"ex":"Jun 12"},
+{"n":50,"co":"Nubo Co","sec":"B","t":2,"qp":97,"ap":368,"ex":"Dec 13"},
+{"n":51,"co":"Bento Co","sec":"B","t":2,"qp":98,"ap":371,"ex":"Jun 15"},
+{"n":52,"co":"Staple Group","sec":"B","t":2,"qp":100,"ap":374,"ex":"Mar/Jun 16"},
+{"n":53,"co":"Hanwood Shoes Co","sec":"B","t":2,"qp":101,"ap":378,"ex":"Sep/Dec 21"},
+{"n":54,"co":"Charborough Co","sec":"B","t":2,"qp":104,"ap":381,"ex":"Mar/Jun 22"},
+{"n":55,"co":"Sembilan Co","sec":"B","t":3,"qp":106,"ap":385,"ex":"Jun 12"},
+{"n":56,"co":"Pault Co","sec":"B","t":3,"qp":107,"ap":388,"ex":"Sep/Dec 16"},
+{"n":57,"co":"Awan Co","sec":"B","t":3,"qp":109,"ap":391,"ex":"Dec 13"},
+{"n":58,"co":"CMC Co","sec":"B","t":3,"qp":110,"ap":395,"ex":"Jun 14"},
+{"n":59,"co":"Daikon Co","sec":"B","t":3,"qp":111,"ap":399,"ex":"Jun 15"},
+{"n":60,"co":"The Armstrong Group","sec":"B","t":3,"qp":112,"ap":403,"ex":"Sep/Dec 15"},
+{"n":61,"co":"Buryecs Co","sec":"B","t":3,"qp":114,"ap":408,"ex":"Mar/Jun 17"},
+{"n":62,"co":"Lurgshall Co","sec":"B","t":3,"qp":115,"ap":410,"ex":"Mar/Jun 19"},
+{"n":63,"co":"Fitzharris Co","sec":"B","t":3,"qp":117,"ap":414,"ex":"Sep/Dec 20"},
+{"n":64,"co":"Gogarth Co","sec":"B","t":3,"qp":118,"ap":419,"ex":"Mar/Jun 21"},
+{"n":65,"co":"Frongoch Co","sec":"B","t":3,"qp":119,"ap":423,"ex":"Sep/Dec 23"},
+{"n":66,"co":"Lough Co","sec":"B","t":3,"qp":120,"ap":427,"ex":"Sep 22"},
+{"n":67,"co":"Abertafol Co","sec":"B","t":3,"qp":122,"ap":430,"ex":"Sep/Dec 23"}
+  ]
+}
+};
+
+/* ---------- page setup ---------- */
+const KEY=new URLSearchParams(location.search).get('k')||'';
+const SUBJ=SUBJECTS[KEY];
+const $=s=>document.querySelector(s);
+function esc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;')}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(t._h);t._h=setTimeout(()=>t.classList.remove('show'),2600)}
+if(!SUBJ){
+  document.body.removeAttribute('data-gate');
+  document.querySelector('.wrap').innerHTML='<p style="padding:70px 0;color:var(--ink-3)">No subject tracker exists for this link yet. <a href="./">Back to your tracker</a></p>';
+  throw new Error('unknown subject');
+}
+document.title=SUBJ.code+' Subject Tracker — CharterTrack';
+$('#crumbQual').textContent=SUBJ.qual;$('#crumbCode').textContent=SUBJ.code;
+$('#hCode').textContent=SUBJ.qual+' '+SUBJ.code;$('#hName').textContent=SUBJ.name;$('#hSub').textContent=SUBJ.sub;
+$('#footKit').textContent=SUBJ.kit;
+
+/* ---------- state: shares the chartertrack-v1 blob with the main tracker ---------- */
+const LS='chartertrack-v1';
+const NOTE_FIELDS=[
+  ['extra','Summary tag (shown on the question row)',1],
+  ['learn','Key learning points — what did it teach you?',0],
+  ['formula','Formulas / methods used',0],
+  ['mistake','Mistakes made / watch out for',0],
+  ['exam','Points to remember for the exam',0],
+  ['comment','Personal comments / extra notes',0]
+];
+const MAX_NOTE=4000;
+function cleanQMap(src){
+  const out={};
+  if(!src||typeof src!=='object'||Array.isArray(src))return out;
+  for(const k of Object.keys(src)){
+    const n=+k;if(!Number.isInteger(n)||n<1||n>SUBJ.questions.length)continue;
+    const v=src[k];if(!v||typeof v!=='object')continue;
+    const rec={};
+    if(v.s==='done'||v.s==='prog')rec.s=v.s;
+    if(v.notes&&typeof v.notes==='object'){
+      const nn={};
+      NOTE_FIELDS.forEach(([f])=>{if(typeof v.notes[f]==='string'&&v.notes[f].trim())nn[f]=v.notes[f].slice(0,MAX_NOTE)});
+      if(Object.keys(nn).length)rec.notes=nn;
+    }
+    if(typeof v.u==='number')rec.u=v.u;
+    if(rec.s||rec.notes)out[k]=rec;
+  }
+  return out;
+}
+function loadFull(){
+  let d=null;try{d=JSON.parse(localStorage.getItem(LS))}catch(e){}
+  d=(d&&typeof d==='object'&&!Array.isArray(d))?d:{};
+  d.quals=Array.isArray(d.quals)?d.quals:[];
+  d.status=(d.status&&typeof d.status==='object'&&!Array.isArray(d.status))?d.status:{};
+  d.extras=(d.extras&&typeof d.extras==='object'&&!Array.isArray(d.extras))?d.extras:{};
+  d.subjects=(d.subjects&&typeof d.subjects==='object'&&!Array.isArray(d.subjects))?d.subjects:{};
+  return d;
+}
+let full=loadFull();
+let q=cleanQMap((full.subjects[KEY]||{}).q);
+let warnedStorage=false;
+function saveState(){
+  full.subjects[KEY]={q};
+  try{localStorage.setItem(LS,JSON.stringify(full))}
+  catch(e){if(!warnedStorage){warnedStorage=true;toast("This browser is blocking storage — progress won't survive a reload")}}
+  pushProgress();
+}
+function rec(n){return q[n]||{}}
+function setRec(n,r){r.u=Date.now();if(!r.s&&!r.notes)delete q[n];else q[n]=r;saveState()}
+
+/* ---------- stats ---------- */
+function stats(){
+  const t=SUBJ.topics.map(()=>({total:0,done:0,prog:0}));
+  let done=0,prog=0,aDone=0,aTot=0,bDone=0,bTot=0,notes=0;
+  SUBJ.questions.forEach(x=>{
+    const r=rec(x.n);const tt=t[x.t];tt.total++;
+    if(x.sec==='A')aTot++;else bTot++;
+    if(r.s==='done'){done++;tt.done++;if(x.sec==='A')aDone++;else bDone++}
+    else if(r.s==='prog'){prog++;tt.prog++}
+    if(r.notes)notes++;
+  });
+  return {t,done,prog,aDone,aTot,bDone,bTot,notes,total:SUBJ.questions.length};
+}
+
+/* ---------- rendering ---------- */
+let filter='all',topicFilter=-1;
+const openNotes=new Set();
+let pendingFocus=null;
+
+function renderTiles(s){
+  const pct=Math.round(s.done/s.total*100);
+  $('#tiles').innerHTML=
+    `<div class="tile"><div class="k">Questions done</div><div class="v">${pct}%<small> · ${s.done}/${s.total}</small></div><div class="bar"><i style="width:${pct}%"></i></div></div>`+
+    `<div class="tile"><div class="k">In progress</div><div class="v">${s.prog}<small> question${s.prog===1?'':'s'}</small></div></div>`+
+    `<div class="tile"><div class="k">Section A (50-mark)</div><div class="v">${s.aDone}<small> / ${s.aTot} done</small></div><div class="bar"><i style="width:${s.aTot?Math.round(s.aDone/s.aTot*100):0}%;background:var(--c5)"></i></div></div>`+
+    `<div class="tile"><div class="k">Section B (25-mark)</div><div class="v">${s.bDone}<small> / ${s.bTot} done</small></div><div class="bar"><i style="width:${s.bTot?Math.round(s.bDone/s.bTot*100):0}%;background:var(--c2)"></i></div></div>`+
+    `<div class="tile"><div class="k">Questions with notes</div><div class="v">${s.notes}<small> / ${s.total}</small></div></div>`;
+}
+function stars(w){let h='';for(let i=1;i<=5;i++)h+=i<=w?'★':'<span>★</span>';return h}
+function renderPerf(s){
+  let h='<thead><tr><th>Topic</th><th>Done</th><th>Progress</th><th>In progress</th><th>Exam weight</th><th>What to focus on</th></tr></thead><tbody>';
+  SUBJ.topics.forEach((tp,i)=>{
+    const st=s.t[i];const pct=st.total?Math.round(st.done/st.total*100):0;
+    h+=`<tr><td class="tname"><a href="#topic-${i}">${esc(tp.name)}</a></td>
+      <td class="num"><b>${st.done}</b>/${st.total}</td>
+      <td><div class="bar"><i style="width:${pct}%"></i></div></td>
+      <td class="num">${st.prog||'—'}</td>
+      <td class="stars" title="${esc(tp.wl)}">${stars(tp.w)}</td>
+      <td class="focus">${esc(tp.focus)}</td></tr>`;
+  });
+  $('#perfTbl').innerHTML=h+'</tbody>';
+}
+function chipRow(n,co){
+  const s=rec(n).s||'todo';
+  const L={todo:'Not started',prog:'In progress',done:'Done'};
+  return ['todo','prog','done'].map(x=>
+    `<button class="chip ${x}" aria-pressed="${s===x}" aria-label="${L[x]} — ${esc(co)}" data-n="${n}" data-s="${x}">${L[x]}</button>`).join('');
+}
+function notesPanel(n){
+  const nt=rec(n).notes||{};
+  return `<div class="notes" data-panel="${n}">`+NOTE_FIELDS.map(([f,label,short])=>
+    `<div class="nf ${short?'':'wide'}"><label for="nf-${n}-${f}">${label}</label><textarea id="nf-${n}-${f}" data-n="${n}" data-f="${f}" maxlength="${MAX_NOTE}" ${short?'style="min-height:44px"':''}>${esc(nt[f]||'')}</textarea></div>`).join('')+`</div>`;
+}
+function renderBank(s){
+  let h='',shown=0;
+  SUBJ.topics.forEach((tp,ti)=>{
+    if(topicFilter>-1&&topicFilter!==ti)return;
+    const qs=SUBJ.questions.filter(x=>x.t===ti&&(filter==='all'||(rec(x.n).s||'todo')===filter));
+    if(!qs.length)return;
+    const st=s.t[ti];
+    h+=`<div class="tgroup" id="topic-${ti}"><div class="tg-head"><h3>${esc(tp.name)}</h3><span class="tg-done">${st.done}/${st.total} done${st.prog?` · ${st.prog} in progress`:''}</span></div>`;
+    qs.forEach(x=>{
+      shown++;
+      const r=rec(x.n);const nt=r.notes||{};
+      const open=openNotes.has(x.n);
+      const hasNotes=!!r.notes;
+      h+=`<div class="q ${r.s==='done'?'done':''}" data-qrow="${x.n}">
+        <div class="q-row">
+          <span class="qno">Q${x.n}</span>
+          <span class="qmain">
+            <span class="qco">${esc(x.co)}<span class="qsec ${x.sec==='A'?'a':'b'}">Sec ${x.sec}</span></span>
+            <span class="qmeta">Q p.${x.qp} · Answer p.${x.ap}${x.ex?' · Past exam: '+esc(x.ex):''}</span>
+            ${nt.extra?`<span class="qtag">✦ ${esc(nt.extra)}</span>`:''}
+          </span>
+          <span class="stat" role="group" aria-label="Status for ${esc(x.co)}">${chipRow(x.n,x.co)}
+            <button class="nbtn ${hasNotes?'has':''}" data-notes="${x.n}" aria-expanded="${open}">${hasNotes?'Notes ✎':'+ Notes'}</button>
+          </span>
+        </div>
+        ${open?notesPanel(x.n):''}
+      </div>`;
+    });
+    h+=`</div>`;
+  });
+  if(!shown)h='<div class="card-pad" style="color:var(--ink-3);font-size:13.5px">No questions match this filter.</div>';
+  $('#qbank').innerHTML=h;
+  $('#fCount').textContent=shown+' of '+s.total+' questions';
+}
+function renderStatic(){
+  $('#facts').innerHTML=SUBJ.facts.map(([k,v])=>`<div class="fact"><span class="fk">${esc(k)}</span><span class="fv">${esc(v)}</span></div>`).join('');
+  $('#formulas').innerHTML=SUBJ.formulas.map(([k,v])=>`<div class="fx"><span class="fxn">${esc(k)}</span><span class="fxf">${esc(v)}</span></div>`).join('');
+  const sel=$('#topicSel');
+  SUBJ.topics.forEach((tp,i)=>{const o=document.createElement('option');o.value=i;o.textContent=tp.name;sel.appendChild(o)});
+}
+function render(){
+  const s=stats();
+  renderTiles(s);renderPerf(s);renderBank(s);
+  if(pendingFocus){const el=document.querySelector(pendingFocus);if(el)el.focus();pendingFocus=null}
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click',e=>{
+  const t=e.target.closest('button');if(!t)return;
+  if(t.dataset.s&&t.dataset.n){
+    const n=+t.dataset.n;const r=rec(n);const nr={...r};
+    if(t.dataset.s==='todo')delete nr.s;else nr.s=t.dataset.s;
+    setRec(n,nr);
+    pendingFocus=`.chip[data-n="${n}"][data-s="${t.dataset.s}"]`;
+    render();
+    return;
+  }
+  if(t.dataset.notes){
+    const n=+t.dataset.notes;
+    if(openNotes.has(n))openNotes.delete(n);else openNotes.add(n);
+    render();
+    if(openNotes.has(n)){const ta=document.querySelector(`#nf-${n}-extra`);if(ta)ta.focus()}
+    return;
+  }
+  if(t.dataset.f){
+    filter=t.dataset.f;
+    document.querySelectorAll('#filters .fchip').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.f===filter)));
+    render();
+    return;
+  }
+});
+$('#topicSel').addEventListener('change',e=>{topicFilter=+e.target.value;render()});
+// notes autosave — no rerender while typing, so focus is preserved
+let noteTimers={};
+document.addEventListener('input',e=>{
+  const ta=e.target;if(!ta.matches||!ta.matches('textarea[data-n]'))return;
+  const n=+ta.dataset.n,f=ta.dataset.f;
+  clearTimeout(noteTimers[n+f]);
+  noteTimers[n+f]=setTimeout(()=>{
+    const r=rec(n);const nr={...r,notes:{...(r.notes||{})}};
+    const v=ta.value.trim();
+    if(v)nr.notes[f]=v.slice(0,MAX_NOTE);else delete nr.notes[f];
+    if(!Object.keys(nr.notes).length)delete nr.notes;
+    setRec(n,nr);
+  },500);
+});
+
+/* ---------- export / import ---------- */
+$('#exportBtn').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify({app:'chartertrack-subject',key:KEY,q},null,1)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chartertrack-'+SUBJ.code.toLowerCase()+'.json';a.click();URL.revokeObjectURL(a.href);
+});
+$('#importBtn').addEventListener('click',()=>$('#importFile').click());
+$('#importFile').addEventListener('change',e=>{
+  const f=e.target.files[0];if(!f)return;
+  f.text().then(txt=>{
+    const d=JSON.parse(txt);
+    if(d.app!=='chartertrack-subject'||d.key!==KEY||!d.q)throw 0;
+    const inc=cleanQMap(d.q);
+    if(!Object.keys(inc).length)throw 0;
+    const now=Date.now();
+    Object.keys(inc).forEach(k=>{inc[k].u=now;q[k]={...(q[k]||{}),...inc[k],notes:{...((q[k]||{}).notes||{}),...(inc[k].notes||{})}};if(!Object.keys(q[k].notes).length)delete q[k].notes});
+    saveState();render();toast('Imported '+Object.keys(inc).length+' question records');
+  }).catch(()=>toast('That file is not a '+SUBJ.code+' subject export'));
+  e.target.value='';
+});
+
+/* ---------- account & sync (same pattern as the main tracker) ---------- */
+let user=null,syncTimer=null,lastPushed='';
+async function api(path,opts){
+  const r=await fetch(path,{credentials:'same-origin',headers:{'Content-Type':'application/json'},...opts});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||('HTTP '+r.status));
+  return j;
+}
+function renderAcct(){
+  const el=$('#acct');if(!el)return;
+  el.innerHTML='<a class="site-link" href="./">&larr; My tracker</a>'+
+    (user?`<span class="site-link who" title="${esc(user.email)}">${esc(user.name||user.email)}</span><button class="site-link" id="signoutBtn">Sign out</button>`:'');
+  const so=$('#signoutBtn');
+  if(so)so.addEventListener('click',async()=>{
+    try{await api('/api/auth',{method:'POST',body:JSON.stringify({action:'logout'})})}catch(e){}
+    location.replace('login.html');
+  });
+}
+function pushProgress(){
+  if(!user)return;
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(async()=>{
+    const body=JSON.stringify({state:full});
+    if(body===lastPushed)return;
+    lastPushed=body;
+    try{await api('/api/progress',{method:'POST',body})}catch(e){lastPushed=''}
+  },900);
+}
+function mergeQ(server,local){
+  // per-question: newer timestamp wins; untimestamped local edits win
+  const out={...server};
+  for(const k of Object.keys(local)){
+    const sv=out[k],lv=local[k];
+    if(!sv){out[k]=lv;continue}
+    out[k]=((lv.u||Infinity)>=(sv.u||0))?lv:sv;
+  }
+  return out;
+}
+async function syncDown(){
+  try{
+    const j=await api('/api/progress');
+    const server=(j&&j.state&&typeof j.state==='object')?j.state:null;
+    if(server){
+      // keep the main-tracker fields the same way index.html merges them (local wins)
+      full.quals=[...new Set([...(Array.isArray(server.quals)?server.quals:[]),...full.quals])];
+      full.status={...(server.status||{}),...full.status};
+      full.extras={...(server.extras||{}),...full.extras};
+      const ss=(server.subjects&&typeof server.subjects==='object')?server.subjects:{};
+      const merged={...ss,...full.subjects};
+      merged[KEY]={q:mergeQ(cleanQMap((ss[KEY]||{}).q),q)};
+      full.subjects=merged;
+      q=merged[KEY].q;
+      render();
+    }
+    saveState();
+  }catch(e){}
+}
+(async function initAuth(){
+  try{const j=await api('/api/auth?action=me');user=j.user||null}catch(e){user=null}
+  if(!user){
+    location.replace('login.html?next=subject:'+encodeURIComponent(KEY));
+    return;
+  }
+  document.body.removeAttribute('data-gate');
+  renderAcct();
+  await syncDown();
+})();
+
+renderStatic();
+render();
+</script>
+</body>
+</html>

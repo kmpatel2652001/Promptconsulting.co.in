@@ -102,6 +102,8 @@ section{padding:22px 0}
 .pcode{font-size:11px;font-weight:600;color:var(--ink-2);background:var(--track);border-radius:6px;padding:2px 7px;min-width:34px;text-align:center;flex:none}
 .pname{font-size:14px;flex:1;min-width:0}
 .pname .opt{font-size:11px;color:var(--ink-3);margin-left:6px}
+.pname .subj-link{font-size:11.5px;font-weight:500;margin-left:8px;text-decoration:none;white-space:nowrap}
+.pname .subj-link:hover{text-decoration:underline}
 .paper.done .pname{color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--ink-3);text-decoration-thickness:1px}
 .stat{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
 .chip{font:inherit;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--hairline);background:transparent;color:var(--ink-2);cursor:pointer;line-height:1.2;min-height:28px}
@@ -272,6 +274,8 @@ const QUALS = [
 /* ---------- state ---------- */
 const LS='chartertrack-v1';
 const STATUSES=['todo','booked','passed','exempt'];
+// papers with a per-subject study tracker (question bank, notes, topic performance)
+const SUBJECT_TRACKERS=['acca:AFM'];
 let shared=null; // sanitized shared plan, when viewing a share link
 let warnedStorage=false;
 let pendingFocus=null; // focus restoration across re-renders
@@ -293,7 +297,14 @@ function sanitize(d){
     const q=QUALS.find(x=>x.id===m[1]);if(!q||+m[2]>=q.extras.length)continue;
     if(eo[k]===true)extras[k]=true;
   }
-  return {quals,status,extras};
+  // per-subject tracker data (question statuses + notes) is managed by subject.html;
+  // carry it through untouched so saves from this page never wipe it
+  const subjects={};
+  const sso=(d.subjects&&typeof d.subjects==='object'&&!Array.isArray(d.subjects))?d.subjects:{};
+  for(const k of SUBJECT_TRACKERS){
+    if(sso[k]&&typeof sso[k]==='object'&&!Array.isArray(sso[k]))subjects[k]=sso[k];
+  }
+  return {quals,status,extras,subjects};
 }
 function loadState(){try{return sanitize(JSON.parse(localStorage.getItem(LS)))}catch(e){return sanitize(null)}}
 let state=loadState();
@@ -305,6 +316,22 @@ function saveState(){
 }
 function cur(){return shared||state}
 function st(qid,key){return cur().status[qid+':'+key]||'todo'}
+// merge two subjects maps per question, newer timestamp wins (b wins ties)
+function mergeSubjects(a,b){
+  a=a||{};b=b||{};
+  const out={...a};
+  for(const k of Object.keys(b)){
+    const aq=(out[k]&&out[k].q&&typeof out[k].q==='object')?out[k].q:null;
+    const bq=(b[k]&&b[k].q&&typeof b[k].q==='object')?b[k].q:{};
+    if(!aq){out[k]=b[k];continue}
+    const q={...aq};
+    for(const n of Object.keys(bq)){
+      if(!q[n]||((bq[n]&&bq[n].u)||0)>=((q[n]&&q[n].u)||0))q[n]=bq[n];
+    }
+    out[k]={q};
+  }
+  return out;
+}
 
 /* ---------- progress ---------- */
 function progress(q){
@@ -386,7 +413,8 @@ function renderPlans(sel){
       h+=`<div class="group"><div class="g-head"><h3>${g.name}</h3>${g.rule?`<span class="rule">${esc(g.rule)}</span>`:''}<span class="g-done">${d}/${r} done</span></div>`;
       g.papers.forEach(pp=>{
         const key=pp.c+'@'+gi;const s=st(q.id,key);
-        h+=`<div class="paper ${(s==='passed'||s==='exempt')?'done':''}"><span class="pcode">${esc(pp.c)}</span><span class="pname">${esc(pp.n)}${pp.opt?'<span class="opt">optional</span>':''}</span>${chipRow(q.id,key,pp.n,!!shared)}</div>`;
+        const subj=SUBJECT_TRACKERS.includes(q.id+':'+pp.c)&&!shared?`<a class="subj-link" href="subject.html?k=${encodeURIComponent(q.id+':'+pp.c)}">Study tracker &rarr;</a>`:'';
+        h+=`<div class="paper ${(s==='passed'||s==='exempt')?'done':''}"><span class="pcode">${esc(pp.c)}</span><span class="pname">${esc(pp.n)}${pp.opt?'<span class="opt">optional</span>':''}${subj}</span>${chipRow(q.id,key,pp.n,!!shared)}</div>`;
       });
       h+=`</div>`;
     });
@@ -464,7 +492,7 @@ $('#shareBtn').addEventListener('click',()=>{
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(url).then(()=>toast('Share link copied to clipboard')).catch(fallback)}else{fallback()}
 });
 $('#exportBtn').addEventListener('click',()=>{
-  const blob=new Blob([JSON.stringify({app:'chartertrack',v:1,quals:state.quals,status:state.status,extras:state.extras},null,2)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({app:'chartertrack',v:1,quals:state.quals,status:state.status,extras:state.extras,subjects:state.subjects},null,2)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chartertrack-plan.json';a.click();URL.revokeObjectURL(a.href);
 });
 $('#importBtn').addEventListener('click',()=>$('#importFile').click());
@@ -475,7 +503,11 @@ $('#importFile').addEventListener('change',e=>{
     if(!Array.isArray(d.quals))throw 0;
     const hasData=state.quals.length||Object.keys(state.status).length;
     if(hasData&&!confirm('Importing will replace your current plan. Continue?'))return;
-    state=sanitize(d);render();toast('Plan imported');
+    const keepSubjects=state.subjects;
+    state=sanitize(d);
+    // older exports have no subject-tracker data — keep the existing notes rather than wiping them
+    if(!Object.keys(state.subjects).length)state.subjects=keepSubjects;
+    render();toast('Plan imported');
   }).catch(()=>toast('That file is not a CharterTrack export'));
   e.target.value='';
 });
@@ -490,7 +522,8 @@ $('#resetBtn').addEventListener('click',()=>{
 /* ---------- shared-link handling ---------- */
 $('#importShared').addEventListener('click',()=>{
   if(!shared)return;
-  state=shared;shared=null;
+  // share links never carry subject-tracker notes — keep the user's own
+  state={...shared,subjects:state.subjects};shared=null;
   history.replaceState(null,'',location.pathname);
   $('#sharedBanner').classList.add('hidden');
   render();toast("Plan imported — it's yours now");
@@ -541,12 +574,13 @@ async function syncDown(){
     const j=await api('/api/progress');
     const server=j&&j.state?sanitize(j.state):null;
     const localHasData=state.quals.length||Object.keys(state.status).length;
-    if(server&&server.quals.length){
+    if(server&&(server.quals.length||Object.keys(server.subjects).length)){
       // merge server + local (local edits win on conflicts), then push the result back
       state=sanitize({
         quals:[...server.quals,...state.quals],
         status:{...server.status,...state.status},
-        extras:{...server.extras,...state.extras}
+        extras:{...server.extras,...state.extras},
+        subjects:mergeSubjects(server.subjects,state.subjects)
       });
       render();
       if(localHasData)toast('Synced with your account');

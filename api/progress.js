@@ -1,7 +1,8 @@
 // Per-student tracker progress sync. Students can only read/write their own plan.
 import { storeReady, kvGet, kvSet, progressKey, currentUser, readBody } from "./_utils.js";
 
-const MAX_BYTES = 100000;
+// Roomy enough for per-subject question notes (subject trackers) on top of the plan itself.
+const MAX_BYTES = 400000;
 
 export default async function handler(req, res) {
   res.setHeader("cache-control", "no-store");
