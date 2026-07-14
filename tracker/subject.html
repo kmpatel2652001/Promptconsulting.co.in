@@ -93,6 +93,7 @@ table.perf .focus{font-size:12.5px;color:var(--ink-3);min-width:220px}
 .fchip:hover{border-color:var(--ink-3)}
 .fchip[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink);font-weight:600}
 .filters select{font:inherit;font-size:12.5px;padding:7px 10px;border-radius:10px;border:1px solid var(--hairline);background:var(--surface);color:var(--ink)}
+#statusChips{display:contents}
 .filters .count{font-size:12.5px;color:var(--ink-3);margin-left:auto}
 /* question groups */
 .tgroup{padding:4px 18px 12px}
@@ -109,22 +110,50 @@ table.perf .focus{font-size:12.5px;color:var(--ink-3);min-width:220px}
 .qsec{font-size:10px;font-weight:600;border:1px solid var(--hairline);border-radius:5px;padding:1px 6px;margin-left:7px;color:var(--ink-2);vertical-align:2px}
 .qsec.a{color:var(--c5);border-color:currentColor}
 .qsec.b{color:var(--c2);border-color:currentColor}
-.qmeta{font-size:11.5px;color:var(--ink-3);margin-top:1px}
-.qtag{font-size:11.5px;color:var(--good-ink);margin-top:1px}
+.qmeta{display:block;font-size:11.5px;color:var(--ink-3);margin-top:1px}
+.qtag{display:block;font-size:11.5px;color:var(--good-ink);margin-top:1px}
 .stat{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end;align-items:center}
 .chip{font:inherit;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--hairline);background:transparent;color:var(--ink-2);cursor:pointer;line-height:1.2;min-height:28px}
 .chip:hover{border-color:var(--ink-3)}
 .chip:focus-visible,.fchip:focus-visible,.btn:focus-visible,.nbtn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .chip[aria-pressed="true"]{font-weight:600}
 .chip.todo[aria-pressed="true"]{background:var(--ink);color:var(--page);border-color:var(--ink)}
-.chip.prog[aria-pressed="true"]{background:var(--warn);color:#fff;border-color:var(--warn)}
+.chip.prog[aria-pressed="true"],.chip.att[aria-pressed="true"]{background:var(--warn);color:#fff;border-color:var(--warn)}
+.chip.redo[aria-pressed="true"]{background:var(--c6);color:#fff;border-color:var(--c6)}
 .chip.done[aria-pressed="true"]{background:var(--good);color:#fff;border-color:var(--good)}
+/* score badges on case rows */
+.qbadge{font-size:11px;font-weight:600;border-radius:5px;padding:1px 7px;margin-left:7px;vertical-align:2px;white-space:nowrap}
+.qbadge.pass{background:var(--good-soft);color:var(--good-ink)}
+.qbadge.fail{background:var(--warn-soft);color:var(--warn-ink)}
+.qbadge.dbf{background:var(--track);color:var(--ink-2);font-weight:500}
 .nbtn{font:inherit;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:20px;border:1px solid var(--hairline);background:transparent;color:var(--ink-2);cursor:pointer;line-height:1.2;min-height:28px;white-space:nowrap}
 .nbtn:hover{border-color:var(--ink-3)}
 .nbtn.has{color:var(--accent);border-color:var(--accent)}
 .nbtn[aria-expanded="true"]{background:var(--track);color:var(--ink)}
 /* notes panel */
 .notes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;background:var(--track);border-radius:12px;padding:12px;margin-top:10px}
+.scoreblk{grid-column:1/-1;display:flex;gap:16px 22px;flex-wrap:wrap;align-items:flex-end;padding:2px 2px 6px;border-bottom:1px solid var(--hairline)}
+.sc label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin:0 0 4px}
+.sc input[type="number"]{width:84px;font:inherit;font-size:13.5px;padding:7px 9px;border:1px solid var(--hairline);border-radius:9px;background:var(--surface);color:var(--ink)}
+.sc.ck{display:flex;align-items:center;gap:7px;padding-bottom:8px}
+.sc.ck label{margin:0;text-transform:none;letter-spacing:0;font-size:12.5px;font-weight:500;color:var(--ink-2);cursor:pointer}
+.sc.ck input{width:17px;height:17px;accent-color:var(--good);cursor:pointer}
+.sc .bestro{font-size:13.5px;font-weight:600;padding-bottom:8px}
+.skillblk{grid-column:1/-1;display:flex;gap:14px 22px;flex-wrap:wrap;padding:2px 2px 6px;border-bottom:1px solid var(--hairline)}
+.skillblk .sk label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin:0 0 4px}
+.skillblk .sk select{font:inherit;font-size:13px;padding:6px 8px;border:1px solid var(--hairline);border-radius:9px;background:var(--surface);color:var(--ink)}
+/* skills averages */
+.skavg{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;padding:14px 18px}
+.ska .kn{font-size:12.5px;font-weight:500;color:var(--ink-2)}
+.ska .kv{font-size:20px;font-weight:700;margin-top:1px}
+.ska .kv small{font-size:12px;color:var(--ink-3);font-weight:500}
+/* technique checklist */
+.techgrp{padding:4px 18px 12px}
+.tk{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-top:1px solid var(--hairline)}
+.tk:first-of-type{border-top:none}
+.tk input{width:18px;height:18px;accent-color:var(--good);cursor:pointer;flex:none;margin-top:2px}
+.tk label{font-size:13.5px;cursor:pointer}
+.tk.on label{color:var(--ink-3);text-decoration:line-through;text-decoration-thickness:1px}
 .nf label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--ink-3);margin:0 0 4px}
 .nf textarea{width:100%;min-height:74px;font:inherit;font-size:13px;line-height:1.5;padding:8px 10px;border:1px solid var(--hairline);border-radius:9px;background:var(--surface);color:var(--ink);resize:vertical}
 .nf textarea:focus{outline:2px solid var(--accent);outline-offset:-1px}
@@ -184,21 +213,28 @@ body[data-gate] #gateMsg{display:block}
   </section>
 
   <section>
-    <h2 class="sec-title">Topic performance</h2>
+    <h2 class="sec-title" id="perfTitle">Topic performance</h2>
     <div class="card"><div class="tblwrap"><table class="perf" id="perfTbl"></table></div></div>
   </section>
 
+  <section id="skillsSec" class="hidden">
+    <h2 class="sec-title">Professional skills — self-rating averages (1–5)</h2>
+    <div class="card"><div class="skavg" id="skavg"></div></div>
+  </section>
+
   <section>
-    <h2 class="sec-title">Question bank</h2>
+    <h2 class="sec-title" id="bankTitle">Question bank</h2>
     <div class="filters" id="filters">
-      <button class="fchip" data-f="all" aria-pressed="true">All</button>
-      <button class="fchip" data-f="todo" aria-pressed="false">Not started</button>
-      <button class="fchip" data-f="prog" aria-pressed="false">In progress</button>
-      <button class="fchip" data-f="done" aria-pressed="false">Done</button>
+      <span id="statusChips"></span>
       <select id="topicSel" aria-label="Filter by topic"><option value="-1">All topics</option></select>
       <span class="count" id="fCount"></span>
     </div>
     <div class="card" id="qbank"></div>
+  </section>
+
+  <section id="techSec" class="hidden">
+    <h2 class="sec-title" id="techTitle">Exam technique checklist</h2>
+    <div class="card" id="techList"></div>
   </section>
 
   <section>
@@ -206,7 +242,7 @@ body[data-gate] #gateMsg{display:block}
     <div class="card"><div class="facts" id="facts"></div></div>
   </section>
 
-  <section>
+  <section id="formulasSec">
     <h2 class="sec-title">Key formulas — quick reference</h2>
     <div class="card"><div class="formulas" id="formulas"></div></div>
   </section>
@@ -336,6 +372,83 @@ const SUBJECTS={
 {"n":66,"co":"Lough Co","sec":"B","t":3,"qp":120,"ap":427,"ex":"Sep 22"},
 {"n":67,"co":"Abertafol Co","sec":"B","t":3,"qp":122,"ap":430,"ex":"Sep/Dec 23"}
   ]
+},
+'acca:SBL':{
+  qual:'ACCA',code:'SBL',name:'Strategic Business Leader',
+  kit:'Kaplan ACCA SBL Exam Kit 2025–26 (Sep 2025 – Jun 2026 sittings)',
+  sub:'Kaplan Exam Kit 2025–26 · 14 full case studies (8 practice + 2 specimens + 4 past exams)',
+  cases:true,passMark:50,
+  groupLabel:'Section',perfTitle:'Section performance',bankTitle:'Case tracker',
+  statuses:[['todo','Not started'],['att','Attempted'],['redo','Re-attempt'],['done','Reviewed']],
+  noteFields:[
+    ['extra','Summary tag (shown on the case row)',1],
+    ['note','Weak areas / notes — e.g. which task went wrong and why',0]
+  ],
+  skills:['Communication','Commercial Acumen','Analysis','Scepticism','Evaluation'],
+  topics:[
+    {name:'Practice case studies',focus:'Core Kaplan cases — build task-by-task technique before full exam simulations'},
+    {name:'Specimen exams',focus:'Full CBE-format specimens — attempt to time (195 min) in closed-book conditions'},
+    {name:'Past exams',focus:'Most recent real sittings — Kaplan advises at least TWO full timed exams before the real one'}
+  ],
+  facts:[
+    ['Pass mark','50% (50/100 marks)'],
+    ['Marks split','80 technical + 20 professional skills'],
+    ['Total time','3 hours 15 minutes — one full case study'],
+    ['Format','Computer-Based Exam (CBE)'],
+    ['Reading time','~35 min RPRT (reading, planning, reflection) — max 45 min'],
+    ['Pacing','2.0 minutes per technical mark (160 min for 80 marks)'],
+    ['Professional skills','4 marks per skill — Communication, Commercial acumen, Analysis, Scepticism, Evaluation'],
+    ['Pre-seen','Released 2 weeks before the exam — read it thoroughly']
+  ],
+  tech:[
+    {name:'Time management',items:[
+      'Allocate ~35 min to RPRT (reading, planning, reflection) — max 45 min',
+      'Budget 2.0 minutes per technical mark (160 min for 80 marks)',
+      "Write down 'minutes per task' before starting each answer",
+      'Never overrun on any task — move on and return if stuck']},
+    {name:'Planning',items:[
+      'Read the task requirements BEFORE reading the exhibits',
+      'Identify role, audience and format required for each task',
+      'Note the verb used in each requirement and pitch the answer at that level',
+      'Copy/paste each requirement (and professional skills detail) into the answer document',
+      "Link exhibits to tasks; 'park' exhibits that relate to later tasks"]},
+    {name:'Writing answers',items:[
+      'Use bold headings and sub-headings with professional language',
+      "Make roughly one well-justified point per 2 marks ('what and why')",
+      'Support and justify every point — never just restate case information',
+      'Integrate information from different exhibits to strengthen points',
+      'Keep a clear stakeholder focus — address the answer to the recipient',
+      'Apply theory, never define or explain it',
+      'Avoid scatter-gun answers — prioritise points in a logical order']},
+    {name:'Professional skills (20 marks)',items:[
+      'Check which professional skill each task tests before answering',
+      'Communication: right format, tone and audience sensitivity',
+      'Commercial acumen: show awareness of wider business/external factors',
+      'Analysis: process information from several sources into a recommendation',
+      'Scepticism: challenge facts, opinions and assertions in the exhibits',
+      'Evaluation: balanced assessment with professional and ethical judgement']},
+    {name:'Final run-up',items:[
+      'Complete at least TWO full exams to time in closed-book conditions',
+      "Practise on ACCA's CBE practice platform for exam-software familiarity",
+      'Read the pre-seen thoroughly when released (2 weeks before the exam)',
+      'Debrief every attempt against the model answer and log weak areas']}
+  ],
+  questions:[
+{"n":1,"co":"Dixon Smith Burrell","t":0,"qp":1,"ap":115},
+{"n":2,"co":"Rail Co","t":0,"qp":14,"ap":127},
+{"n":3,"co":"Swan Hill Company (SHC)","t":0,"qp":29,"ap":146},
+{"n":4,"co":"Data Communication Services (DCS)","t":0,"qp":41,"ap":158},
+{"n":5,"co":"TT4U","t":0,"qp":56,"ap":176},
+{"n":6,"co":"Nehby","t":0,"qp":70,"ap":194},
+{"n":7,"co":"Cofold Construction","t":0,"qp":87,"ap":217},
+{"n":8,"co":"HiLite","t":0,"qp":101,"ap":238},
+{"n":9,"co":"Specimen 1 – Peels Sleep Solutions","t":1,"qp":269,"ap":285},
+{"n":10,"co":"Specimen 2 – Yexmarine","t":1,"qp":305,"ap":321},
+{"n":11,"co":"September 2023 – Corjetz","t":2,"qp":341,"ap":359},
+{"n":12,"co":"December 2023 – NC Tech","t":2,"qp":381,"ap":399},
+{"n":13,"co":"June 2024 – PVS","t":2,"qp":423,"ap":441},
+{"n":14,"co":"September 2024 – Beago","t":2,"qp":459,"ap":481}
+  ]
 }
 };
 
@@ -355,9 +468,10 @@ $('#crumbQual').textContent=SUBJ.qual;$('#crumbCode').textContent=SUBJ.code;
 $('#hCode').textContent=SUBJ.qual+' '+SUBJ.code;$('#hName').textContent=SUBJ.name;$('#hSub').textContent=SUBJ.sub;
 $('#footKit').textContent=SUBJ.kit;
 
-/* ---------- state: shares the chartertrack-v1 blob with the main tracker ---------- */
-const LS='chartertrack-v1';
-const NOTE_FIELDS=[
+/* ---------- per-subject config (defaults = AFM-style question bank) ---------- */
+const STATUSES=SUBJ.statuses||[['todo','Not started'],['prog','In progress'],['done','Done']];
+const STATUS_KEYS=STATUSES.map(x=>x[0]);
+const NOTE_FIELDS=SUBJ.noteFields||[
   ['extra','Summary tag (shown on the question row)',1],
   ['learn','Key learning points — what did it teach you?',0],
   ['formula','Formulas / methods used',0],
@@ -365,6 +479,15 @@ const NOTE_FIELDS=[
   ['exam','Points to remember for the exam',0],
   ['comment','Personal comments / extra notes',0]
 ];
+const CASES=!!SUBJ.cases;          // full-exam cases: attempt scores, timed flags, debrief flag
+const SKILLS=SUBJ.skills||null;    // per-case professional skills self-rating
+const TECH=SUBJ.tech||null;        // exam technique habit checklist
+const TECH_TOTAL=TECH?TECH.reduce((a,g)=>a+g.items.length,0):0;
+const PASS=SUBJ.passMark||50;
+const NOUN=CASES?'case':'question',NOUNS=CASES?'cases':'questions';
+
+/* ---------- state: shares the chartertrack-v1 blob with the main tracker ---------- */
+const LS='chartertrack-v1';
 const MAX_NOTE=4000;
 function cleanQMap(src){
   const out={};
@@ -373,17 +496,37 @@ function cleanQMap(src){
     const n=+k;if(!Number.isInteger(n)||n<1||n>SUBJ.questions.length)continue;
     const v=src[k];if(!v||typeof v!=='object')continue;
     const rec={};
-    if(v.s==='done'||v.s==='prog')rec.s=v.s;
+    if(typeof v.s==='string'&&v.s!=='todo'&&STATUS_KEYS.includes(v.s))rec.s=v.s;
     if(v.notes&&typeof v.notes==='object'){
       const nn={};
       NOTE_FIELDS.forEach(([f])=>{if(typeof v.notes[f]==='string'&&v.notes[f].trim())nn[f]=v.notes[f].slice(0,MAX_NOTE)});
       if(Object.keys(nn).length)rec.notes=nn;
     }
+    if(CASES){
+      ['a1','a2'].forEach(f=>{const x=v[f];if(typeof x==='number'&&x>=0&&x<=100)rec[f]=Math.round(x)});
+      ['a1t','a2t','dbf'].forEach(f=>{if(v[f]===true)rec[f]=true});
+    }
+    if(SKILLS&&Array.isArray(v.sk)){
+      const sk=SKILLS.map((_,i)=>{const x=+v.sk[i];return(Number.isInteger(x)&&x>=1&&x<=5)?x:0});
+      if(sk.some(x=>x>0))rec.sk=sk;
+    }
     if(typeof v.u==='number')rec.u=v.u;
-    if(rec.s||rec.notes)out[k]=rec;
+    if(Object.keys(rec).filter(x=>x!=='u').length)out[k]=rec;
   }
   return out;
 }
+function cleanTech(src){
+  const out={items:{},u:0};
+  if(!TECH||!src||typeof src!=='object')return out;
+  const it=(src.items&&typeof src.items==='object')?src.items:{};
+  for(const k of Object.keys(it)){
+    const i=+k;if(Number.isInteger(i)&&i>=0&&i<TECH_TOTAL&&it[k]===true)out.items[i]=true;
+  }
+  if(typeof src.u==='number')out.u=src.u;
+  return out;
+}
+function best(r){const a=(typeof r.a1==='number')?r.a1:null,b=(typeof r.a2==='number')?r.a2:null;
+  if(a===null&&b===null)return null;return Math.max(a===null?-1:a,b===null?-1:b)}
 function loadFull(){
   let d=null;try{d=JSON.parse(localStorage.getItem(LS))}catch(e){}
   d=(d&&typeof d==='object'&&!Array.isArray(d))?d:{};
@@ -395,28 +538,48 @@ function loadFull(){
 }
 let full=loadFull();
 let q=cleanQMap((full.subjects[KEY]||{}).q);
+let tech=cleanTech((full.subjects[KEY]||{}).tech);
 let warnedStorage=false;
 function saveState(){
-  full.subjects[KEY]={q};
+  full.subjects[KEY]=TECH?{q,tech}:{q};
   try{localStorage.setItem(LS,JSON.stringify(full))}
   catch(e){if(!warnedStorage){warnedStorage=true;toast("This browser is blocking storage — progress won't survive a reload")}}
   pushProgress();
 }
 function rec(n){return q[n]||{}}
-function setRec(n,r){r.u=Date.now();if(!r.s&&!r.notes)delete q[n];else q[n]=r;saveState()}
+function setRec(n,r){
+  r.u=Date.now();
+  const keep=r.s||r.notes||r.sk||typeof r.a1==='number'||typeof r.a2==='number'||r.a1t||r.a2t||r.dbf;
+  if(!keep)delete q[n];else q[n]=r;
+  saveState();
+}
 
 /* ---------- stats ---------- */
 function stats(){
   const t=SUBJ.topics.map(()=>({total:0,done:0,prog:0}));
-  let done=0,prog=0,aDone=0,aTot=0,bDone=0,bTot=0,notes=0;
+  let done=0,prog=0,redo=0,aDone=0,aTot=0,bDone=0,bTot=0,notes=0;
+  const bests=[];let passStd=0,timed=0;
   SUBJ.questions.forEach(x=>{
     const r=rec(x.n);const tt=t[x.t];tt.total++;
-    if(x.sec==='A')aTot++;else bTot++;
-    if(r.s==='done'){done++;tt.done++;if(x.sec==='A')aDone++;else bDone++}
-    else if(r.s==='prog'){prog++;tt.prog++}
+    if(x.sec==='A')aTot++;else if(x.sec==='B')bTot++;
+    if(r.s==='done'){done++;tt.done++;if(x.sec==='A')aDone++;else if(x.sec==='B')bDone++}
+    else if(r.s){prog++;tt.prog++;if(r.s==='redo')redo++}
     if(r.notes)notes++;
+    if(CASES){
+      const b=best(r);
+      if(b!==null){bests.push(b);if(b>=PASS)passStd++}
+      if(r.a1t)timed++;if(r.a2t)timed++;
+    }
   });
-  return {t,done,prog,aDone,aTot,bDone,bTot,notes,total:SUBJ.questions.length};
+  const avgBest=bests.length?Math.round(bests.reduce((a,b)=>a+b,0)/bests.length):null;
+  return {t,done,prog,redo,aDone,aTot,bDone,bTot,notes,total:SUBJ.questions.length,bests,passStd,timed,avgBest};
+}
+function skillAverages(){
+  if(!SKILLS)return null;
+  return SKILLS.map((name,i)=>{
+    const vals=SUBJ.questions.map(x=>((rec(x.n).sk||[])[i]||0)).filter(v=>v>0);
+    return {name,avg:vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length):null,n:vals.length};
+  });
 }
 
 /* ---------- rendering ---------- */
@@ -426,6 +589,15 @@ let pendingFocus=null;
 
 function renderTiles(s){
   const pct=Math.round(s.done/s.total*100);
+  if(CASES){
+    $('#tiles').innerHTML=
+      `<div class="tile"><div class="k">Reviewed (debriefed + done)</div><div class="v">${pct}%<small> · ${s.done}/${s.total}</small></div><div class="bar"><i style="width:${pct}%"></i></div></div>`+
+      `<div class="tile"><div class="k">Attempted</div><div class="v">${s.done+s.prog}<small> / ${s.total} ${NOUNS}</small></div></div>`+
+      `<div class="tile"><div class="k">Marked for re-attempt</div><div class="v">${s.redo}<small> ${s.redo===1?NOUN:NOUNS}</small></div></div>`+
+      `<div class="tile"><div class="k">At pass standard (best ≥ ${PASS})</div><div class="v">${s.passStd}<small> / ${s.total}</small></div><div class="bar"><i style="width:${Math.round(s.passStd/s.total*100)}%;background:var(--c2)"></i></div></div>`+
+      `<div class="tile"><div class="k">Average best score</div><div class="v">${s.avgBest===null?'—':s.avgBest}<small>${s.avgBest===null?'':' / 100'}${s.timed?' · '+s.timed+' timed':''}</small></div></div>`;
+    return;
+  }
   $('#tiles').innerHTML=
     `<div class="tile"><div class="k">Questions done</div><div class="v">${pct}%<small> · ${s.done}/${s.total}</small></div><div class="bar"><i style="width:${pct}%"></i></div></div>`+
     `<div class="tile"><div class="k">In progress</div><div class="v">${s.prog}<small> question${s.prog===1?'':'s'}</small></div></div>`+
@@ -435,28 +607,76 @@ function renderTiles(s){
 }
 function stars(w){let h='';for(let i=1;i<=5;i++)h+=i<=w?'★':'<span>★</span>';return h}
 function renderPerf(s){
-  let h='<thead><tr><th>Topic</th><th>Done</th><th>Progress</th><th>In progress</th><th>Exam weight</th><th>What to focus on</th></tr></thead><tbody>';
+  const hasW=SUBJ.topics.some(tp=>tp.w);
+  const midLabel=CASES?'Started':'In progress';
+  let h=`<thead><tr><th>${esc(SUBJ.groupLabel||'Topic')}</th><th>Done</th><th>Progress</th><th>${midLabel}</th>${hasW?'<th>Exam weight</th>':''}<th>What to focus on</th></tr></thead><tbody>`;
   SUBJ.topics.forEach((tp,i)=>{
     const st=s.t[i];const pct=st.total?Math.round(st.done/st.total*100):0;
     h+=`<tr><td class="tname"><a href="#topic-${i}">${esc(tp.name)}</a></td>
       <td class="num"><b>${st.done}</b>/${st.total}</td>
       <td><div class="bar"><i style="width:${pct}%"></i></div></td>
       <td class="num">${st.prog||'—'}</td>
-      <td class="stars" title="${esc(tp.wl)}">${stars(tp.w)}</td>
+      ${hasW?`<td class="stars" title="${esc(tp.wl||'')}">${stars(tp.w||0)}</td>`:''}
       <td class="focus">${esc(tp.focus)}</td></tr>`;
   });
   $('#perfTbl').innerHTML=h+'</tbody>';
 }
+function renderSkillAvgs(){
+  if(!SKILLS)return;
+  const av=skillAverages();
+  $('#skavg').innerHTML=av.map(x=>{
+    const val=x.avg===null?'—':(Math.round(x.avg*10)/10);
+    const pct=x.avg===null?0:Math.round(x.avg/5*100);
+    return `<div class="ska"><div class="kn">${esc(x.name)}</div><div class="kv">${val}<small> / 5${x.n?' · '+x.n+' rated':''}</small></div><div class="bar"><i style="width:${pct}%;background:var(--c5)"></i></div></div>`;
+  }).join('');
+}
+function renderTech(){
+  if(!TECH)return;
+  const done=Object.keys(tech.items).length;
+  $('#techTitle').textContent=`Exam technique checklist — ${done} of ${TECH_TOTAL} habits done`;
+  let h='',idx=0;
+  TECH.forEach(g=>{
+    h+=`<div class="techgrp"><div class="tg-head"><h3>${esc(g.name)}</h3></div>`;
+    g.items.forEach(item=>{
+      const i=idx++;const on=!!tech.items[i];
+      h+=`<div class="tk ${on?'on':''}"><input type="checkbox" id="tk-${i}" data-tk="${i}" ${on?'checked':''}><label for="tk-${i}">${esc(item)}</label></div>`;
+    });
+    h+=`</div>`;
+  });
+  $('#techList').innerHTML=h;
+}
 function chipRow(n,co){
   const s=rec(n).s||'todo';
-  const L={todo:'Not started',prog:'In progress',done:'Done'};
-  return ['todo','prog','done'].map(x=>
-    `<button class="chip ${x}" aria-pressed="${s===x}" aria-label="${L[x]} — ${esc(co)}" data-n="${n}" data-s="${x}">${L[x]}</button>`).join('');
+  return STATUSES.map(([x,L])=>
+    `<button class="chip ${x}" aria-pressed="${s===x}" aria-label="${L} — ${esc(co)}" data-n="${n}" data-s="${x}">${L}</button>`).join('');
 }
 function notesPanel(n){
-  const nt=rec(n).notes||{};
-  return `<div class="notes" data-panel="${n}">`+NOTE_FIELDS.map(([f,label,short])=>
-    `<div class="nf ${short?'':'wide'}"><label for="nf-${n}-${f}">${label}</label><textarea id="nf-${n}-${f}" data-n="${n}" data-f="${f}" maxlength="${MAX_NOTE}" ${short?'style="min-height:44px"':''}>${esc(nt[f]||'')}</textarea></div>`).join('')+`</div>`;
+  const r=rec(n);const nt=r.notes||{};
+  let h=`<div class="notes" data-panel="${n}">`;
+  if(CASES){
+    const b=best(r);
+    h+=`<div class="scoreblk">
+      <div class="sc"><label for="sc-${n}-a1">Attempt 1 score /100</label><input type="number" id="sc-${n}-a1" data-sc="${n}" data-f="a1" min="0" max="100" value="${typeof r.a1==='number'?r.a1:''}"></div>
+      <div class="sc ck"><input type="checkbox" id="sc-${n}-a1t" data-sc="${n}" data-f="a1t" ${r.a1t?'checked':''}><label for="sc-${n}-a1t">Timed (195 min)</label></div>
+      <div class="sc"><label for="sc-${n}-a2">Attempt 2 score /100</label><input type="number" id="sc-${n}-a2" data-sc="${n}" data-f="a2" min="0" max="100" value="${typeof r.a2==='number'?r.a2:''}"></div>
+      <div class="sc ck"><input type="checkbox" id="sc-${n}-a2t" data-sc="${n}" data-f="a2t" ${r.a2t?'checked':''}><label for="sc-${n}-a2t">Timed (195 min)</label></div>
+      <div class="sc ck"><input type="checkbox" id="sc-${n}-dbf" data-sc="${n}" data-f="dbf" ${r.dbf?'checked':''}><label for="sc-${n}-dbf">Debriefed model answer</label></div>
+      <div class="sc"><span class="bestro">${b===null?'':'Best: '+b+'/100 — '+(b>=PASS?'pass ✓':'below pass mark')}</span></div>
+    </div>`;
+  }
+  if(SKILLS){
+    const sk=r.sk||[];
+    h+=`<div class="skillblk">`+SKILLS.map((name,i)=>{
+      const v=sk[i]||0;
+      return `<div class="sk"><label for="sk-${n}-${i}">${esc(name)}</label><select id="sk-${n}-${i}" data-sc="${n}" data-f="sk${i}">`+
+        ['<option value="0"'+(v===0?' selected':'')+'>—</option>']
+        .concat([1,2,3,4,5].map(x=>`<option value="${x}"${v===x?' selected':''}>${x}</option>`)).join('')+
+      `</select></div>`;
+    }).join('')+`</div>`;
+  }
+  h+=NOTE_FIELDS.map(([f,label,short])=>
+    `<div class="nf ${short?'':'wide'}"><label for="nf-${n}-${f}">${label}</label><textarea id="nf-${n}-${f}" data-n="${n}" data-f="${f}" maxlength="${MAX_NOTE}" ${short?'style="min-height:44px"':''}>${esc(nt[f]||'')}</textarea></div>`).join('');
+  return h+`</div>`;
 }
 function renderBank(s){
   let h='',shown=0;
@@ -470,17 +690,20 @@ function renderBank(s){
       shown++;
       const r=rec(x.n);const nt=r.notes||{};
       const open=openNotes.has(x.n);
-      const hasNotes=!!r.notes;
+      const hasNotes=!!(r.notes||(CASES&&(typeof r.a1==='number'||typeof r.a2==='number'||r.dbf))||r.sk);
+      const b=CASES?best(r):null;
+      const badges=(b===null?'':`<span class="qbadge ${b>=PASS?'pass':'fail'}">Best ${b}/100</span>`)+
+        ((CASES&&r.dbf)?`<span class="qbadge dbf">debriefed ✓</span>`:'');
       h+=`<div class="q ${r.s==='done'?'done':''}" data-qrow="${x.n}">
         <div class="q-row">
-          <span class="qno">Q${x.n}</span>
+          <span class="qno">${CASES?'':'Q'}${x.n}</span>
           <span class="qmain">
-            <span class="qco">${esc(x.co)}<span class="qsec ${x.sec==='A'?'a':'b'}">Sec ${x.sec}</span></span>
+            <span class="qco">${esc(x.co)}${x.sec?`<span class="qsec ${x.sec==='A'?'a':'b'}">Sec ${x.sec}</span>`:''}</span>${badges}
             <span class="qmeta">Q p.${x.qp} · Answer p.${x.ap}${x.ex?' · Past exam: '+esc(x.ex):''}</span>
             ${nt.extra?`<span class="qtag">✦ ${esc(nt.extra)}</span>`:''}
           </span>
           <span class="stat" role="group" aria-label="Status for ${esc(x.co)}">${chipRow(x.n,x.co)}
-            <button class="nbtn ${hasNotes?'has':''}" data-notes="${x.n}" aria-expanded="${open}">${hasNotes?'Notes ✎':'+ Notes'}</button>
+            <button class="nbtn ${hasNotes?'has':''}" data-notes="${x.n}" aria-expanded="${open}">${hasNotes?(CASES?'Log ✎':'Notes ✎'):(CASES?'+ Log':'+ Notes')}</button>
           </span>
         </div>
         ${open?notesPanel(x.n):''}
@@ -488,19 +711,27 @@ function renderBank(s){
     });
     h+=`</div>`;
   });
-  if(!shown)h='<div class="card-pad" style="color:var(--ink-3);font-size:13.5px">No questions match this filter.</div>';
+  if(!shown)h=`<div class="card-pad" style="color:var(--ink-3);font-size:13.5px">No ${NOUNS} match this filter.</div>`;
   $('#qbank').innerHTML=h;
-  $('#fCount').textContent=shown+' of '+s.total+' questions';
+  $('#fCount').textContent=shown+' of '+s.total+' '+NOUNS;
 }
 function renderStatic(){
+  $('#perfTitle').textContent=SUBJ.perfTitle||'Topic performance';
+  $('#bankTitle').textContent=SUBJ.bankTitle||'Question bank';
+  $('#statusChips').innerHTML=[['all','All']].concat(STATUSES).map(([k,L])=>
+    `<button class="fchip" data-f="${k}" aria-pressed="${k==='all'}">${L}</button>`).join('');
   $('#facts').innerHTML=SUBJ.facts.map(([k,v])=>`<div class="fact"><span class="fk">${esc(k)}</span><span class="fv">${esc(v)}</span></div>`).join('');
-  $('#formulas').innerHTML=SUBJ.formulas.map(([k,v])=>`<div class="fx"><span class="fxn">${esc(k)}</span><span class="fxf">${esc(v)}</span></div>`).join('');
+  if(SUBJ.formulas){$('#formulas').innerHTML=SUBJ.formulas.map(([k,v])=>`<div class="fx"><span class="fxn">${esc(k)}</span><span class="fxf">${esc(v)}</span></div>`).join('')}
+  else $('#formulasSec').classList.add('hidden');
+  if(SKILLS)$('#skillsSec').classList.remove('hidden');
+  if(TECH)$('#techSec').classList.remove('hidden');
   const sel=$('#topicSel');
+  sel.options[0].textContent=CASES?'All sections':'All topics';
   SUBJ.topics.forEach((tp,i)=>{const o=document.createElement('option');o.value=i;o.textContent=tp.name;sel.appendChild(o)});
 }
 function render(){
   const s=stats();
-  renderTiles(s);renderPerf(s);renderBank(s);
+  renderTiles(s);renderPerf(s);renderBank(s);renderSkillAvgs();renderTech();
   if(pendingFocus){const el=document.querySelector(pendingFocus);if(el)el.focus();pendingFocus=null}
 }
 
@@ -530,6 +761,36 @@ document.addEventListener('click',e=>{
   }
 });
 $('#topicSel').addEventListener('change',e=>{topicFilter=+e.target.value;render()});
+// score inputs, timed/debrief checkboxes, skill selects, technique checklist
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.dataset&&el.dataset.tk!==undefined){
+    const i=+el.dataset.tk;
+    if(el.checked)tech.items[i]=true;else delete tech.items[i];
+    tech.u=Date.now();
+    saveState();
+    pendingFocus=`[data-tk="${i}"]`;
+    render();
+    return;
+  }
+  if(el.dataset&&el.dataset.sc){
+    const n=+el.dataset.sc,f=el.dataset.f;
+    const r=rec(n);const nr={...r};
+    if(f==='a1'||f==='a2'){
+      const v=el.value===''?null:Math.max(0,Math.min(100,Math.round(+el.value)));
+      if(v===null||isNaN(v))delete nr[f];else nr[f]=v;
+    }else if(f==='a1t'||f==='a2t'||f==='dbf'){
+      if(el.checked)nr[f]=true;else delete nr[f];
+    }else if(f.startsWith('sk')){
+      const i=+f.slice(2);const sk=(nr.sk||SKILLS.map(()=>0)).slice();
+      sk[i]=+el.value||0;
+      if(sk.some(x=>x>0))nr.sk=sk;else delete nr.sk;
+    }
+    setRec(n,nr);
+    pendingFocus='#'+el.id;
+    render();
+  }
+});
 // notes autosave — no rerender while typing, so focus is preserved
 let noteTimers={};
 document.addEventListener('input',e=>{
@@ -547,7 +808,7 @@ document.addEventListener('input',e=>{
 
 /* ---------- export / import ---------- */
 $('#exportBtn').addEventListener('click',()=>{
-  const blob=new Blob([JSON.stringify({app:'chartertrack-subject',key:KEY,q},null,1)],{type:'application/json'});
+  const blob=new Blob([JSON.stringify({app:'chartertrack-subject',key:KEY,q,...(TECH?{tech}:{})},null,1)],{type:'application/json'});
   const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='chartertrack-'+SUBJ.code.toLowerCase()+'.json';a.click();URL.revokeObjectURL(a.href);
 });
 $('#importBtn').addEventListener('click',()=>$('#importFile').click());
@@ -557,10 +818,12 @@ $('#importFile').addEventListener('change',e=>{
     const d=JSON.parse(txt);
     if(d.app!=='chartertrack-subject'||d.key!==KEY||!d.q)throw 0;
     const inc=cleanQMap(d.q);
-    if(!Object.keys(inc).length)throw 0;
+    const incTech=TECH&&d.tech?cleanTech(d.tech):null;
+    if(!Object.keys(inc).length&&!(incTech&&Object.keys(incTech.items).length))throw 0;
     const now=Date.now();
     Object.keys(inc).forEach(k=>{inc[k].u=now;q[k]={...(q[k]||{}),...inc[k],notes:{...((q[k]||{}).notes||{}),...(inc[k].notes||{})}};if(!Object.keys(q[k].notes).length)delete q[k].notes});
-    saveState();render();toast('Imported '+Object.keys(inc).length+' question records');
+    if(incTech&&Object.keys(incTech.items).length){tech={items:{...tech.items,...incTech.items},u:now}}
+    saveState();render();toast('Imported '+Object.keys(inc).length+' '+NOUN+' records');
   }).catch(()=>toast('That file is not a '+SUBJ.code+' subject export'));
   e.target.value='';
 });
@@ -615,6 +878,11 @@ async function syncDown(){
       const ss=(server.subjects&&typeof server.subjects==='object')?server.subjects:{};
       const merged={...ss,...full.subjects};
       merged[KEY]={q:mergeQ(cleanQMap((ss[KEY]||{}).q),q)};
+      if(TECH){
+        const st=cleanTech((ss[KEY]||{}).tech);
+        merged[KEY].tech=(st.u>(tech.u||0))?st:tech;
+        tech=merged[KEY].tech;
+      }
       full.subjects=merged;
       q=merged[KEY].q;
       render();

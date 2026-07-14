@@ -275,7 +275,7 @@ const QUALS = [
 const LS='chartertrack-v1';
 const STATUSES=['todo','booked','passed','exempt'];
 // papers with a per-subject study tracker (question bank, notes, topic performance)
-const SUBJECT_TRACKERS=['acca:AFM'];
+const SUBJECT_TRACKERS=['acca:AFM','acca:SBL'];
 let shared=null; // sanitized shared plan, when viewing a share link
 let warnedStorage=false;
 let pendingFocus=null; // focus restoration across re-renders
@@ -316,7 +316,8 @@ function saveState(){
 }
 function cur(){return shared||state}
 function st(qid,key){return cur().status[qid+':'+key]||'todo'}
-// merge two subjects maps per question, newer timestamp wins (b wins ties)
+// merge two subjects maps per question, newer timestamp wins (b wins ties);
+// non-question fields (e.g. the exam-technique checklist) also merge by their u stamp
 function mergeSubjects(a,b){
   a=a||{};b=b||{};
   const out={...a};
@@ -328,7 +329,10 @@ function mergeSubjects(a,b){
     for(const n of Object.keys(bq)){
       if(!q[n]||((bq[n]&&bq[n].u)||0)>=((q[n]&&q[n].u)||0))q[n]=bq[n];
     }
-    out[k]={q};
+    const merged={...out[k],...b[k],q};
+    const at=out[k].tech,bt=b[k].tech;
+    if(at&&bt)merged.tech=(((bt.u||0)>=((at.u||0)))?bt:at);
+    out[k]=merged;
   }
   return out;
 }
