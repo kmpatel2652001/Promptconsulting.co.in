@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aged Receivables Updater — Prompt Consulting</title>
+<meta name="description" content="Free aged receivables tracker updater: upload the latest AR aging report and your last follow-up tracker — comments and status carry forward automatically, new invoices are flagged, cleared invoices are listed. Runs entirely in your browser.">
+<style>
+  :root{
+    --paper:#FAFAF6; --ink:#1B2622; --muted:#5A6B64; --line:#DCE2DC; --card:#FFFFFF;
+    --green:#15694E; --green-soft:#E3EFE9; --blue:#2D5D8C; --blue-soft:#E4EDF5;
+    --amber:#A96F1A; --amber-soft:#F6EEDD; --red:#A8402F;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+    --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#111917; --ink:#E6ECE8; --muted:#93A59C; --line:#2A3833; --card:#18221F;
+      --green:#53C79A; --green-soft:#1c332a; --blue:#7FB2E0; --blue-soft:#1b2b3d;
+      --amber:#E0AA5E; --amber-soft:#3a2c14; --red:#E08A7A; }
+  }
+  *{box-sizing:border-box}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:15.5px; line-height:1.55; margin:0; padding:0 16px 90px;}
+  main{max-width:1060px; margin:0 auto}
+  a{color:var(--blue)}
+  header.top{display:flex; justify-content:space-between; align-items:baseline; gap:12px; flex-wrap:wrap; padding:26px 0 18px; border-bottom:3px solid var(--ink); margin-bottom:26px}
+  .brand{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); text-decoration:none}
+  h1{font-size:clamp(24px,4vw,34px); margin:6px 0 4px; letter-spacing:-.015em}
+  .lede{color:var(--muted); margin:0; max-width:66ch}
+  h2{font-size:19px; margin:34px 0 4px}
+  h3{font-size:15.5px; margin:20px 0 8px}
+  .sub{color:var(--muted); font-size:13.5px; margin:0 0 14px; max-width:72ch}
+
+  .steps{display:flex; gap:8px; margin:20px 0 8px; flex-wrap:wrap}
+  .step{font-family:var(--mono); font-size:11.5px; letter-spacing:.08em; text-transform:uppercase; padding:6px 12px; border:1px solid var(--line); border-radius:999px; color:var(--muted); background:var(--card)}
+  .step.on{border-color:var(--green); color:var(--green); background:var(--green-soft)}
+
+  section.panel{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:22px; margin:16px 0}
+  .hidden{display:none !important}
+
+  .two-col{display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:16px}
+  .drop{border:2px dashed var(--line); border-radius:10px; padding:26px 16px; text-align:center; color:var(--muted); cursor:pointer; transition:border-color .15s}
+  .drop.hover,.drop:focus-visible{border-color:var(--green); outline:none}
+  .drop b{color:var(--ink)}
+  .drop .tag{display:block; font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--green); margin-bottom:8px}
+  .drop.loaded{border-style:solid; border-color:var(--green); background:var(--green-soft)}
+  .hint{font-size:12px; color:var(--muted)}
+  .btnrow{display:flex; gap:10px; flex-wrap:wrap; margin-top:16px; align-items:center}
+  button{font-family:var(--sans); font-size:14px; padding:9px 18px; border-radius:8px; border:1px solid var(--line); background:var(--card); color:var(--ink); cursor:pointer}
+  button:hover{border-color:var(--green)}
+  button:focus-visible{outline:2px solid var(--green); outline-offset:2px}
+  button.primary{background:var(--green); border-color:var(--green); color:#fff; font-weight:600}
+  @media (prefers-color-scheme: dark){ button.primary{color:#0c1512} }
+  button.ghost{background:transparent}
+  button:disabled{opacity:.5; cursor:default}
+  .status{font-size:13.5px; margin-top:12px; color:var(--muted)}
+  .status.err{color:var(--red)}
+  .status.ok{color:var(--green)}
+
+  fieldset{border:1px solid var(--line); border-radius:10px; padding:14px 16px 16px; margin:0 0 16px; min-width:0}
+  legend{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--green); padding:0 6px}
+  .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:12px 16px}
+  label.f{display:flex; flex-direction:column; gap:4px; font-size:12.5px; color:var(--muted); min-width:0}
+  label.f span b{color:var(--ink)}
+  select,input[type=number]{font-family:var(--sans); font-size:14px; padding:8px 10px; border:1px solid var(--line); border-radius:7px; background:var(--paper); color:var(--ink); width:100%}
+  select:focus-visible,input:focus-visible{outline:2px solid var(--green); outline-offset:1px}
+  .checks{display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:6px 16px; margin-top:6px}
+  .checks label{display:flex; align-items:center; gap:8px; font-size:13.5px; color:var(--ink)}
+  .checks input{accent-color:var(--green)}
+  .flag{border-left:3px solid var(--amber); background:var(--amber-soft); padding:10px 14px; border-radius:0 8px 8px 0; font-size:13.5px; margin:0 0 16px}
+
+  .tiles{display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:6px 0 18px}
+  .tile{background:var(--paper); border:1px solid var(--line); border-radius:10px; padding:14px}
+  .tile .k{font-family:var(--mono); font-size:10.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:6px}
+  .tile .v{font-family:var(--mono); font-size:19px; font-variant-numeric:tabular-nums}
+  .tile.g .v{color:var(--green)} .tile.a .v{color:var(--amber)} .tile.b .v{color:var(--blue)} .tile.r .v{color:var(--red)}
+
+  .tbl-wrap{overflow-x:auto; margin:10px 0 8px; border:1px solid var(--line); border-radius:8px; max-height:420px}
+  table{border-collapse:collapse; width:100%; font-size:13px; background:var(--card)}
+  th{font-family:var(--mono); font-size:10.5px; letter-spacing:.07em; text-transform:uppercase; text-align:left; color:var(--muted); padding:8px 11px; border-bottom:2px solid var(--line); position:sticky; top:0; background:var(--card)}
+  td{padding:7px 11px; border-bottom:1px solid var(--line); vertical-align:top}
+  tr:last-child td{border-bottom:none}
+  td.new{color:var(--blue); font-weight:600}
+  td.cf{color:var(--green)}
+
+  footer{margin-top:48px; padding-top:16px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted); max-width:80ch}
+</style>
+</head>
+<body>
+<main>
+<header class="top">
+  <div>
+    <a class="brand" href="/">← Prompt Consulting</a>
+    <h1>Aged Receivables Updater</h1>
+    <p class="lede">Upload the latest AR aging report and your last follow-up tracker — every comment and status carries forward to the matching invoice, new invoices are flagged, and cleared invoices are listed separately. Your files never leave the browser.</p>
+  </div>
+</header>
+
+<div class="steps" role="list">
+  <span class="step on" id="st1" role="listitem">1 · Upload</span>
+  <span class="step" id="st2" role="listitem">2 · Map columns</span>
+  <span class="step" id="st3" role="listitem">3 · Updated sheet</span>
+</div>
+
+<!-- ============ STEP 1: UPLOAD ============ -->
+<section class="panel" id="panel-upload">
+  <h2 style="margin-top:0">Upload the two sheets</h2>
+  <p class="sub">Excel (.xlsx / .xls) or CSV. The <b>source sheet</b> is the fresh export from your accounting system. The <b>last updated sheet</b> is the tracker you worked on previously — the one with your comments, status and follow-up columns.</p>
+  <div class="two-col">
+    <div class="drop" id="drop-src" tabindex="0" role="button" aria-label="Upload source sheet">
+      <span class="tag">Source · latest aging</span>
+      <b id="src-label">Drop the new AR aging here</b> or click to choose<br>
+      <span class="hint" id="src-hint">e.g. this month's aged receivables export</span>
+      <input type="file" id="file-src" accept=".xlsx,.xls,.csv" style="display:none">
+    </div>
+    <div class="drop" id="drop-prev" tabindex="0" role="button" aria-label="Upload last updated sheet">
+      <span class="tag">Last updated tracker</span>
+      <b id="prev-label">Drop the previous tracker here</b> or click to choose<br>
+      <span class="hint" id="prev-hint">the sheet with your remarks &amp; status columns</span>
+      <input type="file" id="file-prev" accept=".xlsx,.xls,.csv" style="display:none">
+    </div>
+  </div>
+  <div class="btnrow">
+    <button class="primary" id="btn-map" disabled>Continue → map columns</button>
+    <button class="ghost" id="btn-demo">Load demo data</button>
+  </div>
+  <p class="status" id="upload-status" role="status"></p>
+</section>
+
+<!-- ============ STEP 2: MAP ============ -->
+<section class="panel hidden" id="panel-map">
+  <h2 style="margin-top:0">Confirm how the sheets match up</h2>
+  <p class="sub">Rows are matched on the key column (usually the invoice number). If invoice numbers repeat, add a second key such as the customer name. Tick the columns whose values should carry forward from the old tracker onto the new report — these are pre-selected as the columns that exist only in your tracker.</p>
+  <div class="flag hidden" id="map-flag"></div>
+
+  <fieldset><legend>Source — latest aging</legend>
+    <div class="grid">
+      <label class="f"><span>Sheet</span><select id="src-sheet"></select></label>
+      <label class="f"><span>Header row</span><input type="number" id="src-hrow" min="1" step="1"></label>
+      <label class="f"><span><b>Match key</b></span><select id="src-key1"></select></label>
+      <label class="f"><span>Second key (optional)</span><select id="src-key2"></select></label>
+    </div>
+  </fieldset>
+
+  <fieldset><legend>Last updated tracker</legend>
+    <div class="grid">
+      <label class="f"><span>Sheet</span><select id="prev-sheet"></select></label>
+      <label class="f"><span>Header row</span><input type="number" id="prev-hrow" min="1" step="1"></label>
+      <label class="f"><span><b>Match key</b></span><select id="prev-key1"></select></label>
+      <label class="f"><span>Second key (optional)</span><select id="prev-key2"></select></label>
+    </div>
+    <h3 style="margin-top:6px">Columns to carry forward</h3>
+    <div class="checks" id="carry-checks"></div>
+  </fieldset>
+
+  <div class="btnrow">
+    <button class="primary" id="btn-build">Build updated sheet</button>
+    <button class="ghost" id="btn-back1">← Back</button>
+  </div>
+  <p class="status" id="map-status" role="status"></p>
+</section>
+
+<!-- ============ STEP 3: RESULT ============ -->
+<section class="panel hidden" id="panel-result">
+  <h2 style="margin-top:0">Updated tracker</h2>
+  <div class="tiles">
+    <div class="tile"><span class="k">Invoices in source</span><span class="v" id="t-src">–</span></div>
+    <div class="tile g"><span class="k">Comments carried forward</span><span class="v" id="t-matched">–</span></div>
+    <div class="tile b"><span class="k">New invoices</span><span class="v" id="t-new">–</span></div>
+    <div class="tile a"><span class="k">Cleared since last time</span><span class="v" id="t-cleared">–</span></div>
+  </div>
+  <div class="btnrow" style="margin-top:0">
+    <button class="primary" id="btn-download">Download updated sheet (.xlsx)</button>
+    <button class="ghost" id="btn-back2">← Adjust mapping</button>
+    <button class="ghost" id="btn-restart">Start over</button>
+  </div>
+
+  <h3>Preview — updated sheet <span class="hint" id="prev-count"></span></h3>
+  <div class="tbl-wrap"><table id="tbl-updated"></table></div>
+
+  <h3>Cleared invoices (in the old tracker, gone from the new aging) <span class="hint" id="clr-count"></span></h3>
+  <div class="tbl-wrap"><table id="tbl-cleared"></table></div>
+</section>
+
+<footer>
+  <p><b>Privacy:</b> everything runs locally in your browser using client-side JavaScript — no file is uploaded to any server, and nothing is stored. Refreshing the page clears all data.</p>
+  <p>The downloaded workbook contains three sheets: <b>Updated</b> (latest aging with your follow-up columns carried forward and a Row Status column), <b>Cleared</b> (invoices that dropped off the aging), and <b>Summary</b>. A tool by <a href="/">Prompt Consulting</a>.</p>
+</footer>
+</main>
+
+<script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
+<script>
+(function(){
+"use strict";
+const $ = id => document.getElementById(id);
+const state = { src:null, prev:null, result:null };
+
+/* ---------- utilities ---------- */
+function localISO(d){
+  return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+}
+function normKey(v){
+  if (v === null || v === undefined) return "";
+  if (v instanceof Date) return localISO(v);
+  return String(v).trim().toUpperCase().replace(/\s+/g," ");
+}
+function isBlankRow(r){ return !r || r.every(c => c === "" || c === null || c === undefined); }
+
+function detectHeaderRow(rows){
+  let best = 0, bestScore = -1;
+  const limit = Math.min(rows.length, 12);
+  for (let i = 0; i < limit; i++){
+    const r = rows[i] || [];
+    const nonEmpty = r.filter(c => c !== "" && c !== null && c !== undefined);
+    const strings  = nonEmpty.filter(c => typeof c === "string").length;
+    const score = nonEmpty.length + strings;   // favour text-y, full rows
+    if (nonEmpty.length >= 2 && score > bestScore){ bestScore = score; best = i; }
+  }
+  return best;
+}
+
+const KEY_PATTERNS = [/invoice\s*(no|number|#)?/i, /inv\.?\s*(no|#)/i, /doc(ument)?\s*(no|number)/i, /reference|ref\s*no/i, /bill\s*no/i, /voucher/i];
+function suggestKey(headers){
+  for (const p of KEY_PATTERNS){
+    const i = headers.findIndex(h => p.test(String(h)));
+    if (i >= 0) return i;
+  }
+  return 0;
+}
+
+function parseSheet(wb, sheetName, headerRowOverride){
+  const ws = wb.Sheets[sheetName];
+  const all = XLSX.utils.sheet_to_json(ws, {header:1, defval:"", raw:true});
+  const hIdx = (headerRowOverride != null) ? headerRowOverride - 1 : detectHeaderRow(all);
+  const headers = (all[hIdx] || []).map((h,i) => String(h).trim() || ("Column " + (i+1)));
+  const rows = all.slice(hIdx + 1).filter(r => !isBlankRow(r));
+  return { headers, rows, headerRow: hIdx + 1 };
+}
+
+/* ---------- file loading ---------- */
+function loadFile(which, file){
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, {type:"array", cellDates:true});
+      state[which] = { wb, fileName:file.name, sheetName:wb.SheetNames[0], parsed:null };
+      $(which === "src" ? "src-label" : "prev-label").textContent = file.name;
+      $(which === "src" ? "src-hint" : "prev-hint").textContent = wb.SheetNames.length + " sheet(s) — loaded ✓";
+      $(which === "src" ? "drop-src" : "drop-prev").classList.add("loaded");
+      setStatus("upload-status", "", "");
+      $("btn-map").disabled = !(state.src && state.prev);
+    } catch(err){
+      setStatus("upload-status", "Could not read " + file.name + " — is it a valid Excel/CSV file? (" + err.message + ")", "err");
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+function setStatus(id, msg, cls){ const el = $(id); el.textContent = msg; el.className = "status " + (cls||""); }
+
+function wireDrop(dropId, inputId, which){
+  const drop = $(dropId), input = $(inputId);
+  drop.addEventListener("click", () => input.click());
+  drop.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); input.click(); } });
+  input.addEventListener("change", () => { if (input.files[0]) loadFile(which, input.files[0]); });
+  ["dragover","dragenter"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("hover"); }));
+  ["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("hover"); }));
+  drop.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) loadFile(which, f); });
+}
+wireDrop("drop-src","file-src","src");
+wireDrop("drop-prev","file-prev","prev");
+
+/* ---------- demo ---------- */
+$("btn-demo").addEventListener("click", () => {
+  const srcCsv = "Customer,Invoice No,Invoice Date,Due Date,Amount,0-30,31-60,61-90,90+\n" +
+    "Alpha Trading LLC,INV-1001,2026-04-02,2026-05-02,12500,0,0,12500,0\n" +
+    "Alpha Trading LLC,INV-1042,2026-06-15,2026-07-15,8400,8400,0,0,0\n" +
+    "Beta Foods FZE,INV-1010,2026-04-20,2026-05-20,22000,0,0,22000,0\n" +
+    "Gamma Contracting,INV-1055,2026-07-01,2026-07-31,15750,15750,0,0,0\n" +
+    "Delta Interiors,INV-1021,2026-05-10,2026-06-10,6300,0,6300,0,0\n";
+  const prevCsv = "Customer,Invoice No,Amount,Status,Remarks,Promise to Pay\n" +
+    "Alpha Trading LLC,INV-1001,12500,Following up,Spoke to Ahmed - cheque promised,2026-07-25\n" +
+    "Beta Foods FZE,INV-1010,22000,Escalated,Sent legal notice draft to partner,\n" +
+    "Delta Interiors,INV-1021,6300,Following up,PDC received - clearing 20 Jul,2026-07-20\n" +
+    "Old Client LLC,INV-0990,4100,Paid?,Said transfer done - verify bank,\n";
+  loadCsvString("src", srcCsv, "demo-aging-jul26.csv");
+  loadCsvString("prev", prevCsv, "demo-tracker-jun26.csv");
+  setStatus("upload-status", "Demo data loaded — click Continue.", "ok");
+});
+function loadCsvString(which, csv, name){
+  const wb = XLSX.read(csv, {type:"string", cellDates:true});
+  state[which] = { wb, fileName:name, sheetName:wb.SheetNames[0], parsed:null };
+  $(which === "src" ? "src-label" : "prev-label").textContent = name;
+  $(which === "src" ? "src-hint" : "prev-hint").textContent = "loaded ✓";
+  $(which === "src" ? "drop-src" : "drop-prev").classList.add("loaded");
+  $("btn-map").disabled = !(state.src && state.prev);
+}
+
+/* ---------- step navigation ---------- */
+function goStep(n){
+  ["panel-upload","panel-map","panel-result"][0]; // noop for clarity
+  $("panel-upload").classList.toggle("hidden", n !== 1);
+  $("panel-map").classList.toggle("hidden", n !== 2);
+  $("panel-result").classList.toggle("hidden", n !== 3);
+  ["st1","st2","st3"].forEach((id,i) => $(id).classList.toggle("on", i+1 <= n));
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+$("btn-map").addEventListener("click", () => { initMapping(); goStep(2); });
+$("btn-back1").addEventListener("click", () => goStep(1));
+$("btn-back2").addEventListener("click", () => goStep(2));
+$("btn-restart").addEventListener("click", () => location.reload());
+
+/* ---------- mapping UI ---------- */
+function fillSelect(sel, options, selected){
+  sel.innerHTML = "";
+  options.forEach((o,i) => {
+    const opt = document.createElement("option");
+    opt.value = String(o.value !== undefined ? o.value : i);
+    opt.textContent = o.label !== undefined ? o.label : String(o);
+    sel.appendChild(opt);
+  });
+  if (selected !== undefined) sel.value = String(selected);
+}
+
+function reparse(which){
+  const st = state[which];
+  const hrowInput = $(which + "-hrow");
+  const override = hrowInput.value ? parseInt(hrowInput.value,10) : null;
+  st.parsed = parseSheet(st.wb, st.sheetName, override);
+  hrowInput.value = st.parsed.headerRow;
+}
+
+function initMapping(){
+  ["src","prev"].forEach(which => {
+    const st = state[which];
+    fillSelect($(which + "-sheet"), st.wb.SheetNames.map(n => ({value:n, label:n})), st.sheetName);
+    $(which + "-hrow").value = "";
+    reparse(which);
+    refreshKeySelects(which);
+  });
+  refreshCarryChecks();
+  setStatus("map-status","","");
+}
+
+function refreshKeySelects(which){
+  const headers = state[which].parsed.headers;
+  const opts = headers.map((h,i) => ({value:i, label:h}));
+  fillSelect($(which + "-key1"), opts, suggestKey(headers));
+  fillSelect($(which + "-key2"), [{value:-1,label:"— none —"}].concat(opts), -1);
+}
+
+function refreshCarryChecks(){
+  const srcSet = new Set(state.src.parsed.headers.map(h => h.trim().toLowerCase()));
+  const box = $("carry-checks");
+  box.innerHTML = "";
+  state.prev.parsed.headers.forEach((h,i) => {
+    const lbl = document.createElement("label");
+    const cb = document.createElement("input");
+    cb.type = "checkbox"; cb.value = String(i);
+    cb.checked = !srcSet.has(h.trim().toLowerCase());   // default: tracker-only columns
+    lbl.appendChild(cb);
+    lbl.appendChild(document.createTextNode(" " + h));
+    box.appendChild(lbl);
+  });
+}
+
+["src","prev"].forEach(which => {
+  $(which + "-sheet").addEventListener("change", e => {
+    state[which].sheetName = e.target.value;
+    $(which + "-hrow").value = "";
+    reparse(which); refreshKeySelects(which);
+    if (which === "prev" || which === "src") refreshCarryChecks();
+  });
+  $(which + "-hrow").addEventListener("change", () => {
+    reparse(which); refreshKeySelects(which); refreshCarryChecks();
+  });
+});
+
+/* ---------- merge engine ---------- */
+function buildMerge(){
+  const s = state.src.parsed, p = state.prev.parsed;
+  const sk = [parseInt($("src-key1").value,10)], pk = [parseInt($("prev-key1").value,10)];
+  const sk2 = parseInt($("src-key2").value,10), pk2 = parseInt($("prev-key2").value,10);
+  if (sk2 >= 0 && pk2 >= 0){ sk.push(sk2); pk.push(pk2); }
+  else if ((sk2 >= 0) !== (pk2 >= 0)){
+    setStatus("map-status","Second key must be set on both sheets (or neither).","err"); return null;
+  }
+  const carryCols = Array.from($("carry-checks").querySelectorAll("input:checked")).map(cb => parseInt(cb.value,10));
+  if (!carryCols.length){ setStatus("map-status","Tick at least one column to carry forward.","err"); return null; }
+
+  const keyOf = (row, cols) => cols.map(c => normKey(row[c])).join(" | ");
+
+  // queues per key so duplicate invoice numbers match in order
+  const prevMap = new Map();
+  p.rows.forEach(r => {
+    const k = keyOf(r, pk);
+    if (!k.replace(/\|/g,"").trim()) return;
+    if (!prevMap.has(k)) prevMap.set(k, []);
+    prevMap.get(k).push(r);
+  });
+
+  const carryHeaders = carryCols.map(ci => {
+    const name = p.headers[ci];
+    return s.headers.some(h => h.trim().toLowerCase() === name.trim().toLowerCase()) ? name + " (tracker)" : name;
+  });
+  const outHeaders = s.headers.concat(carryHeaders, ["Row Status"]);
+
+  let matched = 0;
+  const outRows = s.rows.map(r => {
+    const k = keyOf(r, sk);
+    const q = prevMap.get(k);
+    const hit = (q && q.length) ? q.shift() : null;
+    if (hit) matched++;
+    const carried = carryCols.map(ci => hit ? hit[ci] : "");
+    return r.slice(0, s.headers.length)
+            .concat(Array(Math.max(0, s.headers.length - r.length)).fill(""))
+            .slice(0, s.headers.length)
+            .concat(carried, [hit ? "Carried forward" : "NEW"]);
+  });
+
+  const cleared = [];
+  prevMap.forEach(q => q.forEach(r => cleared.push(r)));
+
+  return { outHeaders, outRows, matched, newCount: outRows.length - matched,
+           clearedHeaders: p.headers, cleared };
+}
+
+$("btn-build").addEventListener("click", () => {
+  const res = buildMerge();
+  if (!res) return;
+  state.result = res;
+  $("t-src").textContent = res.outRows.length;
+  $("t-matched").textContent = res.matched;
+  $("t-new").textContent = res.newCount;
+  $("t-cleared").textContent = res.cleared.length;
+  renderTable($("tbl-updated"), res.outHeaders, res.outRows, 15, "prev-count");
+  renderTable($("tbl-cleared"), res.clearedHeaders, res.cleared, 10, "clr-count");
+  goStep(3);
+});
+
+function fmtCell(v){
+  if (v instanceof Date) return localISO(v);
+  if (typeof v === "number") return Number.isInteger(v) ? String(v) : v.toLocaleString(undefined,{maximumFractionDigits:2});
+  return String(v === null || v === undefined ? "" : v);
+}
+function renderTable(tbl, headers, rows, max, countId){
+  tbl.innerHTML = "";
+  const tr = document.createElement("tr");
+  headers.forEach(h => { const th = document.createElement("th"); th.textContent = h; tr.appendChild(th); });
+  tbl.appendChild(tr);
+  rows.slice(0, max).forEach(r => {
+    const trr = document.createElement("tr");
+    headers.forEach((h,i) => {
+      const td = document.createElement("td");
+      const val = fmtCell(r[i]);
+      td.textContent = val;
+      if (h === "Row Status") td.className = val === "NEW" ? "new" : "cf";
+      trr.appendChild(td);
+    });
+    tbl.appendChild(trr);
+  });
+  $(countId).textContent = rows.length > max ? "showing " + max + " of " + rows.length + " rows" : rows.length + " row(s)";
+}
+
+/* ---------- download ---------- */
+$("btn-download").addEventListener("click", () => {
+  const res = state.result;
+  if (!res) return;
+  const wb = XLSX.utils.book_new();
+
+  const updated = [res.outHeaders].concat(res.outRows);
+  const wsU = XLSX.utils.aoa_to_sheet(updated, {cellDates:true});
+  wsU["!cols"] = res.outHeaders.map((h,i) => ({wch: Math.min(40, Math.max(String(h).length + 2,
+      ...updated.slice(1, 50).map(r => fmtCell(r[i]).length + 2)))}));
+  XLSX.utils.book_append_sheet(wb, wsU, "Updated");
+
+  const clearedAoa = [res.clearedHeaders].concat(res.cleared);
+  const wsC = XLSX.utils.aoa_to_sheet(clearedAoa.length > 1 ? clearedAoa : [res.clearedHeaders, ["(none)"]], {cellDates:true});
+  XLSX.utils.book_append_sheet(wb, wsC, "Cleared");
+
+  const today = localISO(new Date());
+  const wsS = XLSX.utils.aoa_to_sheet([
+    ["Aged Receivables Updater — Summary"],
+    ["Generated", today],
+    ["Source file", state.src.fileName, "sheet: " + state.src.sheetName],
+    ["Previous tracker", state.prev.fileName, "sheet: " + state.prev.sheetName],
+    [],
+    ["Invoices in source", res.outRows.length],
+    ["Comments carried forward", res.matched],
+    ["New invoices", res.newCount],
+    ["Cleared invoices", res.cleared.length],
+  ]);
+  wsS["!cols"] = [{wch:28},{wch:32},{wch:28}];
+  XLSX.utils.book_append_sheet(wb, wsS, "Summary");
+
+  XLSX.writeFile(wb, "AR Tracker Updated " + today + ".xlsx");
+});
+
+/* exposed for automated testing */
+window.ARU = { state, buildMerge, parseSheet, detectHeaderRow, normKey, loadCsvString, initMapping, goStep };
+})();
+</script>
+</body>
+</html>
