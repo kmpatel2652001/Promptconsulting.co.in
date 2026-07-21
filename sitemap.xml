@@ -5,10 +5,6 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://promptconsulting.co.in/about.html</loc>
-    <priority>0.8</priority>
-  </url>
-  <url>
     <loc>https://promptconsulting.co.in/ifrs16/</loc>
     <priority>0.8</priority>
   </url>
@@ -31,13 +27,5 @@
   <url>
     <loc>https://promptconsulting.co.in/blog/</loc>
     <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://promptconsulting.co.in/careers.html</loc>
-    <priority>0.5</priority>
-  </url>
-  <url>
-    <loc>https://promptconsulting.co.in/contact.html</loc>
-    <priority>0.5</priority>
   </url>
 </urlset>

@@ -3,150 +3,97 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Prompt Consulting | Chartered Accountant & Audit Advisory in Dubai</title>
-<meta name="description" content="Prompt Consulting delivers audit, assurance, and management consulting services for businesses in Dubai, UAE. Chartered accountant-led expertise for compliance, governance, and growth.">
-<link rel="stylesheet" href="styles.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<title>Prompt Consulting — Tools & Resources</title>
+<meta name="description" content="Prompt Consulting, Dubai — free tools and resources for accountants: aged receivables updater, IFRS 16 lease engine, study tracker, UAE tax practice exam and insights.">
+<style>
+  :root{
+    --paper:#FAFAF6; --ink:#1B2622; --muted:#5A6B64; --line:#DCE2DC; --card:#FFFFFF;
+    --green:#15694E; --green-soft:#E3EFE9; --blue:#2D5D8C; --amber:#A96F1A;
+    --mono:ui-monospace,"Cascadia Code",Consolas,"SF Mono",Menlo,monospace;
+    --sans:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{ --paper:#111917; --ink:#E6ECE8; --muted:#93A59C; --line:#2A3833; --card:#18221F;
+      --green:#53C79A; --green-soft:#1c332a; --blue:#7FB2E0; --amber:#E0AA5E; }
+  }
+  *{box-sizing:border-box}
+  body{background:var(--paper); color:var(--ink); font-family:var(--sans); font-size:15.5px; line-height:1.55; margin:0; padding:0 16px 60px;}
+  main{max-width:900px; margin:0 auto}
+  a{color:var(--blue)}
+  header.top{padding:44px 0 22px; border-bottom:3px solid var(--ink); margin-bottom:34px}
+  .brand{font-family:var(--mono); font-size:12px; letter-spacing:.12em; text-transform:uppercase; color:var(--green); margin:0 0 6px}
+  h1{font-size:clamp(26px,4.5vw,38px); margin:0 0 8px; letter-spacing:-.015em}
+  .lede{color:var(--muted); margin:0; max-width:60ch}
+
+  .cards{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:16px; margin:28px 0}
+  a.card{display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--line);
+    border-radius:12px; padding:20px 22px; text-decoration:none; color:var(--ink);
+    transition:border-color .15s, transform .1s}
+  a.card:hover{border-color:var(--green); transform:translateY(-2px)}
+  a.card:focus-visible{outline:2px solid var(--green); outline-offset:2px}
+  .card .tag{font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--green)}
+  .card h2{font-size:17px; margin:0}
+  .card p{font-size:13.5px; color:var(--muted); margin:0; flex:1}
+  .card .go{font-family:var(--mono); font-size:12.5px; color:var(--green); margin-top:6px}
+
+  footer{margin-top:44px; padding-top:18px; border-top:1px solid var(--line); font-size:12.5px; color:var(--muted);
+    display:flex; flex-wrap:wrap; gap:6px 22px}
+  footer a{color:var(--muted)}
+</style>
 </head>
 <body>
-<header>
-<div class="container navbar">
-<div class="logo">Prompt Consulting</div>
-<ul class="nav-links">
-<li><a class="active" href="index.html">Home</a></li>
-<li><a href="about.html">About Us</a></li>
-<li><a href="blogs.html">Blogs</a></li>
-<li><a href="careers.html">Careers</a></li>
-<li><a href="uae-tax-practice.html">Practice Exam</a></li>
-<li><a href="ifrs16/">IFRS 16 Tool</a></li>
-<li><a href="ar-update/">AR Updater</a></li>
-<li><a href="tracker/">Study Tracker</a></li>
-<li><a href="qualification-roadmap.html">Roadmap</a></li>
-<li><a href="contact.html">Contact</a></li>
-</ul>
-</div>
+<main>
+<header class="top">
+  <p class="brand">Prompt Consulting · Dubai, UAE</p>
+  <h1>Tools &amp; resources for accountants.</h1>
+  <p class="lede">Practical, no-nonsense utilities built from real engagement work — plus study tools and insights. Pick one below.</p>
 </header>
 
-<main>
-<section class="hero">
-<div class="container hero-grid">
-<div>
-<span class="hero-badge">Dubai, UAE • Chartered Accountant Led</span>
-<h1>Audit, Assurance & Management Consulting for Confident Decisions.</h1>
-<p>We help UAE businesses strengthen governance, improve financial performance, and stay audit-ready with practical advisory, risk management, and strategic planning support.</p>
-<div class="cta-row">
-<a class="btn-primary" href="contact.html">Request a Consultation</a>
-<a class="btn-outline" href="about.html">Meet Our Team</a>
-<a class="btn-outline" href="uae-tax-practice.html">UAE Tax Practice Exam</a>
-<a class="btn-outline" href="ifrs16/">IFRS 16 Lease Calculator</a>
-<a class="btn-outline" href="ar-update/">New: Aged Receivables Updater</a>
-</div>
-</div>
-<div class="hero-card">
-<h3>What we deliver</h3>
-<div class="hero-stats">
-<div class="hero-stat">
-<span>Audit & Assurance</span>
-<p>Statutory, internal, and special purpose audits with actionable remediation plans.</p>
-</div>
-<div class="hero-stat">
-<span>Management Consulting</span>
-<p>Operational improvements, budgeting, and KPI dashboards for leadership teams.</p>
-</div>
-<div class="hero-stat">
-<span>Risk & Compliance</span>
-<p>UAE regulatory alignment, corporate tax readiness, and governance reviews.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-
-<section class="section">
-<div class="container">
-<h2 class="section-title">Professional Services</h2>
-<p class="section-subtitle">Structured engagements tailored for owner-led businesses, high-growth startups, and established enterprises across the UAE.</p>
-<div class="cards">
-<article class="card">
-<h3>External & Internal Audit</h3>
-<p>Independent assurance, process walkthroughs, and control testing to improve transparency and satisfy stakeholder requirements.</p>
-</article>
-<article class="card">
-<h3>Management Reporting</h3>
-<p>Monthly reporting packs, cash flow forecasting, and executive dashboards that align finance with strategy.</p>
-</article>
-<article class="card">
-<h3>Business Process Review</h3>
-<p>Identify inefficiencies, recommend automation, and strengthen segregation of duties across finance operations.</p>
-</article>
-<article class="card">
-<h3>Corporate Tax Readiness</h3>
-<p>UAE corporate tax impact assessments, documentation, and filing readiness planning.</p>
-</article>
-<article class="card">
-<h3>Due Diligence Support</h3>
-<p>Vendor and buy-side reviews that highlight working capital adjustments, risks, and valuation insights.</p>
-</article>
-<article class="card">
-<h3>Strategic Advisory</h3>
-<p>Board-ready decision support covering profitability, pricing strategy, and growth planning.</p>
-</article>
-</div>
-</div>
-</section>
-
-<section class="section band">
-<div class="container split">
-<div>
-<h2 class="section-title">Why clients choose Prompt Consulting</h2>
-<p class="section-subtitle">Our engagements combine technical depth with executive-level clarity so leadership teams can act quickly and with confidence.</p>
-<ul class="list">
-<li>Chartered accountant leadership with UAE market expertise.</li>
-<li>Clear deliverables, timelines, and audit-ready documentation.</li>
-<li>Hands-on guidance for governance, controls, and performance.</li>
-<li>Advisory focused on measurable business outcomes.</li>
-</ul>
-</div>
-<div class="card">
-<h3>Industries we serve</h3>
-<p>Real estate, trading, professional services, hospitality, technology startups, and family businesses across the Emirates.</p>
-<div class="hero-stats">
-<div class="hero-stat">
-<span>Compliance Coverage</span>
-<p>Audit readiness, VAT support, corporate tax alignment, and regulatory reporting.</p>
-</div>
-<div class="hero-stat">
-<span>Growth Support</span>
-<p>Budgeting, scenario analysis, and capital planning for leadership teams.</p>
-</div>
-</div>
-</div>
-</div>
-</section>
-</main>
+<nav class="cards" aria-label="Site pages">
+  <a class="card" href="ar-update/">
+    <span class="tag">Tool</span>
+    <h2>Aged Receivables Updater</h2>
+    <p>Upload this period's export and your working sheet — balances refresh, notes and formulas stay, new contacts append.</p>
+    <span class="go">Open →</span>
+  </a>
+  <a class="card" href="ifrs16/">
+    <span class="tag">Tool</span>
+    <h2>IFRS 16 Lease Engine</h2>
+    <p>ROU asset, lease liability, full schedules, journal vouchers and an audit note — from a contract PDF or manual entry.</p>
+    <span class="go">Open →</span>
+  </a>
+  <a class="card" href="tracker/">
+    <span class="tag">Study</span>
+    <h2>Study Tracker</h2>
+    <p>Track ACCA, CPA Australia, UAE CA and more paper by paper, with per-subject question banks. Free account.</p>
+    <span class="go">Open →</span>
+  </a>
+  <a class="card" href="uae-tax-practice.html">
+    <span class="tag">Study</span>
+    <h2>UAE Tax Practice Exam</h2>
+    <p>Test yourself on UAE corporate tax and VAT with a timed practice paper.</p>
+    <span class="go">Open →</span>
+  </a>
+  <a class="card" href="qualification-roadmap.html">
+    <span class="tag">Study</span>
+    <h2>Qualification Roadmap</h2>
+    <p>A worked plan for stacking ACCA, CPA Australia and the UAE CA fellowship.</p>
+    <span class="go">Open →</span>
+  </a>
+  <a class="card" href="blogs.html">
+    <span class="tag">Insights</span>
+    <h2>Blogs</h2>
+    <p>Guidance on audit readiness, internal controls, corporate tax and performance management.</p>
+    <span class="go">Read →</span>
+  </a>
+</nav>
 
 <footer>
-<div class="container footer-grid">
-<div>
-<h3>Prompt Consulting</h3>
-<p>Professional audit, assurance, and management consulting services in Dubai, UAE.</p>
-</div>
-<div class="footer-links">
-<strong>Company</strong>
-<a href="about.html">About Us</a>
-<a href="blogs.html">Blogs</a>
-<a href="careers.html">Careers</a>
-</div>
-<div class="footer-links">
-<strong>Contact</strong>
-<a href="mailto:info@promptconsulting.co.in">info@promptconsulting.co.in</a>
-<a href="tel:+971588781696">+971 58 878 1696</a>
-<span>Dubai, UAE</span>
-</div>
-</div>
-<div class="container footer-bottom">© 2025 Prompt Consulting. All rights reserved.</div>
+  <span>© 2026 Prompt Consulting</span>
+  <a href="mailto:info@promptconsulting.co.in">info@promptconsulting.co.in</a>
+  <a href="tel:+971588781696">+971 58 878 1696</a>
+  <span>Dubai, UAE</span>
 </footer>
+</main>
 </body>
 </html>
