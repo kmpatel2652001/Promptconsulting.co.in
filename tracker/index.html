@@ -162,7 +162,7 @@ body[data-gate] #gateMsg{display:block}
     <span class="brand">CharterTrack</span><span class="beta">Beta</span>
     <span class="acct" id="acct">
       <a class="site-link" href="login.html">Sign in</a>
-      <a class="site-link" href="../index.html" aria-label="Built by Prompt Consulting">Prompt Consulting &rarr;</a>
+      <a class="site-link" href="../index.html" aria-label="Built by Kirtan Patel">Kirtan Patel &rarr;</a>
     </span>
   </div>
 </header>
@@ -210,7 +210,7 @@ body[data-gate] #gateMsg{display:block}
   <footer class="foot">
     <p><b>Check dates and syllabus with the awarding body before booking.</b> Exam structures change; each qualification card links to the official source. CharterTrack is an independent study tool and is not affiliated with or endorsed by ACCA, CPA Australia, AICPA, NASBA, IMA, CIMA, ICAEW, ICAI or EAAA.</p>
     <p>Your plan is saved to your free account and syncs across devices — only your plan, name and email are stored, nothing else. Want study-buddy features next? <a href="mailto:info@promptconsulting.co.in">Tell us what to build</a>.</p>
-    <p>Built by <a href="../index.html">Prompt Consulting</a>, Dubai — audit, assurance &amp; management consulting.</p>
+    <p>Built by <a href="../index.html">Kirtan Patel</a>, Chartered Accountant — Dubai, UAE.</p>
   </footer>
 
 </div>
@@ -550,7 +550,7 @@ async function api(path,opts){
 }
 function renderAcct(){
   const el=$('#acct');if(!el)return;
-  const site='<a class="site-link" href="../index.html" aria-label="Built by Prompt Consulting">Prompt Consulting &rarr;</a>';
+  const site='<a class="site-link" href="../index.html" aria-label="Built by Kirtan Patel">Kirtan Patel &rarr;</a>';
   if(user){
     el.innerHTML=(user.role==='admin'?'<a class="site-link" href="admin.html">Admin</a>':'')+
       `<span class="site-link who" title="${esc(user.email)}">${esc(user.name||user.email)}</span>`+

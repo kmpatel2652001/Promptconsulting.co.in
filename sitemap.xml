@@ -5,11 +5,11 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://promptconsulting.co.in/ifrs16/</loc>
+    <loc>https://promptconsulting.co.in/ar-update/</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://promptconsulting.co.in/ar-update/</loc>
+    <loc>https://promptconsulting.co.in/ifrs16/</loc>
     <priority>0.8</priority>
   </url>
   <url>
@@ -21,11 +21,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://promptconsulting.co.in/blogs.html</loc>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://promptconsulting.co.in/blog/</loc>
+    <loc>https://promptconsulting.co.in/qualification-roadmap.html</loc>
     <priority>0.6</priority>
   </url>
 </urlset>
