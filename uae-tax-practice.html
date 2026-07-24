@@ -393,7 +393,7 @@ function buildBuilder(){
     host.appendChild(el);
   });
   var cc=byId("countChips");cc.innerHTML="";
-  [10,20,40,"All"].forEach(function(n,idx){
+  [10,20,40,70,"All"].forEach(function(n,idx){
     var b=document.createElement("button");b.type="button";b.className="chip"+(idx===0?" on":"");
     b.textContent=(n==="All"?"All":n+" questions");b.dataset.count=n;
     b.addEventListener("click",function(){cc.querySelectorAll(".chip").forEach(function(x){x.classList.remove("on");});b.classList.add("on");state.count=n;updateSel();});
